@@ -6,7 +6,7 @@ set ambiwidth=double
 if has('mouse')
     set mouse=a
 endif
-set clipboard+=unnamed
+" set clipboard+=unnamed
 
 set backspace=indent,eol,start
 
