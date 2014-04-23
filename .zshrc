@@ -50,7 +50,7 @@ if [ -f ~/.zsh/auto-fu.zsh/auto-fu.zsh ]; then
 fi
 
 ### プロンプト ###
-PROMPT="%E[%F{green}%n@%m%f] %~"$'\n'"%# "
+PROMPT="%E[%B%F{green}%n%b%f%F{green}@%m%f] %~"$'\n'"%# "
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn hg bzr
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
