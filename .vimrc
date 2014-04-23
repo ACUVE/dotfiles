@@ -29,9 +29,14 @@ set expandtab
 set copyindent
 set preserveindent
 
+nmap <silent> <Esc><Esc> :nohlsearch<CR>
+
 nnoremap o oX<C-h>
 nnoremap O OX<C-h>
 inoremap <CR> <CR>X<C-h>
+
+nnoremap j gj
+nnoremap k gk
 
 " set title
 set cmdheight=1

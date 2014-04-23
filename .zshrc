@@ -20,7 +20,7 @@ SAVEHIST=10000
 zstyle ':completion:*' ignore-parents parent pwd ..
 setopt auto_cd
 setopt auto_list
-setopt correct
+# setopt correct
 setopt magic_equal_subst
 setopt extended_history
 setopt hist_ignore_space
@@ -39,3 +39,14 @@ bindkey "^[[Z" reverse-menu-complete
 ### Aliases ###
 alias la="ls -la"
 
+### auto-fu ###
+if [ -f ~/.zsh/auto-fu.zsh/auto-fu.zsh ]; then
+    source ~/.zsh/auto-fu.zsh/auto-fu.zsh
+    function zle-line-init () {
+        auto-fu-init
+    }
+    zle -N zle-line-init
+    zstyle ':auto-fu:var' postdisplay $''
+fi
+
+PROMPT="%E[%F{green}%n@%m%f] %~"$'\n'"%# "
