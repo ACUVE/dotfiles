@@ -9,7 +9,6 @@ zstyle ':completion:*' squeeze-slashes true
 zstyle :compinstall filename '/home/acuve/.zshrc'
 
 autoload -Uz compinit; compinit
-autoload -Uz colors; colors
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
@@ -17,6 +16,7 @@ HISTSIZE=10000
 SAVEHIST=10000
 # End of lines configured by zsh-newuser-install
 
+autoload -Uz colors; colors
 zstyle ':completion:*' ignore-parents parent pwd ..
 setopt auto_cd
 setopt auto_list
