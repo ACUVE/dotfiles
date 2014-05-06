@@ -12,12 +12,13 @@ autoload -Uz compinit; compinit
 # End of lines added by compinstall
 # Lines configured by zsh-newuser-install
 HISTFILE=~/.histfile
-HISTSIZE=10000
-SAVEHIST=10000
+HISTSIZE=10000000
+SAVEHIST=10000000
 # End of lines configured by zsh-newuser-install
 
 autoload -Uz colors; colors
 zstyle ':completion:*' ignore-parents parent pwd ..
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
 setopt auto_cd
 setopt auto_list
 # setopt correct
@@ -26,6 +27,8 @@ setopt extended_history
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_reduce_blanks
+setopt inc_append_history
+setopt share_history
 disable r
 
 bindkey -e
@@ -47,9 +50,11 @@ if [ -f ~/.zsh/auto-fu.zsh/auto-fu.zsh ]; then
     }
     zle -N zle-line-init
     zstyle ':auto-fu:var' postdisplay $''
+    zstyle ':completion:*' completer _oldlist _complete
 fi
 
 ### プロンプト ###
+setopt transient_rprompt
 PROMPT="%E[%B%F{green}%n%b%f%F{green}@%m%f] %~"$'\n'"%# "
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn hg bzr
@@ -72,5 +77,6 @@ function _update_vcs_info_msg() {
     LANG=en_US.UTF-8 vcs_info
     [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 }
+autoload -U add-zsh-hook
 add-zsh-hook precmd _update_vcs_info_msg
 RPROMPT="%1(v|%F{green}%1v%f|)"
