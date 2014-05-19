@@ -17,11 +17,16 @@ SAVEHIST=10000000
 # End of lines configured by zsh-newuser-install
 
 autoload -Uz colors; colors
+zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' ignore-parents parent pwd ..
 zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-setopt auto_cd
+setopt auto_cd                  # フォルダ名だけでcd
+setopt auto_pushd
+setopt auto_menu
 setopt auto_list
-# setopt correct
+setopt list_packed
+setopt list_types
+setopt correct
 setopt magic_equal_subst
 setopt extended_history
 setopt hist_ignore_space
@@ -41,17 +46,12 @@ bindkey "^[[Z" reverse-menu-complete
 
 ### Aliases ###
 alias la="ls -la"
+alias lsa="ls -a"
 
-### auto-fu ###
-if [ -f ~/.zsh/auto-fu.zsh/auto-fu.zsh ]; then
-    source ~/.zsh/auto-fu.zsh/auto-fu.zsh
-    function zle-line-init () {
-        auto-fu-init
-    }
-    zle -N zle-line-init
-    zstyle ':auto-fu:var' postdisplay $''
-    zstyle ':completion:*' completer _oldlist _complete
-fi
+### cdしたら勝手にls ###
+function cd(){
+    builtin cd $@ && ls;
+}
 
 ### プロンプト ###
 setopt transient_rprompt
