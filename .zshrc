@@ -6,7 +6,6 @@ zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-suffixes true
 zstyle ':completion:*' original true
 zstyle ':completion:*' squeeze-slashes true
-zstyle :compinstall filename '/home/acuve/.zshrc'
 
 autoload -Uz compinit; compinit
 # End of lines added by compinstall
