@@ -47,11 +47,17 @@ bindkey "^[[Z" reverse-menu-complete
 alias la="ls -la"
 alias lsa="ls -a"
 alias lsl="ls -l"
+alias j="z"
 
 ### cdしたら勝手にls ###
 function cd(){
     builtin cd $@ && ls;
 }
+
+### z.sh ###
+if [ -f ~/.zsh/z/z.sh ]; then
+    source ~/.zsh/z/z.sh
+fi
 
 ### プロンプト ###
 setopt transient_rprompt
