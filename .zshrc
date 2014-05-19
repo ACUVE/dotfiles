@@ -46,6 +46,7 @@ bindkey "^[[Z" reverse-menu-complete
 ### Aliases ###
 alias la="ls -la"
 alias lsa="ls -a"
+alias lsl="ls -l"
 
 ### cdしたら勝手にls ###
 function cd(){
