@@ -47,19 +47,6 @@ set showcmd
 set list
 set listchars=tab:^\ ,trail:\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
-" statusline
-" set statusline=%t
-" set statusline+=\ [%{strlen(&fenc)?&fenc:'none'}:
-" set statusline+=%{&ff}]
-" set statusline+=%h
-" set statusline+=%m
-" set statusline+=%r
-" set statusline+=%y
-" set statusline+=%=
-" set statusline+=%c,
-" set statusline+=%l/%L
-" set statusline+=\ %P
-
 augroup vimrcEx
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
     \ exe "normal g`\"" | endif
