@@ -114,6 +114,22 @@ if !exists('g:neocomplete#force_omni_input_patterns')
 endif
 let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 
+" http://d.hatena.ne.jp/osyo-manga/20131029/1383050380 を参照のこと
+" filetype=cpp で insert mode から抜けるたびにキャッシュを削除する
+augroup cpp
+    autocmd!
+    autocmd FileType cpp call s:cpp()
+augroup END
+
+function! s:cpp()
+    augroup filetype-cpp
+        autocmd! * <buffer>
+        autocmd InsertLeave <buffer> MarchingBufferClearCache
+    augroup END
+endfunction
+
+imap <C-x><C-o> <Plug>(marching_start_omni_complete)
+
 " NERDTree """"""""""""""""""""""""""""""""""""""""""""""
 let NERDTreeShowHidden=1
 if has('vim_starting') && expand("%:p") == ""
