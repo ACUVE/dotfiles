@@ -48,6 +48,7 @@ alias la="ls -la"
 alias lsa="ls -a"
 alias lsl="ls -l"
 alias j="z"
+alias g="git"
 
 ### cdしたら勝手にls ###
 function cd(){

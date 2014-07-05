@@ -38,6 +38,8 @@ nnoremap o oX<C-h>
 nnoremap O OX<C-h>
 inoremap <CR> <CR>X<C-h>
 
+nnoremap s <Nop>
+
 nnoremap <silent> j gj
 nnoremap <silent> k gk
 nnoremap <silent> <Down> gj
@@ -135,6 +137,15 @@ elseif neobundle#is_installed('neocomplcache')
     let g:neocomplcache_enable_camel_case_completion = 1
     let g:neocomplcache_enable_underbar_completion = 1
 endif
+
+" VimFiler """"""""""""""""""""""""""""""""""""""""""""""
+let g:vimfiler_as_default_explorer = 1
+nnoremap <silent> <Space>f :VimFiler -split -simple -winwidth=30 -no-quit<CR>
+
+if has('vim_starting') && expand("%:p") == ""
+    autocmd VimEnter * VimFiler -split -simple -winwidth=30 -no-quit
+endif
+
 
 " vim-marching """"""""""""""""""""""""""""""""""""""""""
 let g:marching_clang_command = '/bin/clang'
