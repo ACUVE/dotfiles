@@ -29,6 +29,9 @@ set expandtab
 set copyindent
 set preserveindent
 
+set splitbelow
+set splitright
+
 nmap <silent> <Esc><Esc> :nohlsearch<CR>
 
 nnoremap o oX<C-h>
@@ -78,6 +81,8 @@ NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'airblade/vim-gitgutter'
+NeoBundle 'Lokaltog/vim-easymotion'
+
 
 filetype plugin indent on
 
@@ -106,7 +111,7 @@ endif
 
 " vim-marching """"""""""""""""""""""""""""""""""""""""""
 let g:marching_clang_command = '/bin/clang'
-let g:marching_clang_command_option = '-std=c++1y'
+let g:marching_clang_command_option = '-std=c++1y -I/usr/lib64/qt5/mkspecs/linux-g++-64 -I/usr/include/qt5 -I/usr/include/qt5/QtWebKitWidgets -I/usr/include/qt5/QtQuick -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtPrintSupport -I/usr/include/qt5/QtQml -I/usr/include/qt5/QtWebKit -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore'
 let g:marching_include_paths = []
 let g:marching_enable_neocomplete = 1
 if !exists('g:neocomplete#force_omni_input_patterns')
@@ -142,7 +147,7 @@ nmap ,, <Plug>NERDCommenterToggle
 vmap ,, <Plug>NERDCommenterToggle
 
 " syntastic """""""""""""""""""""""""""""""""""""""""""""
-let g:syntastic_cpp_compiler_options = '--std=c++1y'
+let g:syntastic_cpp_compiler_options = g:marching_clang_command_option
 
 " lightline """""""""""""""""""""""""""""""""""""""""""""
 let g:lightline = {
@@ -159,6 +164,26 @@ function! MyMode()
             \ &ft == 'vimshell' ? 'VimShell' :
             \ winwidth(0) > 60 ? lightline#mode() : ''
 endfunction
+
+" easymotion """"""""""""""""""""""""""""""""""""""""""""
+map f <Plug>(easymotion-fl)
+map t <Plug>(easymotion-tl)
+map F <Plug>(easymotion-Fl)
+map T <Plug>(easymotion-Tl)
+nmap s <Plug>(easymotion-s2)
+xmap s <Plug>(easymotion-s2)
+omap s <Plug>(easymotion-s2)
+
+nmap g/ <Plug>(easymotion-sn)
+xmap g/ <Plug>(easymotion-sn)
+omap g/ <Plug>(easymotion-tn)
+
+map w <Plug>(easymotion-w)
+map W <Plug>(easymotion-W)
+map b <Plug>(easymotion-b)
+map B <Plug>(easymotion-B)
+
+let g:EasyMotion_smartcase = 1
 
 " colorscheme """""""""""""""""""""""""""""""""""""""""""
 colorscheme molokai
