@@ -32,7 +32,7 @@ set preserveindent
 set splitbelow
 set splitright
 
-nmap <silent> <Esc><Esc> :nohlsearch<CR>
+nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
 
 nnoremap o oX<C-h>
 nnoremap O OX<C-h>
@@ -40,8 +40,36 @@ inoremap <CR> <CR>X<C-h>
 
 nnoremap <silent> j gj
 nnoremap <silent> k gk
+nnoremap <silent> <Down> gj
+nnoremap <silent> <Up> gk
 nnoremap <silent> gj j
 nnoremap <silent> gk k
+
+nnoremap <silent> n nzz
+nnoremap <silent> N Nzz
+
+" ウィンドウ分割関連
+nnoremap <silent> ss :split<CR>
+nnoremap <silent> sv :vsplit<CR>
+nnoremap <silent> sh <C-w>h
+nnoremap <silent> sj <C-w>j
+nnoremap <silent> sk <C-w>k
+nnoremap <silent> sl <C-w>l
+
+nnoremap <silent> sH <C-w>H
+nnoremap <silent> sJ <C-w>J
+nnoremap <silent> sK <C-w>K
+nnoremap <silent> sL <C-w>L
+nnoremap <silent> sr <C-w>r
+
+nnoremap <silent> st :tabnew<CR>
+nnoremap <silent> sn gt
+nnoremap <silent> sp gT
+
+nnoremap <silent> sq :q<CR>
+nnoremap <silent> sQ :bd<CR>
+
+nnoremap <silent> so <C-w>o
 
 " set title
 set cmdheight=1
@@ -74,7 +102,6 @@ NeoBundle 'osyo-manga/vim-marching'
 NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'scrooloose/nerdtree'
 NeoBundle 'tomasr/molokai'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'tpope/vim-fugitive'
@@ -135,12 +162,6 @@ endfunction
 
 imap <C-x><C-o> <Plug>(marching_start_omni_complete)
 
-" NERDTree """"""""""""""""""""""""""""""""""""""""""""""
-let NERDTreeShowHidden=1
-if has('vim_starting') && expand("%:p") == ""
-    autocmd VimEnter * execute 'NERDTree ./'
-endif
-
 " NERD Commenter """"""""""""""""""""""""""""""""""""""""
 let NERDSpaceDelims=1
 nmap ,, <Plug>NERDCommenterToggle
@@ -170,24 +191,23 @@ map f <Plug>(easymotion-fl)
 map t <Plug>(easymotion-tl)
 map F <Plug>(easymotion-Fl)
 map T <Plug>(easymotion-Tl)
-nmap s <Plug>(easymotion-s2)
-xmap s <Plug>(easymotion-s2)
-omap s <Plug>(easymotion-s2)
+nmap s<Space> <Plug>(easymotion-s2)
+xmap s<Space> <Plug>(easymotion-s2)
+omap s<Space> <Plug>(easymotion-s2)
 
 nmap g/ <Plug>(easymotion-sn)
 xmap g/ <Plug>(easymotion-sn)
 omap g/ <Plug>(easymotion-tn)
 
-map w <Plug>(easymotion-w)
-map W <Plug>(easymotion-W)
-map b <Plug>(easymotion-b)
-map B <Plug>(easymotion-B)
+map ,j <Plug>(easymotion-j)
+map ,k <Plug>(easymotion-k)
 
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_startofline = 0
+
 
 " colorscheme """""""""""""""""""""""""""""""""""""""""""
 colorscheme molokai
 
 
 NeoBundleCheck
-
