@@ -49,6 +49,10 @@ alias lsa="ls -a"
 alias lsl="ls -l"
 alias j="z"
 alias g="git"
+alias gc="git commit"
+alias gp="git push"
+alias gs="git status -sb"
+alias ga="git add"
 
 ### cdしたら勝手にls ###
 function cd(){
