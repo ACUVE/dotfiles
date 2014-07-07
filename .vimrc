@@ -78,7 +78,7 @@ set cmdheight=1
 set laststatus=2
 set showcmd
 set list
-set listchars=tab:^\ ,trail:\ ,eol:↲,extends:»,precedes:«,nbsp:%
+set listchars=tab:^-,trail:\ ,eol:↲,extends:»,precedes:«,nbsp:%
 
 augroup vimrcEx
     au BufRead * if line("'\"") > 0 && line("'\"") <= line("$") |
@@ -113,7 +113,8 @@ NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 
 
-filetype plugin indent on
+" filetype plugin indent on
+filetype plugin on
 
 " neocomplete / neocomplcache """"""""""""""""""""""""""""
 if neobundle#is_installed('neocomplete')
@@ -155,7 +156,7 @@ let g:marching_enable_neocomplete = 1
 if !exists('g:neocomplete#force_omni_input_patterns')
     let g:neocomplete#force_omni_input_patterns = {}
 endif
-let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
+" let g:neocomplete#force_omni_input_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
 
 " http://d.hatena.ne.jp/osyo-manga/20131029/1383050380 を参照のこと
 " filetype=cpp で insert mode から抜けるたびにキャッシュを削除する
@@ -164,14 +165,14 @@ augroup cpp
     autocmd FileType cpp call s:cpp()
 augroup END
 
+imap <C-o><C-n> <Plug>(marching_start_omni_complete)
+
 function! s:cpp()
     augroup filetype-cpp
         autocmd! * <buffer>
         autocmd InsertLeave <buffer> MarchingBufferClearCache
     augroup END
 endfunction
-
-imap <C-x><C-o> <Plug>(marching_start_omni_complete)
 
 " NERD Commenter """"""""""""""""""""""""""""""""""""""""
 let NERDSpaceDelims=1
@@ -202,9 +203,9 @@ map f <Plug>(easymotion-fl)
 map t <Plug>(easymotion-tl)
 map F <Plug>(easymotion-Fl)
 map T <Plug>(easymotion-Tl)
-nmap s<Space> <Plug>(easymotion-s2)
-xmap s<Space> <Plug>(easymotion-s2)
-omap s<Space> <Plug>(easymotion-s2)
+nmap <Space>s <Plug>(easymotion-s2)
+xmap <Space>s <Plug>(easymotion-s2)
+omap <Space>s <Plug>(easymotion-s2)
 
 nmap g/ <Plug>(easymotion-sn)
 xmap g/ <Plug>(easymotion-sn)
@@ -215,7 +216,6 @@ map ,k <Plug>(easymotion-k)
 
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_startofline = 0
-
 
 " colorscheme """""""""""""""""""""""""""""""""""""""""""
 colorscheme molokai
