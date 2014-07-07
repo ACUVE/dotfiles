@@ -51,6 +51,8 @@ nnoremap <silent> n nzz
 nnoremap <silent> N Nzz
 
 " ウィンドウ分割関連
+nnoremap <silent> s <Nop>
+
 nnoremap <silent> ss :split<CR>
 nnoremap <silent> sv :vsplit<CR>
 nnoremap <silent> sh <C-w>h
@@ -72,6 +74,11 @@ nnoremap <silent> sq :q<CR>
 nnoremap <silent> sQ :bd<CR>
 
 nnoremap <silent> so <C-w>o
+
+nnoremap <silent> sT :Unite tab<CR>
+nnoremap <silent> sb :Unite buffer_tab -buffer-name=file<CR>
+nnoremap <silent> sB :Unite buffer -buffer-name=file<CR>
+
 
 " set title
 set cmdheight=1
@@ -111,10 +118,21 @@ NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'kana/vim-submode'
 
 
 " filetype plugin indent on
 filetype plugin on
+
+" vim-submode """""""""""""""""""""""""""""""""""""""""""
+call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
+call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
+call submode#enter_with('bufmove', 'n', '', 's+', '<C-w>+')
+call submode#enter_with('bufmove', 'n', '', 's-', '<C-w>-')
+call submode#map('bufmove', 'n', '', '>', '<C-w>>')
+call submode#map('bufmove', 'n', '', '<', '<C-w><')
+call submode#map('bufmove', 'n', '', '+', '<C-w>+')
+call submode#map('bufmove', 'n', '', '-', '<C-w>-')
 
 " neocomplete / neocomplcache """"""""""""""""""""""""""""
 if neobundle#is_installed('neocomplete')
@@ -219,6 +237,5 @@ let g:EasyMotion_startofline = 0
 
 " colorscheme """""""""""""""""""""""""""""""""""""""""""
 colorscheme molokai
-
 
 NeoBundleCheck
