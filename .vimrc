@@ -119,6 +119,7 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'kana/vim-submode'
+" NeoBundle 'MetalPhaeton/easybracket-vim'
 
 
 " filetype plugin indent on
