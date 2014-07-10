@@ -29,6 +29,8 @@ set expandtab
 set copyindent
 set preserveindent
 
+set nowrap
+
 set splitbelow
 set splitright
 
