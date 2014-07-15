@@ -22,6 +22,7 @@ set showmatch
 set cursorline
 set scrolloff=2
 set hidden
+set nowrap
 
 set autoindent
 set ts=4 sw=4 sts=4
@@ -33,6 +34,9 @@ set nowrap
 
 set splitbelow
 set splitright
+
+set fileencodings=utf-8,sjis,euc-jp,iso-2022-jp
+set fileformats=unix,dos,mac
 
 nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
 
