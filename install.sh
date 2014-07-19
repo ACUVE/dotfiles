@@ -1,6 +1,6 @@
 #!/bin/bash
 
-DOT_FILES=(.zsh .zshrc .vimrc .vim)
+DOT_FILES=(.zsh .zshrc .vimrc .vim .easystroke)
 
 for file in ${DOT_FILES[@]}
 do
