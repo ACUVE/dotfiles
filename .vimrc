@@ -112,6 +112,8 @@ NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'Shougo/vimshell.vim'
 NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/neosnippet'
+NeoBundle 'Shougo/neosnippet-snippets'
 NeoBundle 'osyo-manga/vim-reunions'
 NeoBundle 'osyo-manga/vim-marching'
 NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
@@ -241,6 +243,22 @@ map ,k <Plug>(easymotion-k)
 
 let g:EasyMotion_smartcase = 1
 let g:EasyMotion_startofline = 0
+
+" neosnippet """"""""""""""""""""""""""""""""""""""""""""
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+xmap <C-k> <Plug>(neosnippet_expand_target)
+
+imap <expr><Tab> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: pumvisible() ? "\<C-n>" : "\<Tab>"
+smap <expr><Tab> neosnippet#expandable_or_jumpable() ?
+\ "\<Plug>(neosnippet_expand_or_jump)"
+\: "\<Tab>"
+
+if has('conceal')
+    set conceallevel=2 concealcursor=i
+endif
 
 " colorscheme """""""""""""""""""""""""""""""""""""""""""
 colorscheme molokai
