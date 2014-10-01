@@ -22,15 +22,13 @@ set showmatch
 set cursorline
 set scrolloff=2
 set hidden
-set nowrap
+set wrap
 
 set autoindent
 set ts=4 sw=4 sts=4
 set expandtab
 set copyindent
 set preserveindent
-
-set nowrap
 
 set splitbelow
 set splitright
