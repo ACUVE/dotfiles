@@ -44,11 +44,13 @@ bindkey "^[[4~" end-of-line
 bindkey "^[[Z" reverse-menu-complete
 
 ### Aliases ###
+autoload -Uz zmv
 alias la="ls -la"
 alias lsa="ls -a"
 alias lsl="ls -l"
 alias j="z"
 alias g="git"
+alias mmv="noglob zmv -W"
 
 ### cdしたら勝手にls ###
 function cd(){
