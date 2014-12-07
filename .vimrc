@@ -118,7 +118,7 @@ NeoBundle 'osyo-manga/vim-marching'
 NeoBundle has('lua') ? 'Shougo/neocomplete' : 'Shougo/neocomplcache'
 NeoBundle 'scrooloose/nerdcommenter'
 NeoBundle 'scrooloose/syntastic'
-NeoBundle 'jpo/vim-railscasts-theme'
+NeoBundle 'tomasr/molokai'
 NeoBundle 'mattn/emmet-vim'
 NeoBundle 'tpope/vim-fugitive'
 NeoBundle 'gregsexton/gitv.git'
@@ -262,6 +262,6 @@ if has('conceal')
 endif
 
 " colorscheme """""""""""""""""""""""""""""""""""""""""""
-colorscheme railscasts
+colorscheme molokai
 
 NeoBundleCheck
