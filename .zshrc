@@ -65,10 +65,14 @@ fi
 
 ### プロンプト ###
 setopt transient_rprompt
-PROMPT="%E[%B%F{green}%n%b%f%F{green}@%m%f] %~"$'\n'"%# "
 if [ ${UID} -eq 0 ]; then
-    PROMPT="%E[%B%F{red}%n%b%f%F{red}@%m%f] %~"$'\n'"%# "
+    PROMPTCOLOR="red"
+elif [ -n "${SSH_CONNECTION}" ]; then
+    PROMPTCOLOR="yellow"
+else
+    PROMPTCOLOR="green"
 fi
+PROMPT="%E[%B%F{${PROMPTCOLOR}}%n%b%f%F{${PROMPTCOLOR}}@%m%f] %~"$'\n'"%# "
 autoload -Uz vcs_info
 zstyle ':vcs_info:*' enable git svn hg bzr
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
