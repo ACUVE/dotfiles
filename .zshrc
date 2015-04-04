@@ -55,7 +55,7 @@ alias mmv="noglob zmv -W"
 
 ### cdしたら勝手にls ###
 function cd(){
-    builtin cd $@ && ls;
+    builtin cd $@ && ls > $TTY 2> /dev/null;
 }
 
 ### z.sh ###
