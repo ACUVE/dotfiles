@@ -8,3 +8,4 @@ do
 done
 
 # git config --global core.editor 'vim -c "set fenc=utf-8"'
+# go get github.com/nsf/gocode

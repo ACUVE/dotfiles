@@ -127,6 +127,8 @@ NeoBundle 'itchyny/lightline.vim'
 NeoBundle 'airblade/vim-gitgutter'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'kana/vim-submode'
+NeoBundle 'fatih/vim-go'
+NeoBundle 'vim-jp/vim-go-extra'
 " NeoBundle 'MetalPhaeton/easybracket-vim'
 
 call neobundle#end()
