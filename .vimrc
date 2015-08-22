@@ -172,7 +172,7 @@ endif
 
 " VimFiler """"""""""""""""""""""""""""""""""""""""""""""
 let g:vimfiler_as_default_explorer = 1
-nnoremap <silent> <Space>f :VimFiler -split -simple -winwidth=30 -no-quit<CR>
+nnoremap <silent> sf :VimFiler -split -simple -winwidth=30 -no-quit<CR>
 
 if has('vim_starting') && expand("%:p") == ""
     autocmd VimEnter * VimFiler -split -simple -winwidth=30 -no-quit
