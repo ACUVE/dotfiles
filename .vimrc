@@ -37,6 +37,9 @@ set splitright
 set fileencodings=utf-8,sjis,euc-jp,iso-2022-jp
 set fileformats=unix,dos,mac
 
+" maybe don't autofold anything
+set foldlevel=100
+
 nnoremap <silent> <Esc><Esc> :nohlsearch<CR>
 
 nnoremap o oX<C-h>
@@ -129,6 +132,9 @@ NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'kana/vim-submode'
 NeoBundle 'fatih/vim-go'
 NeoBundle 'vim-jp/vim-go-extra'
+NeoBundle 'plasticboy/vim-markdown'
+NeoBundle 'kannokanno/previm'
+NeoBundle 'tyru/open-browser.vim'
 " NeoBundle 'MetalPhaeton/easybracket-vim'
 
 call neobundle#end()
