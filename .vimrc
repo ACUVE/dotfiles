@@ -187,7 +187,7 @@ endif
 
 " vim-marching """"""""""""""""""""""""""""""""""""""""""
 let g:marching_clang_command = '/bin/clang'
-let g:marching_clang_command_option = '-std=c++1y -I/usr/lib64/qt5/mkspecs/linux-g++-64 -I/usr/include/qt5 -I/usr/include/qt5/QtWebKitWidgets -I/usr/include/qt5/QtQuick -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtPrintSupport -I/usr/include/qt5/QtQml -I/usr/include/qt5/QtWebKit -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore'
+let g:marching_clang_command_option = '-std=c++14 -I/usr/lib64/qt5/mkspecs/linux-g++-64 -I/usr/include/qt5 -I/usr/include/qt5/QtWebKitWidgets -I/usr/include/qt5/QtQuick -I/usr/include/qt5/QtOpenGL -I/usr/include/qt5/QtPrintSupport -I/usr/include/qt5/QtQml -I/usr/include/qt5/QtWebKit -I/usr/include/qt5/QtWidgets -I/usr/include/qt5/QtNetwork -I/usr/include/qt5/QtGui -I/usr/include/qt5/QtCore'
 let g:marching_include_paths = []
 let g:marching_enable_neocomplete = 1
 if !exists('g:neocomplete#force_omni_input_patterns')
