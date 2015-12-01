@@ -143,6 +143,9 @@ call neobundle#end()
 " filetype plugin indent on
 filetype plugin on
 
+" vim-gitgutter """""""""""""""""""""""""""""""""""""""""
+let g:gitgutter_max_signs = 100000
+
 " vim-submode """""""""""""""""""""""""""""""""""""""""""
 call submode#enter_with('bufmove', 'n', '', 's>', '<C-w>>')
 call submode#enter_with('bufmove', 'n', '', 's<', '<C-w><')
