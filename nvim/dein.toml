@@ -82,6 +82,8 @@ let g:ale_sign_warning = 'W➤'
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_lint_on_text_changed = 'normal'
 
+call ale#Set('cpp_gcc_options', '-std=c++1z -Wall')
+
 call ale#linter#Define('markdown', {
 \   'name': 'textlint',
 \   'executable': 'textlint',
@@ -118,3 +120,6 @@ repo = 'thinca/vim-quickrun'
 
 [[plugins]]
 repo = 'itchyny/lightline.vim'
+
+[[plugins]]
+repo = 'rhysd/vim-clang-format'
