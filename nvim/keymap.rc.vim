@@ -9,9 +9,6 @@ nnoremap <silent> <Up> gk
 nnoremap <silent> gj j
 nnoremap <silent> gk k
 
-nnoremap <silent> n nzz
-nnoremap <silent> N Nzz
-
 " ウィンドウ分割関連
 nnoremap <silent> s <Nop>
 
