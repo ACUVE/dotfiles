@@ -1,8 +1,9 @@
 ### golang ###
-export GOPATH=$HOME/go
+GOPATH_MAIN=$HOME/go
+export GOPATH="${GOPATH_MAIN}:$HOME/Sync/project/Go"
 
 ### PATH ###
 path=(
-    $GOPATH/bin(N-/)
+    $GOPATH_MAIN/bin(N-/)
     $path
 )

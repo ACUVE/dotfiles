@@ -1,0 +1,120 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'tomasr/molokai'
+hook_add='''
+au MyAutoCmd VimEnter * nested colorscheme molokai
+'''
+
+[[plugins]]
+repo = 'scrooloose/nerdcommenter'
+hook_add='''
+"invalid default
+let g:NERDCreateDefaultMappings = 0
+nmap ,, <Plug>NERDCommenterToggle
+vmap ,, <Plug>NERDCommenterToggle
+'''
+
+[[plugins]]
+repo = 'LeafCage/yankround.vim.git'
+hook_add='''
+nmap p <Plug>(yankround-p)
+xmap p <Plug>(yankround-p)
+nmap P <Plug>(yankround-P)
+nmap gp <Plug>(yankround-gp)
+xmap gp <Plug>(yankround-gp)
+nmap gP <Plug>(yankround-gP)
+nmap <C-p> <Plug>(yankround-prev)
+nmap <C-n> <Plug>(yankround-next)
+'''
+
+[[plugins]]
+repo = 'cohama/lexima.vim'
+
+[[plugins]]
+repo = 'Shougo/vinarise.vim'
+on_cmd = 'Vinarise'
+
+[[plugins]]
+repo = 'easymotion/vim-easymotion'
+hook_add='''
+map f <Plug>(easymotion-fl)
+map t <Plug>(easymotion-tl)
+map F <Plug>(easymotion-Fl)
+map T <Plug>(easymotion-Tl)
+nmap <Space>s <Plug>(easymotion-s2)
+xmap <Space>s <Plug>(easymotion-s2)
+omap <Space>s <Plug>(easymotion-s2)
+
+nmap / <Plug>(easymotion-sn)
+xmap / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+
+map ,j <Plug>(easymotion-j)
+map ,k <Plug>(easymotion-k)
+
+let g:EasyMotion_smartcase = 1
+let g:EasyMotion_startofline = 0
+'''
+
+[[plugins]]
+repo = 'tpope/vim-surround'
+
+[[plugins]]
+repo = 'bronson/vim-trailing-whitespace'
+
+[[plugins]]
+repo = 'terryma/vim-multiple-cursors'
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+hook_add = '''
+xmap ga <Plug>(EasyAlign)
+nmap ga <Plug>(EasyAlign)
+'''
+
+[[plugins]]
+repo = 'w0rp/ale'
+hook_add = '''
+let g:ale_sign_error = 'E➤'
+let g:ale_sign_warning = 'W➤'
+let g:ale_echo_msg_format = '[%linter%] %s'
+let g:ale_lint_on_text_changed = 'normal'
+
+call ale#linter#Define('markdown', {
+\   'name': 'textlint',
+\   'executable': 'textlint',
+\   'command': 'textlint -f unix %t',
+\   'callback': 'ale#handlers#unix#HandleAsError',
+\})
+'''
+
+[[plugins]]
+repo = 'Shougo/unite.vim'
+hook_add = '''
+nnoremap <silent> sT :Unite tab<CR>
+nnoremap <silent> sb :Unite buffer_tab -buffer-name=file<CR>
+nnoremap <silent> sB :Unite buffer -buffer-name=file<CR>
+'''
+
+[[plugins]]
+repo = 'Shougo/tabpagebuffer.vim'
+
+[[plugins]]
+repo = 'Shougo/vimfiler.vim'
+depends = 'unite.vim'
+hook_add = '''
+let g:vimfiler_as_default_explorer = 1
+nnoremap <silent> sf :VimFiler -split -simple -winwidth=30 -no-quit<CR>
+
+if has('vim_starting') && expand("%:p") == ""
+    autocmd VimEnter * VimFiler -split -simple -winwidth=30 -no-quit
+endif
+'''
+
+[[plugins]]
+repo = 'thinca/vim-quickrun'
+
+[[plugins]]
+repo = 'itchyny/lightline.vim'

@@ -1,0 +1,109 @@
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+
+[[plugins]]
+repo = 'Shougo/deoplete.nvim'
+depends = 'context_filetype.vim'
+if = "has('nvim')"
+on_i = 1
+hook_add = '''
+let g:deoplete#enable_at_startup = 1
+'''
+
+# lang
+
+[[plugins]]
+repo = 'Shougo/neco-vim'
+on_ft = 'vim'
+
+[[plugins]]
+repo = 'cespare/vim-toml'
+on_ft = 'toml'
+
+[[plugins]]
+repo = 'Shougo/neoinclude.vim'
+on_ft = ['c', 'cpp']
+
+#[[plugins]]
+#repo = 'vim-jp/cpp-vim'
+#on_ft = ['c', 'cpp']
+
+[[plugins]]
+repo = 'zchee/deoplete-clang'
+depends = 'deoplete.nvim'
+on_ft = ['c', 'cpp']
+hook_add = '''
+let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
+let g:deoplete#sources#clang#clang_header = '/usr/include/'
+'''
+
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
+hook_source = '''
+let g:rustfmt_autosave = 1
+'''
+
+[[plugins]]
+repo = 'fatih/vim-go'
+on_ft = 'go'
+hook_source = '''
+let g:go_highlight_functions = 1
+let g:go_highlight_methods = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_types = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_build_constraints = 1
+'''
+
+[[plugins]]
+repo = 'hynek/vim-python-pep8-indent'
+on_ft = 'python'
+
+[[plugins]]
+repo = 'elzr/vim-json'
+on_ft = 'json'
+
+[[plugins]]
+repo = 'hail2u/vim-css3-syntax'
+on_ft = 'css'
+
+[[plugins]]
+repo = 'mxw/vim-jsx'
+on_ft = ['javascript', 'javascript.jsx']
+
+[[plugins]]
+repo = 'leafgarland/typescript-vim'
+on_ft = 'typescript'
+
+[[plugins]]
+repo = 'dag/vim-fish'
+on_ft = 'fish'
+
+[[plugins]]
+repo = 'tikhomirov/vim-glsl'
+on_ft = 'glsl'
+
+[[plugins]]
+repo = 'neovimhaskell/haskell-vim'
+on_ft = ['haskell', 'cabal']
+
+[[plugins]]
+repo = 'rhysd/vim-gfm-syntax'
+on_ft = ['markdown', 'mkd']
+
+[[plugins]]
+repo = 'udalov/kotlin-vim'
+on_ft = 'kotlin'
+
+[[plugins]]
+repo = 'keith/swift.vim'
+on_ft = 'swift'
+
+[[plugins]]
+repo = 'posva/vim-vue'
+on_ft = 'vue'
+
+[[plugins]]
+repo = 'mattn/emmet-vim'
+on_ft = 'html'
