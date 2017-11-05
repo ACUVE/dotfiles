@@ -27,10 +27,12 @@ on_ft = ['c', 'cpp']
 [[plugins]]
 repo = 'zchee/deoplete-clang'
 depends = 'deoplete.nvim'
-on_ft = ['c', 'cpp']
+on_ft = ['c', 'cpp', 'objc', 'objcpp']
 hook_add = '''
 let g:deoplete#sources#clang#libclang_path = '/usr/lib64/libclang.so'
-let g:deoplete#sources#clang#clang_header = '/usr/include/'
+let g:deoplete#sources#clang#clang_header = '/usr/lib64/clang'
+let g:deoplete#sources#clang#std = {'c': 'c11', 'cpp': 'c++14', 'objc': 'c11', 'objcpp': 'c++14'}
+let g:deoplete#sources#clang#flags = ['-I', '/usr/include', '-I', '/usr/include/c++/7/x86_64-redhat-linux']
 '''
 
 [[plugins]]
