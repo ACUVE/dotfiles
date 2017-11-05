@@ -10,8 +10,10 @@ au MyAutoCmd VimEnter * nested colorscheme molokai
 [[plugins]]
 repo = 'scrooloose/nerdcommenter'
 hook_add='''
-"invalid default
 let g:NERDCreateDefaultMappings = 0
+let g:NERDSpaceDelims = 1
+let g:NERDCompactSexyComs = 1
+let g:NERDTrimTrailingWhitespace = 1
 nmap ,, <Plug>NERDCommenterToggle
 vmap ,, <Plug>NERDCommenterToggle
 '''
@@ -82,7 +84,7 @@ let g:ale_sign_warning = 'W➤'
 let g:ale_echo_msg_format = '[%linter%] %s'
 let g:ale_lint_on_text_changed = 'normal'
 
-call ale#Set('cpp_gcc_options', '-std=c++1z -Wall')
+call ale#Set('cpp_gcc_options', '-std=c++14 -Wall')
 
 call ale#linter#Define('markdown', {
 \   'name': 'textlint',
