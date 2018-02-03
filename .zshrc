@@ -97,3 +97,13 @@ function _update_vcs_info_msg() {
 autoload -U add-zsh-hook
 add-zsh-hook precmd _update_vcs_info_msg
 RPROMPT="%1(v|%F{green}%1v%f|)"
+
+## Read .proxy
+if [ -e ~/.proxy ]; then
+    source ~/.proxy
+fi
+
+## Read .env
+if [ -e ~/.env ]; then
+    source ~/.env
+fi
