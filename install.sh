@@ -7,6 +7,7 @@ for file in ${DOT_FILES[@]}
 do
 	ln -sfn $HOME/dotfiles/$file $HOME/$file
 done
+mkdir -p $HOME/.config
 for file in ${CONFIG_FILES[@]}
 do
 	ln -sfn $HOME/dotfiles/$file $HOME/.config/$file
