@@ -46,6 +46,7 @@ bindkey "^[[Z" reverse-menu-complete
 
 ### Aliases ###
 autoload -Uz zmv
+alias ls="ls --color -F"
 alias la="ls -la"
 alias lsa="ls -a"
 alias lsl="ls -l"
