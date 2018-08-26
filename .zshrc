@@ -28,6 +28,7 @@ setopt list_types
 setopt correct
 setopt magic_equal_subst
 setopt extended_history
+setopt extendedglob
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_reduce_blanks
