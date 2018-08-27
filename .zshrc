@@ -28,6 +28,7 @@ setopt list_types
 setopt correct
 setopt magic_equal_subst
 setopt extended_history
+setopt extendedglob
 setopt hist_ignore_space
 setopt hist_ignore_all_dups
 setopt hist_reduce_blanks
@@ -45,6 +46,7 @@ bindkey "^[[Z" reverse-menu-complete
 
 ### Aliases ###
 autoload -Uz zmv
+alias ls="ls --color -F"
 alias la="ls -la"
 alias lsa="ls -a"
 alias lsl="ls -l"
