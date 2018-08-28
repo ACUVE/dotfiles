@@ -100,6 +100,10 @@ autoload -U add-zsh-hook
 add-zsh-hook precmd _update_vcs_info_msg
 RPROMPT="%1(v|%F{green}%1v%f|)"
 
+# https://github.com/pypa/pipenv/issues/1058
+export SHELL=`which zsh`
+export PIPENV_SHELL=`which zsh`
+
 ## Read .proxy
 if [ -e ~/.proxy ]; then
     source ~/.proxy
