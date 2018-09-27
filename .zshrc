@@ -46,19 +46,20 @@ bindkey "^[[Z" reverse-menu-complete
 
 ### Aliases ###
 autoload -Uz zmv
-alias ls="ls --color -F"
+alias ls="ls --color=auto -F"
 alias la="ls -la"
 alias lsa="ls -a"
 alias lsl="ls -l"
 alias ll="ls -l"
+alias less="less -R"
 alias j="z"
 alias g="git"
 alias mmv="noglob zmv -W"
 
 ### cdしたら勝手にls ###
-function cd(){
-    builtin cd $@ && ls > $TTY 2> /dev/null;
-}
+# function cd(){
+    # builtin cd $@ && ls > $TTY 2> /dev/null;
+# }
 
 ### z.sh ###
 if [ -f ~/.zsh/z/z.sh ]; then
