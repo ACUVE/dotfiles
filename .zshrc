@@ -35,6 +35,7 @@ setopt hist_reduce_blanks
 setopt inc_append_history
 setopt share_history
 disable r
+stty stop undef
 
 bindkey -e
 bindkey "^?"    backward-delete-char
