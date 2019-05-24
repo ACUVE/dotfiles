@@ -115,7 +115,3 @@ fi
 if [ -e ~/.env ]; then
     source ~/.env
 fi
-
-if which brew > /dev/null 2>&1; then
-    export PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
-fi
