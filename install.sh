@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -xe
+
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc)
 DOT_DIRECTORY_EACH_FILE=(.ssh)
 CONFIG_FILES=(nvim)
@@ -18,7 +20,7 @@ do
 done
 
 # DOT_DIRECTORY_EACH_FILE
-for dir in ${DOT_DIRECTORY_IN_FILE[@]}
+for dir in ${DOT_DIRECTORY_EACH_FILE[@]}
 do
     TARGET_DIR="$HOME/$dir"
     if [ \! -e "${TARGET_DIR}" ]; then
