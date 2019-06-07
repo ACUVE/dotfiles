@@ -16,7 +16,6 @@ SAVEHIST=10000000
 # End of lines configured by zsh-newuser-install
 
 autoload -Uz colors; colors
-autoload -Uz predict-on; predict-on
 autoload zargs
 zstyle ':completion:*:default' menu select=2
 zstyle ':completion:*' ignore-parents parent pwd ..
