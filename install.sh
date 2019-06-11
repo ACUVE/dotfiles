@@ -33,6 +33,10 @@ do
     if [ -d "${TARGET_DIR}" ]; then
         for file in "${dir}"/*; do
             ln -sfn $HOME/dotfiles/$file $HOME/$file
+            # .ssh だけ 600 である必要性がある
+            if [ "${dir}" = ".ssh" ]; then
+                chmod 600 $HOME/$file
+            fi
         done
     fi
 done
