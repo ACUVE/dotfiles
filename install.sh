@@ -35,7 +35,11 @@ do
             ln -sfn $HOME/dotfiles/$file $HOME/$file
             # .ssh だけ 600 である必要性がある
             if [ "${dir}" = ".ssh" ]; then
-                chmod 600 $HOME/$file
+                if [ -d "$HOME/$file" ]; then
+                    chmod 700 $HOME/$file
+                else
+                    chmod 600 $HOME/$file
+                fi
             fi
         done
     fi
