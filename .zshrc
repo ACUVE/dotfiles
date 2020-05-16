@@ -36,7 +36,9 @@ setopt hist_reduce_blanks
 setopt inc_append_history
 setopt share_history
 disable r
-stty stop undef
+if which stty >/dev/null 2>&1; then
+    stty stop undef
+fi
 
 bindkey -e
 bindkey "^?"    backward-delete-char
@@ -57,6 +59,12 @@ alias less="less -R"
 alias j="z"
 alias g="git"
 alias mmv="noglob zmv -W"
+if which gfind > /dev/null 2>&1; then
+    alias find="gfind"
+fi
+if which ggrep > /dev/null 2>&1; then
+    alias grep="ggrep"
+fi
 
 ### cdしたら勝手にls ###
 # function cd(){
