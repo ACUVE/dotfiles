@@ -65,6 +65,12 @@ fi
 if which ggrep > /dev/null 2>&1; then
     alias grep="ggrep"
 fi
+which aws > /dev/null 2>&1
+if [ "$?" != "0" ]; then
+    if which docker > /dev/null 2>&1; then
+        alias aws="docker run -v ${HOME}/.aws:/root/.aws --rm -it amazon/aws-cli"
+    fi
+fi
 
 ### cdしたら勝手にls ###
 # function cd(){
