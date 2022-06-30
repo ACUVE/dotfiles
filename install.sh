@@ -4,7 +4,7 @@ set -xe
 
 # Settings #####
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc)
-DOT_DIRECTORY_EACH_FILE=(.ssh)
+DOT_DIRECTORY_EACH_FILE=(.ssh .aws)
 CONFIG_FILES=(nvim)
 ################
 
