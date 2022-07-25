@@ -5,7 +5,7 @@ set -xe
 # Settings #####
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws)
-CONFIG_FILES=(nvim)
+CONFIG_FILES=(nvim git)
 ################
 
 SCRIPT_DIR=$(cd $(dirname $0); pwd)

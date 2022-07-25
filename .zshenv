@@ -7,3 +7,8 @@ path=(
     $GOPATH_MAIN/bin(N-/)
     $path
 )
+
+if [ -e "$HOME/.cargo/env" ]
+then
+    . "$HOME/.cargo/env"
+fi

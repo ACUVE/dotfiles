@@ -1,0 +1,11 @@
+[push]
+	default = simple
+
+[pull]
+	ff = only
+
+[merge]
+	ff = false
+
+[submodule]
+	recurse = true
