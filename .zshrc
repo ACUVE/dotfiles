@@ -1,11 +1,11 @@
-# The following lines were added by compinstall
-
 zstyle ':completion:*' expand prefix suffix
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*' list-colors ''
 zstyle ':completion:*' list-suffixes true
 zstyle ':completion:*' original true
 zstyle ':completion:*' squeeze-slashes true
+
+fpath=(~/.zsh/autocomp "${fpath[@]}")
 
 autoload -Uz compinit; compinit
 # End of lines added by compinstall
@@ -119,6 +119,10 @@ RPROMPT="%1(v|%F{green}%1v%f|)"
 # https://github.com/pypa/pipenv/issues/1058
 export SHELL=`which zsh`
 export PIPENV_SHELL=`which zsh`
+
+if which bw > /dev/null 2>&1; then
+    eval "$(bw completion --shell zsh); compdef _bw bw;"
+fi
 
 ## Read .proxy
 if [ -e ~/.proxy ]; then

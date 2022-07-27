@@ -4,7 +4,7 @@ set -xe
 
 # Settings #####
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc)
-DOT_DIRECTORY_EACH_FILE=(.ssh .aws)
+DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
 CONFIG_FILES=(nvim git)
 ################
 
