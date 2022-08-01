@@ -1,6 +1,8 @@
 #!/bin/bash
 
-set -xe
+set -eux
+
+git submodule update --init --recursive || true
 
 # Settings #####
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc)
