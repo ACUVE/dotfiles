@@ -1,11 +1,11 @@
 [submodule ".zsh/z"]
-	path = root/.zsh/z
+	path = root/zsh/z
 	url = https://github.com/rupa/z.git
 [submodule ".vim/bundle/neobundle.vim"]
-	path = root/.vim/bundle/neobundle.vim
+	path = root/vim/bundle/neobundle.vim
 	url = https://github.com/Shougo/neobundle.vim.git
 [submodule ".pyenv"]
-	path = root/.pyenv
+	path = root/pyenv
 	url = https://github.com/pyenv/pyenv.git
 [submodule "private_config"]
 	path = private_config
