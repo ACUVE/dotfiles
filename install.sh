@@ -16,7 +16,7 @@ SCRIPT_DIR=$(cd $(dirname $0); pwd)
 # DOT_FILES
 for file in ${DOT_FILES[@]}
 do
-	ln -sfn "${SCRIPT_DIR}/$file" "${HOME}/${file}"
+	ln -sfn "${SCRIPT_DIR}/root/$file" "${HOME}/${file}"
 done
 
 # CONFIG_FILES
