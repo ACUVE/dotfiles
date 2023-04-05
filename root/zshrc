@@ -109,7 +109,7 @@ fi
 
 function _update_vcs_info_msg() {
     psvar=()
-    LANG=en_US.UTF-8 vcs_info
+    LANG=en_US.UTF-8 vcs_info 2>/dev/null
     [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 }
 autoload -U add-zsh-hook
