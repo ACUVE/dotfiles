@@ -1,0 +1,18 @@
+#!/bin/bash
+
+set -eu -o pipefail
+
+CMD=""
+if where awsume >/dev/null 2>&1; then
+    CMD="awsume"
+elif [ -x "${HOME}/.local/bin/awsume" ]; then
+    CMD="${HOME}/.local/bin/awsume"
+fi
+
+if [ -z "${CMD}" ]; then
+    echo "awsume not found"
+    exit 1
+fi
+
+set +eu +o pipefail
+. "${CMD}" "$@"

@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# 第一引数に指定したアカウントで、
+# 第二引数に指定したターゲット、第三引数のポートで接続
+
+set -eu -o pipefail
+
+PROFILE_NAME="$1"
+EC2_INSTANCE_ID="$2"
+EC2_PORT="$3"
+EC2_USER="$4"
+SEND_SSH_KEY="${5:-~/.ssh/id_ed25519.pub}"
+
+CMD=""
+if where awsume >/dev/null 2>&1; then
+    CMD="awsume"
+elif [ -x "${HOME}/.local/bin/awsume" ]; then
+    CMD="${HOME}/.local/bin/awsume"
+fi
+
+if [ -z "${CMD}" ]; then
+    echo "awsume not found"
+    exit 1
+fi
+
+set +eu +o pipefail
+. "${CMD}" "${PROFILE_NAME}"
+
+# check instance-id is valid
+if echo -n "${EC2_INSTANCE_ID}" | grep "i-" >/dev/null 2>&1; then
+    :
+else
+    # search instance-id with Name tag
+    EC2_INSTANCE_ID=$(aws ec2 describe-instances \
+        --filters "Name=tag:Name,Values=${EC2_INSTANCE_ID}" \
+        --query "Reservations[].Instances[0].InstanceId" \
+        --output text)
+    if [ -z "${EC2_INSTANCE_ID}" ]; then
+        echo "instance-id not found"
+        exit 1
+    fi
+fi
+
+aws ec2-instance-connect send-ssh-public-key \
+    --instance-id "${EC2_INSTANCE_ID}" \
+    --instance-os-user "${EC2_USER}" \
+    --ssh-public-key "file://${SEND_SSH_KEY}"
+
+aws ssm start-session \
+    --target "${EC2_INSTANCE_ID}" \
+    --document-name AWS-StartSSHSession \
+    --parameters "portNumber=${EC2_PORT}"
