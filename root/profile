@@ -1,0 +1,16 @@
+if which docker > /dev/null 2>&1; then
+    # Docker がインストールされている
+    DOCKER_CMD_PATH=$(which docker)
+    if [ "${DOCKER_CMD_PATH#"$HOME"}" != "${DOCKER_CMD_PATH}" ]; then
+        # rootless docker がインストールされているようだ
+        if [ -z "${XDG_RUNTIME_DIR:-}" ]; then
+            # XDG_RUNTIME_DIR が設定されていないようだ
+            if [ -d "/run/user/$(id -u)" ]; then
+                export XDG_RUNTIME_DIR="/run/user/$(id -u)"
+            else
+                XDG_RUNTIME_DIR="${HOME}/.docker/run"
+            fi
+        fi
+        export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
+    fi
+fi
