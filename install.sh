@@ -5,7 +5,7 @@ set -eux
 git submodule update --init --recursive || true
 
 # Settings #####
-DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc .bin .bashrc)
+DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc .bin .bashrc .profile)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
 CONFIG_FILES=(nvim git)
 ################
