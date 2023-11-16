@@ -1,0 +1,20 @@
+#!/bin/bash
+
+set -euo pipefail
+
+REPOURI="$1"
+REPOLAST="${REPOURI##*/}"
+REPONAME="${2:-${REPOLAST%.git}}"
+
+if [ -e "$REPONAME" ]; then
+    echo "Repo $REPONAME already exists"
+    exit 1
+fi
+
+mkdir "$REPONAME"
+cd "$REPONAME"
+git clone --bare "$REPOURI" .bare
+echo "gitdir: ./.bare" > .git
+git config --local --add remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+MAINBRANCH="$(git remote show origin | grep 'HEAD branch' | awk '{print $NF}')"
+git worktree add "${MAINBRANCH}"
