@@ -13,10 +13,6 @@ EC2_USER="$4"
 AWS_REGION_TMP="${5:-}"
 SEND_SSH_KEY="${6:-~/.ssh/id_ed25519.pub}"
 
-if [ -n "${AWS_REGION_TMP}" ]; then
-    export AWS_REGION="${AWS_REGION_TMP}"
-fi
-
 CMD=""
 if where awsume >/dev/null 2>&1; then
     CMD="awsume"
@@ -34,6 +30,10 @@ fi
 set +eu +o pipefail
 
 . "${CMD}" "${PROFILE_NAME}"
+
+if [ -n "${AWS_REGION_TMP}" ]; then
+    export AWS_REGION="${AWS_REGION_TMP}"
+fi
 
 # check instance-id is valid
 if echo -n "${EC2_INSTANCE_ID}" | grep "i-" >/dev/null 2>&1; then
