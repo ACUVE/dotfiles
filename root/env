@@ -1,3 +1,8 @@
+# if ~/profile exists, source it
+if [ -e "${HOME}/profile" ]; then
+    source "${HOME}/profile"
+fi
+
 # pip
 # Linux
 if [ -d "${HOME}/.local/bin" ]; then
@@ -84,3 +89,22 @@ export PATH="${PATH}:${HOME}/.bin"
 # Enable BuiltKit
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
+
+if [ -z "${DOCKER_HOST:-}" ]; then
+    if which docker > /dev/null 2>&1; then
+        # Docker がインストールされている
+        DOCKER_CMD_PATH=$(which docker)
+        if [ "${DOCKER_CMD_PATH#"$HOME"}" != "${DOCKER_CMD_PATH}" ]; then
+            # rootless docker がインストールされているようだ
+            if [ -z "${XDG_RUNTIME_DIR:-}" ]; then
+                # XDG_RUNTIME_DIR が設定されていないようだ
+                if [ -d "/run/user/${UID}" ]; then
+                    export XDG_RUNTIME_DIR="/run/user/${UID}"
+                else
+                    export XDG_RUNTIME_DIR="${HOME}/.docker/run"
+                fi
+            fi
+            export DOCKER_HOST=unix://${XDG_RUNTIME_DIR}/docker.sock
+        fi
+    fi
+fi
