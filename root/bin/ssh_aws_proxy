@@ -41,7 +41,7 @@ if echo -n "${EC2_INSTANCE_ID}" | grep "i-" >/dev/null 2>&1; then
 else
     # search instance-id with Name tag
     EC2_INSTANCE_ID=$(aws ec2 describe-instances \
-        --filters "Name=tag:Name,Values=${EC2_INSTANCE_ID}" \
+        --filters "Name=tag:Name,Values=${EC2_INSTANCE_ID}" "Name=instance-state-name,Values=running" \
         --query "Reservations[].Instances[0].InstanceId" \
         --output text)
     if [ -z "${EC2_INSTANCE_ID}" ]; then
