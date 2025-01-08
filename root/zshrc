@@ -72,8 +72,6 @@ if [ "$?" != "0" ]; then
 fi
 
 ALIASES=(
-    "ls exa"
-    "cat bat"
     "kc kubectl"
     "g git"
     "top htop"
