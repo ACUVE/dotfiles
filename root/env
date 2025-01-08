@@ -65,6 +65,12 @@ if [ -z "${SSH_CONNECTION}" -a -z "${SSH_AUTH_SOCK:-}" ]; then
     fi
 fi
 
+# mise
+if which mise > /dev/null 2>&1; then
+    SHELL_NAME=$(basename "${SHELL}")
+    eval "$(mise activate ${SHELL_NAME})"
+fi
+
 if which whence > /dev/null 2>&1; then
     # awsume
     if whence -w awsume | grep -v "alias" > /dev/null 2>&1; then
