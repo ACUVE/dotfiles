@@ -108,3 +108,8 @@ if [ -z "${DOCKER_HOST:-}" ]; then
         fi
     fi
 fi
+
+# kubectl
+if which kubectl > /dev/null 2>&1; then
+    source <(kubectl completion ${SHELL##*/})
+fi
