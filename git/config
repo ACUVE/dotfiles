@@ -11,7 +11,9 @@
 	recurse = true
 
 [fetch]
-    prune = true
+	prune = true
+	pruneTags = true
+	all = true
 
 [init]
 	defaultBranch = master
