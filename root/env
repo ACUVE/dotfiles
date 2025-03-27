@@ -59,6 +59,15 @@ if which brew > /dev/null 2>&1; then
     export PATH=$(brew --prefix openssl)/bin:$PATH
 fi
 
+# SSH_AUTH_SOCK
+#  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
+if [ -S "/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
+    export SSH_AUTH_SOCK="/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+fi
+if [ -S "/Users/$(whoami)/.bitwarden-ssh-agent.sock" ]; then
+    export SSH_AUTH_SOCK="/Users/$(whoami)/.bitwarden-ssh-agent.sock"
+fi
+#  SSH で接続していない場合は ssh-agent を起動する
 if [ -z "${SSH_CONNECTION}" -a -z "${SSH_AUTH_SOCK:-}" ]; then
     if where ssh-agent > /dev/null 2>&1; then
         eval "$(ssh-agent)" > /dev/null 2>&1
