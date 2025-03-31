@@ -35,3 +35,7 @@
 	br = branch
 	co = checkout
 	com = "!f() { git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@' | xargs git checkout; }; f"
+
+[user]
+	name = ACUVE
+	email = 601805+ACUVE@users.noreply.github.com
