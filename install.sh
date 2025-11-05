@@ -20,7 +20,7 @@ do
 done
 
 # CONFIG_FILES
-mkdir -p $HOME/.config
+mkdir -p "$HOME/.config"
 for file in "${CONFIG_FILES[@]}"
 do
 	ln -sfn "${SCRIPT_DIR}/${file}" "${HOME}/.config/${file}"
