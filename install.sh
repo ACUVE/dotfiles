@@ -10,24 +10,24 @@ DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
 CONFIG_FILES=(nvim git)
 ################
 
-SCRIPT_DIR=$(cd $(dirname $0); pwd)
+SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 
 
 # DOT_FILES
-for file in ${DOT_FILES[@]}
+for file in "${DOT_FILES[@]}"
 do
 	ln -sfn "${SCRIPT_DIR}/root/${file#.}" "${HOME}/${file}"
 done
 
 # CONFIG_FILES
 mkdir -p $HOME/.config
-for file in ${CONFIG_FILES[@]}
+for file in "${CONFIG_FILES[@]}"
 do
 	ln -sfn "${SCRIPT_DIR}/${file}" "${HOME}/.config/${file}"
 done
 
 # DOT_DIRECTORY_EACH_FILE
-for dir in ${DOT_DIRECTORY_EACH_FILE[@]}
+for dir in "${DOT_DIRECTORY_EACH_FILE[@]}"
 do
     TARGET_DIR="${HOME}/${dir}"
     if [ \! -e "${TARGET_DIR}" ]; then
