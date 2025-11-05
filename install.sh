@@ -39,7 +39,7 @@ do
     fi
     if [ -d "${TARGET_DIR}" ]; then
         for file in "${SCRIPT_DIR}/${dir}"/*; do
-            REL_TARGET_PATH="${file#${SCRIPT_DIR}/}"
+            REL_TARGET_PATH="${file#"${SCRIPT_DIR}"/}"
             ln -sfn "${file}" "${HOME}/${REL_TARGET_PATH}"
             # .ssh だけ 600 である必要性がある
             if [ "${dir}" = ".ssh" ]; then
