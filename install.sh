@@ -30,7 +30,7 @@ done
 for dir in "${DOT_DIRECTORY_EACH_FILE[@]}"
 do
     TARGET_DIR="${HOME}/${dir}"
-    if [ \! -e "${TARGET_DIR}" ]; then
+    if [ ! -e "${TARGET_DIR}" ]; then
         mkdir "${TARGET_DIR}"
         # .ssh だけ例外的に 700 である必要性がある
         if [ "${dir}" = ".ssh" ]; then
