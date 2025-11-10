@@ -38,10 +38,14 @@ fi
 # poetry
 export POETRY_VIRTUALENVS_IN_PROJECT=true
 
+# set EDITOR
 if where nvim > /dev/null 2>&1; then
     export EDITOR=nvim
 elif where vim > /dev/null 2>&1; then
     export EDITOR=vim
+fi
+if [ "${TERM_PROGRAM:-}" = "vscode" ]; then
+    export EDITOR="code --wait"
 fi
 
 # pyenv
