@@ -1,17 +1,23 @@
 #!/bin/bash
 
-# 第一引数に指定したアカウントで、
-# 第二引数に指定したターゲット、第三引数のポート、第四引数のユーザーで接続
-# 第五引数でリージョン指定
-
 set -eu -o pipefail
 
-PROFILE_NAME="$1"
-EC2_INSTANCE_ID="$2"
-EC2_PORT="$3"
-EC2_USER="$4"
-AWS_REGION_TMP="${5:-}"
-SEND_SSH_KEY="${6:-~/.ssh/id_ed25519.pub}"
+if [ "$#" -eq 4 ] || [ "$#" -eq 5 ]; then
+    PROFILE_NAME="$1"
+    EC2_INSTANCE_ID="$2"
+    EC2_PORT="$3"
+    EC2_USER="$4"
+    AWS_REGION_TMP="${5:-}"
+elif [ "$#" -eq 3 ]; then
+    PROFILE_NAME_AND_HOST_AND_REGION="$1" # ex: aws_randd_gateway / aws_randd_gateway_ap-northeast-1
+    PROFILE_NAME=$(echo "${PROFILE_NAME_AND_HOST_AND_REGION}" | cut -d'_' -f2)
+    EC2_INSTANCE_ID=$(echo "${PROFILE_NAME_AND_HOST_AND_REGION}" | cut -d'_' -f3)
+    AWS_REGION_TMP=$(echo "${PROFILE_NAME_AND_HOST_AND_REGION}" | cut -d'_' -f4)
+    EC2_PORT="$2"
+    EC2_USER="$3"
+fi
+
+SEND_SSH_KEY="${HOME}/.ssh/id_ed25519.pub"
 
 CMD=""
 if where awsume >/dev/null 2>&1; then
