@@ -57,7 +57,7 @@ aws ec2-instance-connect send-ssh-public-key \
     --instance-os-user "${EC2_USER}" \
     --ssh-public-key "file://${SEND_SSH_KEY}"
 
-aws ssm start-session \
+exec aws ssm start-session \
     --target "${EC2_INSTANCE_ID}" \
     --document-name AWS-StartSSHSession \
     --parameters "portNumber=${EC2_PORT}"
