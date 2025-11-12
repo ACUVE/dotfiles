@@ -1,0 +1,15 @@
+[tools]
+python = ["3.9", "3.10", "3.11", "3.12"]
+node = "lts"
+poetry = "latest"
+task = "latest"
+"npm:aws-cdk" = "latest"
+buf = "latest"
+java = "corretto-8"
+aws-cli = "latest"
+
+[settings]
+idiomatic_version_file_enable_tools = []
+
+# experimental = true
+# lockfile = true

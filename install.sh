@@ -7,7 +7,7 @@ git submodule update --init --recursive || true
 # Settings #####
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc .bin .bashrc)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
-CONFIG_FILES=(nvim git)
+CONFIG_FILES=(nvim git mise)
 ################
 
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
