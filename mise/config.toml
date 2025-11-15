@@ -7,6 +7,7 @@ task = "latest"
 buf = "latest"
 java = "corretto-8"
 aws-cli = "latest"
+pnpm = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
