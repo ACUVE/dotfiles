@@ -23,7 +23,7 @@ done
 mkdir -p "$HOME/.config"
 for file in "${CONFIG_FILES[@]}"
 do
-	ln -sfn "${SCRIPT_DIR}/${file}" "${HOME}/.config/${file}"
+	ln -sfn "${SCRIPT_DIR}/config/${file}" "${HOME}/.config/${file}"
 done
 
 # DOT_DIRECTORY_EACH_FILE
