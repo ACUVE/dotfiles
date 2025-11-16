@@ -144,7 +144,7 @@ if [ -e ~/.proxy ]; then
     source ~/.proxy
 fi
 
-## Read .env
-if [ -e ~/.env ]; then
-    source ~/.env
+## Read .shenv
+if [ -e ~/.shenv ]; then
+    source ~/.shenv
 fi

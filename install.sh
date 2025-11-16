@@ -5,9 +5,10 @@ set -eux
 git submodule update --init --recursive || true
 
 # Settings #####
-DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .env .pep8 .pyenv .digrc .bin .bashrc)
+DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .shenv .pep8 .pyenv .digrc .bin .bashrc)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
 CONFIG_FILES=(nvim git mise)
+OLD_DOT_FILES=(.env)  # 過去管理していたが、現在は管理していないファイル群
 ################
 
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
@@ -17,6 +18,13 @@ SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 for file in "${DOT_FILES[@]}"
 do
 	ln -sfn "${SCRIPT_DIR}/root/${file#.}" "${HOME}/${file}"
+done
+# OLD_DOT_FILES
+for file in "${OLD_DOT_FILES[@]}"
+do
+    if [ -L "${HOME}/${file}" ] && [ ! -e "${HOME}/${file}" ]; then
+        rm "${HOME}/${file}"
+    fi
 done
 
 # CONFIG_FILES

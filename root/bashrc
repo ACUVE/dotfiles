@@ -1,8 +1,8 @@
 #!/bin/bash
 
-if [ -e "${HOME}/.env" ]
+if [ -e "${HOME}/.shenv" ]
 then
-    source "${HOME}/.env"
+    source "${HOME}/.shenv"
 fi
 
 if [ -e "/etc/bashrc" ]

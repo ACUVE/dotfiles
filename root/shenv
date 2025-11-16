@@ -11,7 +11,7 @@ fi
 # Mac
 if [ -d "${HOME}/Library/Python"  ]; then
     PYTHON_BIN=(
-        ${HOME}/Library/Python/*/bin
+        "${HOME}"/Library/Python/*/bin
     )
     for D in "${PYTHON_BIN[@]}"; do
         if [ -d "$D" ]; then
@@ -59,17 +59,20 @@ fi
 
 # brew
 if which brew > /dev/null 2>&1; then
-    export PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
-    export PATH=$(brew --prefix openssl)/bin:$PATH
+    PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
+    PATH=$(brew --prefix openssl)/bin:$PATH
+    export PATH
 fi
 
 # SSH_AUTH_SOCK
 #  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
 if [ -S "/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
-    export SSH_AUTH_SOCK="/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+    SSH_AUTH_SOCK="/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+    export SSH_AUTH_SOCK
 fi
 if [ -S "/Users/$(whoami)/.bitwarden-ssh-agent.sock" ]; then
-    export SSH_AUTH_SOCK="/Users/$(whoami)/.bitwarden-ssh-agent.sock"
+    SSH_AUTH_SOCK="/Users/$(whoami)/.bitwarden-ssh-agent.sock"
+    export SSH_AUTH_SOCK
 fi
 #  SSH で接続していない場合は ssh-agent を起動する
 if [ -z "${SSH_CONNECTION}" -a -z "${SSH_AUTH_SOCK:-}" ]; then
@@ -81,7 +84,7 @@ fi
 # mise
 if which mise > /dev/null 2>&1; then
     SHELL_NAME=$(basename "${SHELL}")
-    eval "$(mise activate ${SHELL_NAME})"
+    eval "$(mise activate "${SHELL_NAME}")"
 fi
 
 if which whence > /dev/null 2>&1; then
@@ -89,7 +92,7 @@ if which whence > /dev/null 2>&1; then
     if whence -w awsume | grep -v "alias" > /dev/null 2>&1; then
         alias awsume='. awsume'
     fi
-    
+
     # VSCode
     if where VSCode > /dev/null 2>&1; then
         :
