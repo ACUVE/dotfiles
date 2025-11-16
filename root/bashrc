@@ -1,4 +1,9 @@
-source ${HOME}/.env
+#!/bin/bash
+
+if [ -e "${HOME}/.env" ]
+then
+    source "${HOME}/.env"
+fi
 
 if [ -e "/etc/bashrc" ]
 then
