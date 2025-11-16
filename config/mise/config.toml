@@ -8,6 +8,7 @@ buf = "latest"
 java = "corretto-8"
 aws-cli = "latest"
 pnpm = "latest"
+uv = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
