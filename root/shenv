@@ -20,9 +20,6 @@ if [ -d "${HOME}/Library/Python"  ]; then
     done
 fi
 
-# golang
-export PATH="${HOME}/go/bin:${PATH}"
-
 # added by Anaconda3 installer
 if [ -d "${HOME}/anaconda3/bin" ]; then
     # export PATH="${HOME}/anaconda3/bin:$PATH"
