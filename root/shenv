@@ -3,29 +3,6 @@ if [ -e "${HOME}/profile" ]; then
     source "${HOME}/profile"
 fi
 
-# pip
-# Linux
-if [ -d "${HOME}/.local/bin" ]; then
-    export PATH="${HOME}/.local/bin:${PATH}"
-fi
-# Mac
-if [ -d "${HOME}/Library/Python"  ]; then
-    PYTHON_BIN=(
-        "${HOME}"/Library/Python/*/bin
-    )
-    for D in "${PYTHON_BIN[@]}"; do
-        if [ -d "$D" ]; then
-            export PATH="${D}:${PATH}"
-        fi
-    done
-fi
-
-# added by Anaconda3 installer
-if [ -d "${HOME}/anaconda3/bin" ]; then
-    # export PATH="${HOME}/anaconda3/bin:$PATH"
-    export PATH="${PATH}:${HOME}/anaconda3/bin"
-fi
-
 # pipenv
 export PIPENV_VENV_IN_PROJECT=true
 if which pipenv > /dev/null 2>&1; then
