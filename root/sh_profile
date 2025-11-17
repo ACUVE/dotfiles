@@ -1,6 +1,11 @@
 export XDG_CONFIG_HOME="${HOME}/.config"
 
-if [ -e "${HOME}/.cargo/env" ]
-then
+# Rust
+if [ -e "${HOME}/.cargo/env" ]; then
     . "${HOME}/.cargo/env"
+fi
+
+# useful script
+if [ -d "${HOME}/.bin" ]; then
+    export PATH="${PATH}:${HOME}/.bin"
 fi

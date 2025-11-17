@@ -105,9 +105,6 @@ if which whence > /dev/null 2>&1; then
     fi
 fi
 
-# useful script
-export PATH="${PATH}:${HOME}/.bin"
-
 # Enable BuiltKit
 export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
