@@ -1,5 +1,5 @@
 [tools]
-python = ["3.9", "3.10", "3.11", "3.12"]
+python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
 node = "lts"
 poetry = "latest"
 task = "latest"
@@ -10,6 +10,7 @@ aws-cli = "latest"
 pnpm = "latest"
 uv = "latest"
 go = "latest"
+"npm:@anthropic-ai/claude-code" = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
