@@ -38,7 +38,7 @@ if which brew > /dev/null 2>&1; then
     export PATH
 fi
 
-# SSH_AUTH_SOCK
+# SSH_AUTH_SOCK（sh_profile と同じ内容とすること）
 #  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
 if [ -S "/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
     SSH_AUTH_SOCK="/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"

@@ -9,3 +9,20 @@ fi
 if [ -d "${HOME}/.bin" ]; then
     export PATH="${PATH}:${HOME}/.bin"
 fi
+
+# SSH_AUTH_SOCK（shenv と同じ内容とすること）
+#  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
+if [ -S "/Users/${USER}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
+    SSH_AUTH_SOCK="/Users/${USER}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+    export SSH_AUTH_SOCK
+fi
+if [ -S "/Users/${USER}/.bitwarden-ssh-agent.sock" ]; then
+    SSH_AUTH_SOCK="/Users/${USER}/.bitwarden-ssh-agent.sock"
+    export SSH_AUTH_SOCK
+fi
+#  SSH で接続していない場合は ssh-agent を起動する
+if [ -z "${SSH_CONNECTION}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
+    if where ssh-agent > /dev/null 2>&1; then
+        eval "$(ssh-agent)" > /dev/null 2>&1
+    fi
+fi
