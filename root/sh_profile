@@ -33,3 +33,5 @@ fi
 # その他しょうもない設定
 #  https://github.com/aws/aws-cdk/issues/34892
 export CDK_DISABLE_CLI_TELEMETRY=true
+#  https://github.com/anthropics/claude-code/issues/1455
+export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"

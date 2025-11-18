@@ -69,5 +69,9 @@ do
     fi
 done
 
+# Claude Code が XDG の仕様に沿ってないので、仕方なく一部分離
+ln -sfn "${SCRIPT_DIR}/claude_agents" "${CLAUDE_CONFIG_DIR:-"${HOME}/.claude"}/agents"
+
+
 # git config --global core.editor 'vim -c "set fenc=utf-8"'
 # go get github.com/nsf/gocode
