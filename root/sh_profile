@@ -35,3 +35,5 @@ fi
 export CDK_DISABLE_CLI_TELEMETRY=true
 #  https://github.com/anthropics/claude-code/issues/1455
 export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"
+#  https://code.claude.com/docs/ja/monitoring-usage
+export CLAUDE_CODE_ENABLE_TELEMETRY="0"
