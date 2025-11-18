@@ -11,6 +11,7 @@ pnpm = "latest"
 uv = "latest"
 go = "latest"
 "npm:@anthropic-ai/claude-code" = "latest"
+rust = "latest"
 
 [settings]
 idiomatic_version_file_enable_tools = []
