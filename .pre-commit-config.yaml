@@ -1,0 +1,22 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+        description: "行末の空白を削除"
+        stages: [pre-commit, manual]
+      - id: end-of-file-fixer
+        description: "ファイルの末尾に改行を追加"
+        stages: [pre-commit, manual]
+      - id: check-yaml
+        description: "YAMLファイルのチェック"
+        stages: [pre-commit, manual]
+      - id: check-toml
+        description: "TOMLファイルのチェック"
+        stages: [pre-commit, manual]
+      - id: check-json
+        description: "JSONファイルのチェック"
+        stages: [pre-commit, manual]
+      - id: check-merge-conflict
+        description: "マージコンフリクトのチェック"
+        stages: [pre-push, manual]
