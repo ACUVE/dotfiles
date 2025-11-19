@@ -21,10 +21,16 @@ task = "latest"
 # cli
 aws-cli = "latest"
 buf = "latest"
-"npm:aws-cdk" = "latest"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
-"npm:@anthropic-ai/claude-code" = "latest"  # https://www.claude.com/product/claude-code
-"npm:@typespec/compiler" = "latest"  # https://typespec.io/docs/language-basics/visibility/
-"pipx:pre-commit" = "latest"  # https://pre-commit.com/
+"npm:aws-cdk" = "2.1033.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
+"npm:@anthropic-ai/claude-code" = "2.0.46"  # https://www.claude.com/product/claude-code
+"npm:@typespec/compiler" = "1.6.0"  # https://typespec.io/docs/language-basics/visibility/
+"pipx:pre-commit" = "4.4.0"  # https://pre-commit.com/
+
+[tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
+version = "1.0.0"
+url = "https://github.com/coderabbitai/git-worktree-runner/archive/refs/tags/v1.0.0.tar.gz"
+checksum = "sha256:0c3e000fd40654e350ecc5a6453339d9cf42feb75090662379bb2819018ff2f6"
+size = 110099
 
 [settings]
 idiomatic_version_file_enable_tools = []
