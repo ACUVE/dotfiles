@@ -26,6 +26,7 @@ buf = "latest"
 "npm:@typespec/compiler" = "1.6.0"  # https://typespec.io/docs/language-basics/visibility/
 "pipx:pre-commit" = "4.4.0"  # https://pre-commit.com/
 "pipx:awsume" = "4.5.4"  # https://awsu.me/
+"npm:@bitwarden/cli" = "2025.11.0"  # https://bitwarden.com/help/article/cli/
 
 [tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
 version = "1.0.0"
