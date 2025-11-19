@@ -30,7 +30,7 @@ buf = "latest"
 
 [tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
 version = "1.0.0"
-url = "https://github.com/coderabbitai/git-worktree-runner/archive/refs/tags/v1.0.0.tar.gz"
+url = "https://github.com/coderabbitai/git-worktree-runner/archive/refs/tags/v{{version}}.tar.gz"
 checksum = "sha256:0c3e000fd40654e350ecc5a6453339d9cf42feb75090662379bb2819018ff2f6"
 size = 110099
 
