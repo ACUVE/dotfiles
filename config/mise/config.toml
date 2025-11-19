@@ -1,17 +1,29 @@
 [tools]
+# runtime
 python = ["3.9", "3.10", "3.11", "3.12", "3.13"]
 node = "lts"
-poetry = "latest"
-task = "latest"
-"npm:aws-cdk" = "latest"
-buf = "latest"
-java = "corretto-8"
-aws-cli = "latest"
-pnpm = "latest"
-uv = "latest"
+
+# compiler
 go = "latest"
-"npm:@anthropic-ai/claude-code" = "latest"
 rust = "latest"
+java = "corretto-8"
+
+# python package managers
+poetry = "latest"
+uv = "latest"
+
+# node package managers
+pnpm = "latest"
+
+# task runner
+task = "latest"
+
+# cli
+aws-cli = "latest"
+buf = "latest"
+"npm:aws-cdk" = "latest"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
+"npm:@anthropic-ai/claude-code" = "latest"  # https://www.claude.com/product/claude-code
+"npm:@typespec/compiler" = "latest"  # https://typespec.io/docs/language-basics/visibility/
 
 [settings]
 idiomatic_version_file_enable_tools = []
