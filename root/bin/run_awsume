@@ -9,6 +9,8 @@ elif [ -x "${HOME}/.local/bin/awsume" ]; then
     CMD="${HOME}/.local/bin/awsume"
 elif [ -x "/usr/local/bin/awsume" ]; then
     CMD="/usr/local/bin/awsume"
+elif [ -x "/opt/homebrew/bin/awsume" ]; then
+    CMD="/opt/homebrew/bin/awsume"
 elif [ -x "/Users/acuve/.local/share/mise/installs/pipx-awsume/latest/bin/awsume" ]; then
     CMD="/Users/acuve/.local/share/mise/installs/pipx-awsume/latest/bin/awsume"
 fi
