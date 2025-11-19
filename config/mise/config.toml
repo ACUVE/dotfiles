@@ -24,9 +24,13 @@ buf = "latest"
 "npm:aws-cdk" = "latest"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
 "npm:@anthropic-ai/claude-code" = "latest"  # https://www.claude.com/product/claude-code
 "npm:@typespec/compiler" = "latest"  # https://typespec.io/docs/language-basics/visibility/
+"pipx:pre-commit" = "latest"  # https://pre-commit.com/
 
 [settings]
 idiomatic_version_file_enable_tools = []
 
 # experimental = true
 # lockfile = true
+
+[settings.pipx]
+uvx = true
