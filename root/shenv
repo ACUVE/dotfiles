@@ -104,7 +104,7 @@ fi
 
 # kubectl
 if which kubectl > /dev/null 2>&1; then
-    source <(kubectl completion ${SHELL##*/})
+    source <(kubectl completion "${SHELL##*/}")
 fi
 
 # typer
@@ -114,5 +114,5 @@ fi
 
 # task
 if which task > /dev/null 2>&1; then
-    eval "$(task --completion ${SHELL##*/})"
+    eval "$(task --completion "${SHELL##*/}")"
 fi
