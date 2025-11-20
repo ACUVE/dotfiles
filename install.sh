@@ -70,4 +70,5 @@ do
 done
 
 # Claude Code が XDG の仕様に沿ってないので、仕方なく一部分離
+mkdir -p "${CLAUDE_CONFIG_DIR:-"${HOME}/.claude"}"
 ln -sfn "${SCRIPT_DIR}/claude_agents" "${CLAUDE_CONFIG_DIR:-"${HOME}/.claude"}/agents"
