@@ -111,3 +111,8 @@ fi
 if which typer > /dev/null 2>&1; then
     eval "$(typer --show-completion)"
 fi
+
+# task
+if which task > /dev/null 2>&1; then
+    eval "$(task --completion ${SHELL##*/})"
+fi
