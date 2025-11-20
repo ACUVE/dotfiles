@@ -12,8 +12,14 @@ java = "corretto-8"
 poetry = "latest"
 uv = "latest"
 
+# python dev tools
+ruff = "latest"
+
 # node package managers
 pnpm = "latest"
+
+# node dev tools
+biome = "latest"
 
 # task runner
 task = "latest"
