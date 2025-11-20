@@ -21,6 +21,7 @@
 
 [commit]
 	verbose = true
+	gpgsign = true
 
 [branch]
 	sort = -authordate
@@ -40,6 +41,10 @@
 	co = checkout
 	com = "!f() { git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@' | xargs git checkout; }; f"
 
+[gpg]
+	format = ssh
+
 [user]
 	name = ACUVE
 	email = 601805+ACUVE@users.noreply.github.com
+	signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKfI74Wrd7v1d36kj3uA/rFpFzWjoxS/KqWPoG2SZiM7"
