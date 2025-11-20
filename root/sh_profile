@@ -15,6 +15,11 @@ if [ -d "${HOME}/.bin" ]; then
     export PATH="${PATH}:${HOME}/.bin"
 fi
 
+# Antigravity（XDG Base Directory 仕様に沿わないゴミアプリ）
+if [ -d "${HOME}/.antigravity/antigravity/bin" ]; then
+    export PATH="${HOME}/.antigravity/antigravity/bin:${PATH}"
+fi
+
 # SSH_AUTH_SOCK（shenv と同じ内容とすること）
 #  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
 if [ -S "/Users/${USER}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
