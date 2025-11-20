@@ -32,7 +32,6 @@ bat = "latest"
 eza = "latest"
 ripgrep = "latest"
 fd = "latest"
-starship = "latest"
 fzf = "latest"
 gh = "latest"
 "npm:aws-cdk" = "2.1033.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
