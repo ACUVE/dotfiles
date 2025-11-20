@@ -135,8 +135,15 @@ RPROMPT="%1(v|%F{green}%1v%f|)"
 export SHELL=`which zsh`
 export PIPENV_SHELL=`which zsh`
 
+# bitwarden cli completion
 if which bw > /dev/null 2>&1; then
     eval "$(bw completion --shell zsh); compdef _bw bw;"
+fi
+# gtr cli completion
+if [ -f "${HOME}/.local/share/mise/installs/http-git-worktree-runner/latest/git-worktree-runner-1.0.0/completions/_gtr" ]; then
+    fpath+=("${HOME}/.local/share/mise/installs/http-git-worktree-runner/latest/git-worktree-runner-1.0.0/completions")
+    autoload -Uz _gtr
+    compdef _gtr gtr
 fi
 
 ## Read .proxy
