@@ -106,3 +106,8 @@ fi
 if which kubectl > /dev/null 2>&1; then
     source <(kubectl completion ${SHELL##*/})
 fi
+
+# typer
+if which typer > /dev/null 2>&1; then
+    eval "$(typer --show-completion)"
+fi
