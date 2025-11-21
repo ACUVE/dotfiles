@@ -1,11 +1,9 @@
 #!/bin/bash
 
-if [ -e "/etc/bashrc" ]
-then
+if [ -f "/etc/bashrc" ]; then
     source "/etc/bashrc"
 fi
 
-if [ -e "${HOME}/.shenv" ]
-then
+if [ -f "${HOME}/.shenv" ]; then
     source "${HOME}/.shenv"
 fi
