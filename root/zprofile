@@ -1,0 +1,3 @@
+if [ -f "${HOME}/.sh_profile" ]; then
+    . "${HOME}/.sh_profile"
+fi
