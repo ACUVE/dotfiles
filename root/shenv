@@ -13,9 +13,9 @@ fi
 export POETRY_VIRTUALENVS_IN_PROJECT=true
 
 # set EDITOR
-if where nvim > /dev/null 2>&1; then
+if command -v nvim > /dev/null 2>&1; then
     export EDITOR=nvim
-elif where vim > /dev/null 2>&1; then
+elif command -v vim > /dev/null 2>&1; then
     export EDITOR=vim
 fi
 if [ "${TERM_PROGRAM:-}" = "vscode" ]; then
@@ -50,7 +50,7 @@ if [ -S "/Users/$(whoami)/.bitwarden-ssh-agent.sock" ]; then
 fi
 #  SSH で接続していない場合は ssh-agent を起動する
 if [ -z "${SSH_CONNECTION}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
-    if where ssh-agent > /dev/null 2>&1; then
+    if command -v ssh-agent > /dev/null 2>&1; then
         eval "$(ssh-agent)" > /dev/null 2>&1
     fi
 fi

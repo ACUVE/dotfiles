@@ -30,7 +30,7 @@ if [ -S "/Users/${USER}/.bitwarden-ssh-agent.sock" ]; then
 fi
 #  SSH で接続していない場合は ssh-agent を起動する
 if [ -z "${SSH_CONNECTION}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
-    if where ssh-agent > /dev/null 2>&1; then
+    if command -v ssh-agent > /dev/null 2>&1; then
         eval "$(ssh-agent)" > /dev/null 2>&1
     fi
 fi
