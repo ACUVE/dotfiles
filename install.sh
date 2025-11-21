@@ -74,7 +74,7 @@ mkdir -p "${CLAUDE_CONFIG_DIR:-"${HOME}/.claude"}"
 ln -sfn "${SCRIPT_DIR}/claude_agents" "${CLAUDE_CONFIG_DIR:-"${HOME}/.claude"}/agents"
 
 # Homebrew Bundle
-if where brew >/dev/null 2>&1; then
+if command -v brew >/dev/null 2>&1; then
     pushd "${HOME}"
     HOMEBREW_BUNDLE_NO_UPGRADE="1" brew bundle
     popd
