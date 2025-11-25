@@ -133,10 +133,10 @@ if command -v bw > /dev/null 2>&1; then
     eval "$(bw completion --shell zsh); compdef _bw bw;"
 fi
 # gtr cli completion
-if [ -f "${HOME}/.local/share/mise/installs/http-git-worktree-runner/latest/git-worktree-runner-1.0.0/completions/_gtr" ]; then
-    fpath+=("${HOME}/.local/share/mise/installs/http-git-worktree-runner/latest/git-worktree-runner-1.0.0/completions")
-    autoload -Uz _gtr
-    compdef _gtr gtr
+if [ -f "${HOME}/.local/share/mise/installs/http-git-worktree-runner/latest/git-worktree-runner-2.0.0/completions/_git-gtr" ]; then
+    fpath+=("${HOME}/.local/share/mise/installs/http-git-worktree-runner/latest/git-worktree-runner-2.0.0/completions")
+    autoload -Uz _git-gtr
+    compdef _git-gtr git-gtr gtr
 fi
 
 ## Read .proxy
