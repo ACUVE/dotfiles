@@ -56,5 +56,9 @@ idiomatic_version_file_enable_tools = []
 # experimental = true
 # lockfile = true
 
+[settings.status]
+missing_tools = 'always'
+show_env = true
+
 [settings.pipx]
 uvx = true
