@@ -35,7 +35,7 @@ setopt hist_reduce_blanks
 setopt inc_append_history
 setopt share_history
 disable r
-if which stty >/dev/null 2>&1; then
+if command -v stty >/dev/null 2>&1; then
     stty stop undef
 fi
 
@@ -57,10 +57,10 @@ alias ll="ls -l"
 alias less="less -R"
 alias g="git"
 alias mmv="noglob zmv -W"
-if which gfind > /dev/null 2>&1; then
+if command -v gfind > /dev/null 2>&1; then
     alias find="gfind"
 fi
-if which ggrep > /dev/null 2>&1; then
+if command -v ggrep > /dev/null 2>&1; then
     alias grep="ggrep"
 fi
 
@@ -74,7 +74,7 @@ for al in "${ALIASES[@]}"
 do
     alias_name=$(echo $al | cut -d ' ' -f 1)
     alias_cmd=$(echo $al | cut -d ' ' -f 2)
-    if which $alias_cmd > /dev/null 2>&1; then
+    if command -v $alias_cmd > /dev/null 2>&1; then
         alias $alias_name=$alias_cmd
     fi
 done
@@ -125,11 +125,11 @@ add-zsh-hook precmd _update_vcs_info_msg
 RPROMPT="%1(v|%F{green}%1v%f|)"
 
 # https://github.com/pypa/pipenv/issues/1058
-export SHELL=`which zsh`
-export PIPENV_SHELL=`which zsh`
+export SHELL=`command -v zsh`
+export PIPENV_SHELL=`command -v zsh`
 
 # bitwarden cli completion
-if which bw > /dev/null 2>&1; then
+if command -v bw > /dev/null 2>&1; then
     eval "$(bw completion --shell zsh); compdef _bw bw;"
 fi
 # gtr cli completion
