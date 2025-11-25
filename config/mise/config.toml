@@ -45,10 +45,10 @@ shellcheck = "latest"
 "npm:vibe-kanban" = "0.0.122"  # https://www.vibekanban.com/docs
 
 [tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
-version = "1.0.0"
+version = "2.0.0"
 url = "https://github.com/coderabbitai/git-worktree-runner/archive/refs/tags/v{{version}}.tar.gz"
-checksum = "sha256:0c3e000fd40654e350ecc5a6453339d9cf42feb75090662379bb2819018ff2f6"
-size = 110099
+checksum = "sha256:ea5be2610bcd49a7f05806c3cf956d8dd5bc53d51a2f1c2519604586e2b3afa8"
+size = 118519
 
 [settings]
 idiomatic_version_file_enable_tools = []
