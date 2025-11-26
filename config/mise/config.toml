@@ -43,6 +43,7 @@ shellcheck = "latest"
 "npm:@bitwarden/cli" = "2025.11.0"  # https://bitwarden.com/help/article/cli/
 "pipx:typer" = "0.20.0"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
 "npm:vibe-kanban" = "0.0.122"  # https://www.vibekanban.com/docs
+"npm:@google/clasp" = "3.1.3" # https://github.com/google/clasp#readme
 
 [tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
 version = "2.0.0"
