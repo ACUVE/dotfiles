@@ -5,7 +5,7 @@ fi
 
 # pipenv
 export PIPENV_VENV_IN_PROJECT=true
-if which pipenv > /dev/null 2>&1; then
+if command -v pipenv > /dev/null 2>&1; then
     eval "$(pipenv --completion)"
 fi
 
@@ -32,7 +32,7 @@ if [ -d "${HOME}/.pyenv" ]; then
 fi
 
 # brew
-if which brew > /dev/null 2>&1; then
+if command -v brew > /dev/null 2>&1; then
     PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
     PATH=$(brew --prefix openssl)/bin:$PATH
     export PATH
@@ -56,12 +56,12 @@ if [ -z "${SSH_CONNECTION}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
 fi
 
 # mise
-if which mise > /dev/null 2>&1; then
+if command -v mise > /dev/null 2>&1; then
     SHELL_NAME=$(basename "${SHELL}")
     eval "$(mise activate "${SHELL_NAME}")"
 fi
 
-if which whence > /dev/null 2>&1; then
+if command -v whence > /dev/null 2>&1; then
     # awsume
     if whence -w awsume | grep -v "alias" > /dev/null 2>&1; then
         alias awsume='. awsume'
@@ -84,9 +84,9 @@ export DOCKER_BUILDKIT=1
 export COMPOSE_DOCKER_CLI_BUILD=1
 
 if [ -z "${DOCKER_HOST:-}" ]; then
-    if which docker > /dev/null 2>&1; then
+    if command -v docker > /dev/null 2>&1; then
         # Docker がインストールされている
-        DOCKER_CMD_PATH=$(which docker)
+        DOCKER_CMD_PATH=$(command -v docker)
         if [ "${DOCKER_CMD_PATH#"$HOME"}" != "${DOCKER_CMD_PATH}" ]; then
             # rootless docker がインストールされているようだ
             if [ -z "${XDG_RUNTIME_DIR:-}" ]; then
@@ -103,16 +103,16 @@ if [ -z "${DOCKER_HOST:-}" ]; then
 fi
 
 # kubectl
-if which kubectl > /dev/null 2>&1; then
-    source <(kubectl completion "${SHELL##*/}")
+if command -v kubectl > /dev/null 2>&1; then
+    eval "$(kubectl completion "${SHELL##*/}")"
 fi
 
 # typer
-if which typer > /dev/null 2>&1; then
+if command -v typer > /dev/null 2>&1; then
     eval "$(typer --show-completion)"
 fi
 
 # task
-if which task > /dev/null 2>&1; then
+if command -v task > /dev/null 2>&1; then
     eval "$(task --completion "${SHELL##*/}")"
 fi
