@@ -57,8 +57,7 @@ fi
 
 # mise
 if command -v mise > /dev/null 2>&1; then
-    SHELL_NAME=$(basename "${SHELL}")
-    eval "$(mise activate "${SHELL_NAME}")"
+    eval "$(mise activate "${SHELL##*/}")"
 fi
 
 if command -v whence > /dev/null 2>&1; then
