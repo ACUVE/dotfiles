@@ -7,6 +7,7 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 
 # rustup
 if [ -e "${HOME}/.cargo/env" ]; then
+    # shellcheck source=/dev/null
     . "${HOME}/.cargo/env"
 fi
 
