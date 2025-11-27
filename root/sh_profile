@@ -52,3 +52,5 @@ export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"
 export CLAUDE_CODE_ENABLE_TELEMETRY="0"
 #  https://github.com/npm/cli/issues/654
 export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
+#  https://wiki.archlinux.jp/index.php/XDG_Base_Directory
+export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
