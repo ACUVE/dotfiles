@@ -48,3 +48,5 @@ export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"
 #  https://code.claude.com/docs/ja/monitoring-usage
 #  https://code.claude.com/docs/ja/settings#%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0
 export CLAUDE_CODE_ENABLE_TELEMETRY="0"
+#  https://github.com/npm/cli/issues/654
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
