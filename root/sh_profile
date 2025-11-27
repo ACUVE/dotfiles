@@ -4,9 +4,11 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 # export XDG_CACHE_HOME="${HOME}/.cache"
 # export XDG_DATA_HOME="${HOME}/.local/share"
 # export XDG_STATE_HOME="${HOME}/.local/state"
+# export XDG_RUNTIME_DIR="/run/user/${UID}"
 
 # rustup
 if [ -e "${HOME}/.cargo/env" ]; then
+    # shellcheck source=/dev/null
     . "${HOME}/.cargo/env"
 fi
 
@@ -48,3 +50,7 @@ export CLAUDE_CONFIG_DIR="${XDG_CONFIG_HOME}/claude"
 #  https://code.claude.com/docs/ja/monitoring-usage
 #  https://code.claude.com/docs/ja/settings#%E7%92%B0%E5%A2%83%E5%A4%89%E6%95%B0
 export CLAUDE_CODE_ENABLE_TELEMETRY="0"
+#  https://github.com/npm/cli/issues/654
+export NPM_CONFIG_USERCONFIG="${XDG_CONFIG_HOME}/npm/npmrc"
+#  https://wiki.archlinux.jp/index.php/XDG_Base_Directory
+export DOCKER_CONFIG="${XDG_CONFIG_HOME}/docker"
