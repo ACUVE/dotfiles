@@ -6,6 +6,11 @@ export XDG_CONFIG_HOME="${HOME}/.config"
 # export XDG_STATE_HOME="${HOME}/.local/state"
 # export XDG_RUNTIME_DIR="/run/user/${UID}"
 
+# ${HOME}/.local/bin を PATH に追加
+if [ -d "${HOME}/.local/bin" ]; then
+    export PATH="${HOME}/.local/bin:${PATH}"
+fi
+
 # rustup
 if [ -e "${HOME}/.cargo/env" ]; then
     # shellcheck source=/dev/null
