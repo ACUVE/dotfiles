@@ -36,13 +36,13 @@ fzf = "latest"
 gh = "latest"
 shellcheck = "latest"
 "npm:aws-cdk" = "2.1033.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
-"npm:@anthropic-ai/claude-code" = "2.0.53"  # https://www.claude.com/product/claude-code
+"npm:@anthropic-ai/claude-code" = "2.0.55"  # https://www.claude.com/product/claude-code
 "npm:@typespec/compiler" = "1.6.0"  # https://typespec.io/docs/language-basics/visibility/
 "pipx:pre-commit" = "4.4.0"  # https://pre-commit.com/
 "pipx:awsume" = "4.5.4"  # https://awsu.me/
 "npm:@bitwarden/cli" = "2025.11.0"  # https://bitwarden.com/help/article/cli/
 "pipx:typer" = "0.20.0"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
-"npm:vibe-kanban" = "0.0.122"  # https://www.vibekanban.com/docs
+"npm:vibe-kanban" = "0.0.125"  # https://www.vibekanban.com/docs
 "npm:@google/clasp" = "3.1.3" # https://github.com/google/clasp#readme
 
 [tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
