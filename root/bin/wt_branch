@@ -1,0 +1,47 @@
+#!/bin/bash
+
+set -euo pipefail
+
+WT_BRANCH_NAME="${1:?Branch name required}"
+
+shift 1
+
+# check if inside a git worktree
+if git rev-parse --is-inside-work-tree > /dev/null 2>&1; then
+    :
+else
+    echo "Not inside a git worktree"
+    exit 1
+fi
+
+WT_GIT_DIR="$(git rev-parse --git-dir)"
+WT_COMMON_DIR="$(git rev-parse --git-common-dir)"
+
+# check if inside the worktree
+if [ "${WT_GIT_DIR}" == "${WT_COMMON_DIR}" ]; then
+    echo "Not inside a git worktree"
+    exit 1
+fi
+
+# check common dir ends with .bare
+if [[ ! "${WT_COMMON_DIR}" =~ \.bare$ ]]; then
+    echo "Not inside a bare repository worktree"
+    exit 1
+fi
+
+# check already existing branch ${WT_BRANCH_NAME}
+if git show-ref --verify --quiet "refs/heads/${WT_BRANCH_NAME}"; then
+    echo "Branch ${WT_BRANCH_NAME} already exists"
+    exit 1
+fi
+
+WT_CURRENT_COMMIT="$(git rev-parse HEAD)"
+WT_CURRENT_BRANCH="$(git rev-parse --abbrev-ref HEAD)"
+
+WT_OUTPUT_DIR="$(dirname "${WT_COMMON_DIR}")/${WT_BRANCH_NAME}"
+
+GIT_DIR="${WT_COMMON_DIR}" GIT_COMMON_DIR="${WT_COMMON_DIR}" \
+    git worktree add -b "${WT_BRANCH_NAME}" "${WT_OUTPUT_DIR}" "${WT_CURRENT_COMMIT}"
+
+echo "Branch ${WT_BRANCH_NAME} created at commit ${WT_CURRENT_COMMIT} (from ${WT_CURRENT_BRANCH})"
+echo "Worktree path: ${WT_OUTPUT_DIR}"
