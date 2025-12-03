@@ -43,7 +43,7 @@ shellcheck = "latest"
 "pipx:awsume" = "4.5.4"  # https://awsu.me/
 "npm:@bitwarden/cli" = "2025.11.0"  # https://bitwarden.com/help/article/cli/
 "pipx:typer" = "0.20.0"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
-"npm:vibe-kanban" = "0.0.125"  # https://www.vibekanban.com/docs
+"npm:vibe-kanban" = "0.0.126"  # https://www.vibekanban.com/docs
 "npm:@google/clasp" = "3.1.3" # https://github.com/google/clasp#readme
 "pipx:git+https://github.com/github/spec-kit.git" = "v0.0.89"
 
