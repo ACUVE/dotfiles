@@ -26,6 +26,7 @@ task = "latest"
 
 # cli
 aws-cli = "latest"
+gcloud = "latest"
 buf = "latest"
 jq = "latest"
 bat = "latest"
