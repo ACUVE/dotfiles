@@ -42,6 +42,7 @@ fd = "latest"
 fzf = "latest"
 gh = "latest"
 shellcheck = "latest"
+age = "latest"
 bitwarden-secrets-manager = "latest"
 "npm:aws-cdk" = "2.1033.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
 "npm:@anthropic-ai/claude-code" = "2.0.57"  # https://www.claude.com/product/claude-code
