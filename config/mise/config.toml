@@ -53,6 +53,7 @@ bitwarden-secrets-manager = "latest"
 "npm:vibe-kanban" = "0.0.126"  # https://www.vibekanban.com/docs
 "npm:@google/clasp" = "3.1.3" # https://github.com/google/clasp#readme
 "pipx:github/spec-kit" = "v0.0.89"
+"npm:@hono/cli" = "0.1.3"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
 
 [tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
 version = "2.0.0"
