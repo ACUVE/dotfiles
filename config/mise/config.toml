@@ -51,6 +51,7 @@ bitwarden-secrets-manager = "latest"
 "npm:@bitwarden/cli" = "2025.11.0"  # https://bitwarden.com/help/article/cli/
 "pipx:typer" = "0.20.0"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
 "npm:vibe-kanban" = "0.0.126"  # https://www.vibekanban.com/docs
+"npm:sahai" = "0.1.7"
 "npm:@google/clasp" = "3.1.3" # https://github.com/google/clasp#readme
 "pipx:github/spec-kit" = "v0.0.89"  # https://github.com/github/spec-kit
 "npm:@hono/cli" = "0.1.3"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
