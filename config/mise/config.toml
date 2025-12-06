@@ -2,6 +2,7 @@
 # runtime
 python = ["3.12", "3.9", "3.10", "3.11", "3.13"]
 node = "lts"
+bun = "latest"
 
 # compiler
 go = "latest"
