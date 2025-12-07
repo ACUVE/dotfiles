@@ -2,4 +2,8 @@
 
 set -euo pipefail
 
-sbx copilot --allow-all-paths --allow-all-tools "$@"
+sbx \
+    --git \
+    --cwd \
+    --write "${XDG_CONFIG_HOME:-${HOME}/.config}/.copilot" \
+    copilot --allow-all-paths --allow-all-tools "$@"

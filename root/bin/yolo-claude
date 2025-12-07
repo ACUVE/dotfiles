@@ -2,4 +2,9 @@
 
 set -euo pipefail
 
-sbx claude --dangerously-skip-permissions "$@"
+sbx \
+    --git \
+    --cwd \
+    --write "${HOME}/.claude" \
+    --write "${CLAUDE_CONFIG_DIR:-${HOME}/.claude}" \
+    claude --dangerously-skip-permissions "$@"
