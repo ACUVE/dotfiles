@@ -108,6 +108,7 @@ def default_profile() -> str:
 
 
 def sbx(
+    *,
     write: Sequence[str],
     command: Sequence[str],
 ) -> None:
