@@ -3,7 +3,7 @@
 import re
 from typing import List
 
-from cli.sbx_ast import ASTNode, Integer, SExpression, String, Symbol
+from cli.sbx_ast import ASTNode, Integer, Regex, SExpression, String, Symbol
 
 
 class ParseError(Exception):
@@ -60,9 +60,16 @@ class Tokenizer:
                 )
                 self.tokens.append(("STRING", content))
             elif regex:
-                # Treat regex as string for simplicity
+                # Regex literal (#"...")
                 content = regex[2:-1]  # Remove #" and "
-                self.tokens.append(("STRING", content))
+                # Unescape regex content
+                content = (
+                    content.replace("\\n", "\n")
+                    .replace("\\t", "\t")
+                    .replace('\\"', '"')
+                    .replace("\\\\", "\\")
+                )
+                self.tokens.append(("REGEX", content))
             elif integer:
                 self.tokens.append(("INTEGER", integer))
             elif symbol:
@@ -110,6 +117,9 @@ class Parser:
         elif token_type == "STRING":
             self.tokenizer.consume()
             return String(token_value)
+        elif token_type == "REGEX":
+            self.tokenizer.consume()
+            return Regex(token_value)
         elif token_type == "INTEGER":
             self.tokenizer.consume()
             return Integer(int(token_value))
@@ -117,7 +127,7 @@ class Parser:
             self.tokenizer.consume()
             return Symbol(token_value)
         elif token_type == "RPAREN":
-            raise ParseError(f"Unexpected closing parenthesis")
+            raise ParseError("Unexpected closing parenthesis")
         else:
             raise ParseError(f"Unexpected token: {token_type}")
 

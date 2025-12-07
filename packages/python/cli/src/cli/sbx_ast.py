@@ -65,6 +65,26 @@ class Integer(Node):
         return isinstance(other, Integer) and self.value == other.value
 
 
+class Regex(Node):
+    """Represents a regex literal (#\"...\")."""
+
+    def __init__(self, pattern: str):
+        self.pattern = pattern
+
+    def to_string(self) -> str:
+        # Escape special characters (same as String)
+        escaped = (
+            self.pattern.replace("\\", "\\\\")
+            .replace('"', '\\"')
+            .replace("\n", "\\n")
+            .replace("\t", "\\t")
+        )
+        return f'#"{escaped}"'
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, Regex) and self.pattern == other.pattern
+
+
 class SExpression(Node):
     """Represents an S-expression (list of nodes)."""
 
@@ -98,4 +118,4 @@ class SExpression(Node):
 
 
 # Type alias for any AST node
-ASTNode = Union[Symbol, String, Integer, SExpression]
+ASTNode = Union[Symbol, String, Integer, Regex, SExpression]
