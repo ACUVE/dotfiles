@@ -78,16 +78,7 @@ def main() -> None:
     invoked = os.path.basename(sys.argv[0])
 
     if invoked in _ALIAS:
-        app_local = Typer()
-
-        main_callback()
-
-        func = globals().get(_ALIAS[invoked])
-        if func is None:
-            _LOGGER.error("No command found for alias: %s", invoked)
-            sys.exit(1)
-
-        app_local.command()(func)
-        app_local()
+        sys.argv.insert(1, _ALIAS[invoked])
+        app()
     else:
         app()
