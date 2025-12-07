@@ -3,7 +3,7 @@
 import re
 from typing import List
 
-from cli.sbx_ast import ASTNode, Integer, Regex, SExpression, String, Symbol
+from .sbx_ast import ASTNode, Integer, Regex, SExpression, String, Symbol
 
 
 class ParseError(Exception):
