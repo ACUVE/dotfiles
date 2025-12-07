@@ -330,8 +330,7 @@ class TestDefaultProfile:
 
     def test_default_profile_parsing(self):
         """Test parsing the default profile from sbx.py."""
-        profile = default_profile()
-        nodes = parse(profile)
+        nodes = default_profile()
 
         # Verify we got multiple top-level expressions
         assert len(nodes) > 0

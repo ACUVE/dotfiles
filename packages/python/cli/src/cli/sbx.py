@@ -4,14 +4,17 @@ import subprocess
 import sys
 from logging import DEBUG, getLogger
 from pathlib import Path
-from typing import Sequence
+from typing import Sequence, Literal, LiteralString
+
+from .sbx_parser import parse
+from .sbx_ast import ASTNode, Symbol, String, SExpression
 
 _LOGGER = getLogger(__name__)
 
 
-def default_profile() -> str:
+def default_profile() -> list[ASTNode]:
     """Build the sandbox profile."""
-    return """(version 1)
+    profile = """(version 1)
 
 (allow default)
 
@@ -21,16 +24,7 @@ def default_profile() -> str:
 (allow file-write*
   ;; (param "NAME") には、起動時に -D NAME=VALUE として渡した値が反映される
 
-  ;; プロジェクトディレクトリを TARGET_DIR として指定する
-  (subpath (param "TARGET_DIR"))
-
-  ;; git worktree を使っている場合に、御本尊の .git への書き込みを許可する (commit などできるように)
-  (subpath (param "DOT_GIT_DIR"))
-
   ;; プロジェクトディレクトリ以外に書き込みを許可する場所
-  ;; Claude Code関係
-  (regex (string-append "^" (param "CLAUDE_CONFIG_DIR") "*"))
-  (regex (string-append "^" (param "HOME_DIR") "/.claude*"))
   ;; セッション情報をKeychain経由で記録するらしい
   (subpath (string-append (param "HOME_DIR") "/Library/Keychains"))
 
@@ -105,45 +99,95 @@ def default_profile() -> str:
   (ipc-posix-name "com.apple.AppleDatabaseChanged")
 )
 """
+    return parse(profile)
+
+
+def _get_or_insert_allow_deny(
+    profile_nodes: list[ASTNode],
+    action: Literal["allow", "deny"],
+    operation: LiteralString,
+) -> SExpression:
+    """Get or insert an allow/deny expression for the given operation."""
+    for node in profile_nodes:
+        if (
+            isinstance(node, SExpression)
+            and len(node.elements) > 0
+            and isinstance(node.elements[0], Symbol)
+            and node.elements[0].name == action
+            and len(node.elements) > 1
+            and isinstance(node.elements[1], Symbol)
+            and node.elements[1].name == operation
+        ):
+            return node
+
+    # Not found, create a new one
+    new_node = SExpression([Symbol(action), Symbol(operation)])
+    profile_nodes.append(new_node)
+    return new_node
+
+
+def _git_subpaths() -> list[str]:
+    try:
+        repo_root = _call_command(["git", "rev-parse", "--show-toplevel"])
+        dot_git_dir = _call_command(["git", "rev-parse", "--git-common-dir"])
+
+        abs_repo_root = os.path.abspath(repo_root)
+        abs_dot_git_dir = os.path.abspath(dot_git_dir)
+
+        _LOGGER.info("Repository root: %s", abs_repo_root)
+        _LOGGER.info(".git directory: %s", abs_dot_git_dir)
+
+        return [
+            abs_repo_root,
+            abs_dot_git_dir,
+        ]
+    except subprocess.CalledProcessError:
+        _LOGGER.warning("Not a git repository or git command failed.")
+        return []
 
 
 def sbx(
     *,
+    enable_git: bool,
+    enable_cwd: bool,
     write: Sequence[str],
+    dry_run: bool,
     command: Sequence[str],
 ) -> None:
-    repo_root = _call_command(["git", "rev-parse", "--show-toplevel"])
-    dot_git_dir = _call_command(["git", "rev-parse", "--git-common-dir"])
-    claude_dir = os.environ.get("CLAUDE_CONFIG_DIR", str(Path.home() / ".claude"))
-
-    _LOGGER.info("Repository root: %s", repo_root)
-    _LOGGER.info(".git directory: %s", dot_git_dir)
-
     profile = default_profile()
 
+    additional_allow_write_subpaths = []
+    if enable_git:
+        additional_allow_write_subpaths.extend(_git_subpaths())
+    if enable_cwd:
+        additional_allow_write_subpaths.append(os.getcwd())
     if write:
-        _LOGGER.error("Specifying additional write directories is not supported yet.")
-        sys.exit(1)
+        additional_allow_write_subpaths.extend(write)
 
-    home_dir = str(Path.home())
-    target_dir = os.getcwd()
+    if additional_allow_write_subpaths:
+        allow_file_write = _get_or_insert_allow_deny(profile, "allow", "file-write*")
+        for path in additional_allow_write_subpaths:
+            allow_file_write.elements.append(
+                SExpression([Symbol("subpath"), String(path)])
+            )
+
+    profile_str = "\n\n".join(node.to_string() for node in profile)
+
+    _LOGGER.info("Using sandbox profile:\n%s", profile_str)
 
     cmd = [
         "sandbox-exec",
         "-p",
-        profile,
+        profile_str,
         "-D",
-        f"TARGET_DIR={target_dir}",
-        "-D",
-        f"DOT_GIT_DIR={dot_git_dir}",
-        "-D",
-        f"CLAUDE_CONFIG_DIR={claude_dir}",
-        "-D",
-        f"HOME_DIR={home_dir}",
+        f"HOME_DIR={Path.home().as_posix()}",
     ] + list(command)
 
     try:
-        os.execvp(cmd[0], cmd)
+        if dry_run:
+            print(" ".join(shlex.quote(arg) for arg in cmd))
+        else:
+            os.execvp(cmd[0], cmd)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)

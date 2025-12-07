@@ -45,6 +45,20 @@ def main_callback(
 )
 def sbx(
     ctx: typer.Context,
+    enable_git: Annotated[
+        bool,
+        typer.Option(
+            "--git",
+            help="Enable git-related sandboxing features.",
+        ),
+    ] = False,
+    enable_cwd: Annotated[
+        bool,
+        typer.Option(
+            "--cwd",
+            help="Enable current working directory access in the sandbox.",
+        ),
+    ] = False,
     write: Annotated[
         list[str],
         typer.Option(
@@ -53,9 +67,22 @@ def sbx(
             help="Directories to allow write access. Can be specified multiple times.",
         ),
     ] = [],
+    dry_run: Annotated[
+        bool,
+        typer.Option(
+            "--dry-run",
+            help="Print the sandbox-exec command without executing it.",
+        ),
+    ] = False,
 ) -> None:
     """Execute a command in a sandboxed environment using sandbox-exec."""
-    sbx_command(write=write, command=ctx.args)
+    sbx_command(
+        enable_git=enable_git,
+        enable_cwd=enable_cwd,
+        write=write,
+        dry_run=dry_run,
+        command=ctx.args,
+    )
 
 
 @app.command()
