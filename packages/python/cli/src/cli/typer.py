@@ -1,12 +1,14 @@
 import os
 import sys
 from typing import Annotated
-from logging import DEBUG, INFO, WARNING, basicConfig
+from logging import DEBUG, INFO, WARNING, basicConfig, getLogger
 
 import typer
 from typer import Typer
 
 from .sbx import sbx as sbx_command
+
+_LOGGER = getLogger(__name__)
 
 app = Typer()
 
@@ -68,11 +70,23 @@ _ALIAS = {
     "sbx": "sbx",
 }
 
+assert "py_cli" not in _ALIAS, "Alias 'py_cli' is not allowed."
+
 
 def main() -> None:
     invoked = os.path.basename(sys.argv[0])
 
     if invoked in _ALIAS:
-        sys.argv = sys.argv[:1] + [_ALIAS[invoked]] + sys.argv[1:]
+        app_local = Typer()
 
-    app()
+        main_callback()
+
+        func = globals().get(_ALIAS[invoked])
+        if func is None:
+            _LOGGER.error("No command found for alias: %s", invoked)
+            sys.exit(1)
+
+        app_local.command()(func)
+        app_local()
+    else:
+        app()
