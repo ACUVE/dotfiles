@@ -38,10 +38,6 @@ def default_profile() -> list[ASTNode]:
 
   (subpath (string-append (param "HOME_DIR") "/.npm"))
   (subpath (string-append (param "HOME_DIR") "/.pnpm"))
-  (subpath (string-append (param "HOME_DIR") "/.yarn"))
-  (subpath (string-append (param "HOME_DIR") "/.serena"))
-
-  (subpath (string-append (param "HOME_DIR") "/.codex"))
 
   ;; STDOUTとか
   (literal "/dev/stdout")
