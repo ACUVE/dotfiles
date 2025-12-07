@@ -1,7 +1,7 @@
 """Tests for sbx_ast module."""
 
 import pytest
-
+from cli.sbx import default_profile
 from cli.sbx_ast import Integer, SExpression, String, Symbol
 from cli.sbx_parser import parse
 
@@ -323,6 +323,23 @@ class TestProfileParsing:
         # Verify structural equivalence
         for n1, n2 in zip(nodes1, nodes2):
             assert n1 == n2, "Nodes should be structurally equivalent after round-trip"
+
+
+class TestDefaultProfile:
+    """Test that the default profile from sbx.py can be parsed."""
+
+    def test_default_profile_parsing(self):
+        """Test parsing the default profile from sbx.py."""
+        profile = default_profile()
+        nodes = parse(profile)
+
+        # Verify we got multiple top-level expressions
+        assert len(nodes) > 0
+
+        # Check first expression is (version 1)
+        assert isinstance(nodes[0], SExpression)
+        assert nodes[0].elements[0] == Symbol("version")
+        assert nodes[0].elements[1] == Integer(1)
 
 
 if __name__ == "__main__":
