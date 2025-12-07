@@ -15,6 +15,7 @@ app = Typer()
 
 @app.callback()
 def main_callback(
+    *,
     verbose: Annotated[
         int,
         typer.Option(
