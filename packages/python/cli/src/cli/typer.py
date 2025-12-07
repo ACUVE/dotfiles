@@ -79,6 +79,4 @@ def main() -> None:
 
     if invoked in _ALIAS:
         sys.argv.insert(1, _ALIAS[invoked])
-        app()
-    else:
-        app()
+    app()
