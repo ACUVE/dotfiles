@@ -58,6 +58,7 @@ bitwarden-secrets-manager = "latest"
 "pipx:github/spec-kit" = "v0.0.89"  # https://github.com/github/spec-kit
 "npm:@hono/cli" = "0.1.3"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
 "npm:@github/copilot" = "0.0.367"
+"pipx:serena-agent" = "0.1.4"
 
 "pipx:git+https://github.com/ACUVE/dotfiles.git" = "master#subdirectory=packages/python/cli"
 
