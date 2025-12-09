@@ -115,3 +115,8 @@ fi
 if command -v task > /dev/null 2>&1; then
     eval "$(task --completion "${SHELL##*/}")"
 fi
+
+# uv
+if command -v uv > /dev/null 2>&1; then
+    eval "$(uv generate-shell-completion "${SHELL##*/}")"
+fi
