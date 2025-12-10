@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
 REAL_SCRIPT_DIR=$(dirname "$(realpath "$0")")
+CLI_PACKAGE_DIR="${REAL_SCRIPT_DIR%/}/../../packages/python/cli"
 
-exec uvx --from "${REAL_SCRIPT_DIR%/}/../../packages/python/cli" --quiet -- py_cli "$@"
+exec uvx --from "${CLI_PACKAGE_DIR}" --with-editable "${CLI_PACKAGE_DIR}" --quiet -- py_cli "$@"
