@@ -94,5 +94,11 @@ def version() -> None:
     print(f"cli version {__version__}")
 
 
+@app.command()
+def show_python_executable() -> None:
+    """Show the current Python path."""
+    print(sys.executable)
+
+
 def main() -> None:
     app()
