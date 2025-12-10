@@ -94,16 +94,5 @@ def version() -> None:
     print(f"cli version {__version__}")
 
 
-_ALIAS = {
-    "sbx": "sbx",
-}
-
-assert "py_cli" not in _ALIAS, "Alias 'py_cli' is not allowed."
-
-
 def main() -> None:
-    invoked = os.path.basename(sys.argv[0])
-
-    if invoked in _ALIAS:
-        sys.argv.insert(1, _ALIAS[invoked])
     app()
