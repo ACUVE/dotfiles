@@ -19,3 +19,6 @@ dev = [
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
 ]
+
+[tool.pytest.ini_options]
+addopts = "--cov=cli --cov-report=term-missing"
