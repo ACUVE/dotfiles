@@ -7,11 +7,6 @@ dependencies = [
     "typer>=0.20.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-]
-
 [project.scripts]
 py_cli = "cli:main"
 
@@ -22,4 +17,5 @@ build-backend = "uv_build"
 [dependency-groups]
 dev = [
     "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
 ]
