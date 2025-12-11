@@ -1,4 +1,3 @@
-import os
 import sys
 from typing import Annotated
 from logging import DEBUG, INFO, WARNING, basicConfig, getLogger
