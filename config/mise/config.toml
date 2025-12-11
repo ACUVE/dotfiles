@@ -44,6 +44,7 @@ fzf = "latest"
 # gh = "latest"
 shellcheck = "latest"
 age = "latest"
+aws-sso = "latest"
 bitwarden-secrets-manager = "latest"
 "amazon-ecr-credential-helper" = "latest"
 "npm:aws-cdk" = "2.1033.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
