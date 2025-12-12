@@ -36,6 +36,7 @@ gcloud = "latest"
 # not categorized
 buf = "latest"
 jq = "latest"
+yq = "latest"
 bat = "latest"
 eza = "latest"
 ripgrep = "latest"
