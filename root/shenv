@@ -120,3 +120,8 @@ fi
 if command -v uv > /dev/null 2>&1; then
     eval "$(uv generate-shell-completion "${SHELL##*/}")"
 fi
+
+# gh
+if command -v gh > /dev/null 2>&1; then
+    eval "$(gh completion -s "${SHELL##*/}")"
+fi
