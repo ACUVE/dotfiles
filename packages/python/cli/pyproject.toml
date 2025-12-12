@@ -7,11 +7,6 @@ dependencies = [
     "typer>=0.20.0",
 ]
 
-[project.optional-dependencies]
-dev = [
-    "pytest>=8.0.0",
-]
-
 [project.scripts]
 py_cli = "cli:main"
 
@@ -21,5 +16,11 @@ build-backend = "uv_build"
 
 [dependency-groups]
 dev = [
+    "mypy>=1.19.0",
     "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.8",
 ]
+
+[tool.pytest.ini_options]
+addopts = "--cov=cli --cov-report=term-missing"
