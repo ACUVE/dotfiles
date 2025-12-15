@@ -1,5 +1,6 @@
 {
 	"cliPluginsExtraDirs": ["/opt/homebrew/lib/docker/cli-plugins"],
+	"credsStore": "bw",
 	"credHelpers": {
 		"https://index.docker.io/v1/": "bw-docker"
 	}
