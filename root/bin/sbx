@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-exec py_cli sbx "$@"
+set -euo pipefail
+
+REAL_SCRIPT_DIR=$(dirname "$(realpath "$0")")
+
+exec "$REAL_SCRIPT_DIR/py_cli" sbx "$@"
