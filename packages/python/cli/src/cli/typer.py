@@ -21,6 +21,7 @@ def main_callback(
             "-v",
             "--verbose",
             count=True,
+            envvar="CLI_VERBOSE",
             help="Increase verbosity level. Can be specified multiple times.",
         ),
     ] = 0,
@@ -37,6 +38,8 @@ def main_callback(
         level=level,
         format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
     )
+
+    _LOGGER.debug(f"Set logging level to {level}")
 
 
 @app.command(
