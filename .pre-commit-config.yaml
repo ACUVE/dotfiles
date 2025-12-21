@@ -29,16 +29,16 @@ repos:
         language: system
         pass_filenames: false
         files: ^packages/python/cli/
-        types: [python]
+        types: [python, pyi]
       - id: ruff-check
         name: ruff-check
         entry: bash -c 'cd packages/python/cli && uv sync --quiet && uv run ruff check --fix "$@"'
         language: system
         files: ^packages/python/cli/
-        types: [python]
+        types: [python, pyi]
       - id: ruff-format
         name: ruff-format
         entry: bash -c 'cd packages/python/cli && uv sync --quiet && uv run ruff format "$@"'
         language: system
         files: ^packages/python/cli/
-        types: [python]
+        types: [python, pyi]
