@@ -24,26 +24,26 @@ fi
 # VCS (Git) info function
 _get_vcs_info() {
     local vcs_info=""
-    
+
     # Check if we're in a git repository
     if git rev-parse --is-inside-work-tree &>/dev/null; then
         local branch
         local staged=""
         local unstaged=""
-        
+
         # Get branch name or commit hash if detached HEAD
         branch=$(git symbolic-ref --short HEAD 2>/dev/null || git rev-parse --short HEAD 2>/dev/null)
-        
+
         # Check for staged changes
         if ! git diff --cached --quiet 2>/dev/null; then
             staged="+"
         fi
-        
+
         # Check for unstaged changes
         if ! git diff --quiet 2>/dev/null; then
             unstaged="-"
         fi
-        
+
         # Check if in the middle of an action (rebase, merge, etc.)
         local action=""
         local git_dir
@@ -57,10 +57,10 @@ _get_vcs_info() {
         elif [ -f "${git_dir}/BISECT_LOG" ]; then
             action="|bisect"
         fi
-        
+
         vcs_info="(git)-[${branch}${action}] ${staged}${unstaged}"
     fi
-    
+
     echo "${vcs_info}"
 }
 
@@ -68,7 +68,7 @@ _get_vcs_info() {
 _set_prompt() {
     local vcs_info
     vcs_info=$(_get_vcs_info)
-    
+
     # Build the prompt
     # Format: [username@hostname] current_directory
     #         $ (or # for root)
@@ -76,22 +76,22 @@ _set_prompt() {
     if [ "${UID}" -eq 0 ]; then
         prompt_char='#'
     fi
-    
+
     # Main prompt (left side)
     PS1="[${_BOLD}${_PROMPTCOLOR}\u${_RESET}${_PROMPTCOLOR_NOBOLD}@\h${_RESET}] \w"
-    
+
     # Add VCS info (RPROMPT equivalent) on the same line if available
     if [ -n "${vcs_info}" ]; then
         # Calculate terminal width and string lengths for right alignment
         local term_width
         term_width=$(tput cols 2>/dev/null || echo 80)
-        
+
         # Strip color codes for length calculation
         local plain_left="[\u@\h] \w"
         local left_len=${#plain_left}
         local vcs_len=${#vcs_info}
         local padding=$((term_width - left_len - vcs_len - 1))
-        
+
         if [ ${padding} -gt 0 ]; then
             # Add padding and VCS info in green
             PS1="${PS1}\[\e[${padding}C\]\[\e[32m\]${vcs_info}${_RESET}\[\e[${padding}D\]\[\e[0G\]"
@@ -100,7 +100,7 @@ _set_prompt() {
         # For cleaner display, append to first line
         PS1="[${_BOLD}${_PROMPTCOLOR}\u${_RESET}${_PROMPTCOLOR_NOBOLD}@\h${_RESET}] \w \[\e[32m\]${vcs_info}${_RESET}"
     fi
-    
+
     PS1="${PS1}"$'\n'"${prompt_char} "
 }
 
