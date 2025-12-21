@@ -1,7 +1,6 @@
 """Tests for Docker credential helper."""
 
 import json
-import subprocess
 import sys
 from unittest.mock import MagicMock, patch
 

@@ -25,20 +25,20 @@ repos:
     hooks:
       - id: mypy
         name: mypy
-        entry: bash -c 'cd packages/python/cli && uv sync --quiet && uv run mypy src/cli'
+        entry: bash -c 'export UV_PROJECT=$(pwd)/packages/python/cli && uv sync --quiet && cd packages/python/cli && uv run mypy src/cli'
         language: system
         pass_filenames: false
         files: ^packages/python/cli/
-        types: [python, pyi]
+        types_or: [python, pyi]
       - id: ruff-check
         name: ruff-check
-        entry: bash -c 'cd packages/python/cli && uv sync --quiet && uv run ruff check --fix "$@"'
+        entry: bash -c 'export UV_PROJECT=$(pwd)/packages/python/cli && uv sync --quiet && uv run ruff check --fix "$@"'
         language: system
         files: ^packages/python/cli/
-        types: [python, pyi]
+        types_or: [python, pyi]
       - id: ruff-format
         name: ruff-format
-        entry: bash -c 'cd packages/python/cli && uv sync --quiet && uv run ruff format "$@"'
+        entry: bash -c 'export UV_PROJECT=$(pwd)/packages/python/cli && uv sync --quiet && uv run ruff format "$@"'
         language: system
         files: ^packages/python/cli/
-        types: [python, pyi]
+        types_or: [python, pyi]

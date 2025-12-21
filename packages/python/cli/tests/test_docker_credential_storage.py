@@ -1,12 +1,8 @@
 """Tests for Docker credential storage helper."""
 
 import json
-import subprocess
-import sys
 from unittest.mock import MagicMock, patch
 
-import pytest
-from pydantic import ValidationError
 
 from cli.docker_credential_storage import (
     _cmd_erase,
@@ -17,12 +13,7 @@ from cli.docker_credential_storage import (
 )
 from cli.docker_credential.bitwarden import (
     BitwardenError,
-    check_bw_status,
-    get_all_credentials,
-    output_error,
-    save_all_credentials,
 )
-from cli.docker_credential.types import DockerCredential
 
 
 class TestCmdGet:
