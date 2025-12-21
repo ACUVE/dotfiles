@@ -7,7 +7,13 @@ from unittest.mock import MagicMock, patch
 import pytest
 from pydantic import ValidationError
 
-from cli.docker_credential import _cmd_erase, _cmd_get, _cmd_list, _cmd_store, main
+from cli.docker_credential import (
+    _cmd_erase_noop,
+    _cmd_get_docker_hub,
+    _cmd_list_docker_hub,
+    _cmd_store_noop,
+    docker_credential_bw_docker,
+)
 from cli.docker_credential.bitwarden import (
     BitwardenError,
     check_bw_status,
@@ -36,7 +42,7 @@ class TestCmdGet:
             }
         ]
 
-        _cmd_get("https://index.docker.io/v1/", "DockerHub")
+        _cmd_get_docker_hub("https://index.docker.io/v1/", "DockerHub")
 
         # Verify output
         mock_print.assert_called_once()
@@ -48,7 +54,7 @@ class TestCmdGet:
     @patch("cli.docker_credential.output_error")
     def test_get_wrong_server(self, mock_error: MagicMock) -> None:
         """Test get with non-Docker Hub server."""
-        _cmd_get("https://ghcr.io", "DockerHub")
+        _cmd_get_docker_hub("https://ghcr.io", "DockerHub")
         mock_error.assert_called_once()
         assert "credentials not found for" in mock_error.call_args[0][0]
 
@@ -63,7 +69,7 @@ class TestCmdGet:
     ) -> None:
         """Test get when no items found."""
         mock_search.return_value = []
-        _cmd_get("https://index.docker.io/v1/", "DockerHub")
+        _cmd_get_docker_hub("https://index.docker.io/v1/", "DockerHub")
         mock_error.assert_called_once_with("credentials not found")
 
     @patch("cli.docker_credential.check_bw_status")
@@ -84,7 +90,7 @@ class TestCmdGet:
                 }
             }
         ]
-        _cmd_get("https://index.docker.io/v1/", "DockerHub")
+        _cmd_get_docker_hub("https://index.docker.io/v1/", "DockerHub")
         mock_error.assert_called_once_with("invalid credentials format")
 
     @patch("cli.docker_credential.check_bw_status")
@@ -94,7 +100,7 @@ class TestCmdGet:
     ) -> None:
         """Test get when Bitwarden raises an error."""
         mock_check.side_effect = BitwardenError("Bitwarden is locked")
-        _cmd_get("https://index.docker.io/v1/", "DockerHub")
+        _cmd_get_docker_hub("https://index.docker.io/v1/", "DockerHub")
         mock_error.assert_called_once_with("Bitwarden is locked")
 
     @patch("cli.docker_credential.check_bw_status")
@@ -126,7 +132,7 @@ class TestCmdGet:
             except ValidationError as ve:
                 mock_cred.side_effect = ve
 
-            _cmd_get("https://index.docker.io/v1/", "DockerHub")
+            _cmd_get_docker_hub("https://index.docker.io/v1/", "DockerHub")
 
             mock_error.assert_called_once()
             assert "validation error" in mock_error.call_args[0][0]
@@ -143,7 +149,7 @@ class TestCmdStore:
             "Username": "testuser",
             "Secret": "testpass",
         }
-        _cmd_store(input_data)
+        _cmd_store_noop(input_data)
         mock_exit.assert_called_once_with(0)
 
     @patch("cli.docker_credential.output_error")
@@ -153,7 +159,7 @@ class TestCmdStore:
             "ServerURL": "https://index.docker.io/v1/",
             # Missing Username and Secret
         }
-        _cmd_store(input_data)
+        _cmd_store_noop(input_data)
         mock_error.assert_called_once()
         assert "invalid input" in mock_error.call_args[0][0]
 
@@ -164,7 +170,7 @@ class TestCmdErase:
     @patch("sys.exit")
     def test_erase(self, mock_exit: MagicMock) -> None:
         """Test erase command (no-op)."""
-        _cmd_erase("https://index.docker.io/v1/")
+        _cmd_erase_noop("https://index.docker.io/v1/")
         mock_exit.assert_called_once_with(0)
 
 
@@ -187,7 +193,7 @@ class TestCmdList:
             }
         ]
 
-        _cmd_list("DockerHub")
+        _cmd_list_docker_hub("DockerHub")
 
         # Verify output
         mock_print.assert_called_once()
@@ -207,7 +213,7 @@ class TestCmdList:
     ) -> None:
         """Test list when no items found."""
         mock_search.return_value = []
-        _cmd_list("DockerHub")
+        _cmd_list_docker_hub("DockerHub")
         mock_print.assert_called_once_with("{}")
         mock_exit.assert_called_once_with(0)
 
@@ -226,7 +232,7 @@ class TestCmdList:
                 }
             }
         ]
-        _cmd_list("DockerHub")
+        _cmd_list_docker_hub("DockerHub")
         mock_print.assert_called_once_with("{}")
 
     @patch("cli.docker_credential.check_bw_status")
@@ -236,7 +242,7 @@ class TestCmdList:
     ) -> None:
         """Test list when Bitwarden raises an error."""
         mock_check.side_effect = BitwardenError("Bitwarden is locked")
-        _cmd_list("DockerHub")
+        _cmd_list_docker_hub("DockerHub")
         mock_error.assert_called_once_with("Bitwarden is locked")
 
 
@@ -355,24 +361,24 @@ class TestMainFunction:
     """Tests for the main entry point."""
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential._cmd_get")
+    @patch("cli.docker_credential._cmd_get_docker_hub")
     def test_main_get_command(self, mock_cmd: MagicMock, mock_stdin: MagicMock) -> None:
         """Test main function with get command."""
         mock_stdin.read.return_value = "https://index.docker.io/v1/\n"
 
-        main("get", "DockerHub")
+        docker_credential_bw_docker("get", "DockerHub")
 
         mock_cmd.assert_called_once_with("https://index.docker.io/v1/", "DockerHub")
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential._cmd_store")
+    @patch("cli.docker_credential._cmd_store_noop")
     def test_main_store_command(
         self, mock_cmd: MagicMock, mock_stdin: MagicMock
     ) -> None:
         """Test main function with store command."""
         mock_stdin.read.return_value = '{"ServerURL":"https://index.docker.io/v1/","Username":"user","Secret":"pass"}'
 
-        main("store", "DockerHub")
+        docker_credential_bw_docker("store", "DockerHub")
 
         mock_cmd.assert_called_once()
 
@@ -384,34 +390,34 @@ class TestMainFunction:
         """Test main function with invalid JSON for store command."""
         mock_stdin.read.return_value = "invalid json"
 
-        main("store", "DockerHub")
+        docker_credential_bw_docker("store", "DockerHub")
 
         mock_error.assert_called_once()
         assert "invalid JSON input" in mock_error.call_args[0][0]
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential._cmd_erase")
+    @patch("cli.docker_credential._cmd_erase_noop")
     def test_main_erase_command(
         self, mock_cmd: MagicMock, mock_stdin: MagicMock
     ) -> None:
         """Test main function with erase command."""
         mock_stdin.read.return_value = "https://index.docker.io/v1/\n"
 
-        main("erase", "DockerHub")
+        docker_credential_bw_docker("erase", "DockerHub")
 
         mock_cmd.assert_called_once_with("https://index.docker.io/v1/")
 
-    @patch("cli.docker_credential._cmd_list")
+    @patch("cli.docker_credential._cmd_list_docker_hub")
     def test_main_list_command(self, mock_cmd: MagicMock) -> None:
         """Test main function with list command."""
-        main("list", "DockerHub")
+        docker_credential_bw_docker("list", "DockerHub")
 
         mock_cmd.assert_called_once_with("DockerHub")
 
     @patch("cli.docker_credential.output_error")
     def test_main_unknown_command(self, mock_error: MagicMock) -> None:
         """Test main function with unknown command."""
-        main("unknown", "DockerHub")
+        docker_credential_bw_docker("unknown", "DockerHub")  # type: ignore
 
         mock_error.assert_called_once()
         assert "Unknown command" in mock_error.call_args[0][0]

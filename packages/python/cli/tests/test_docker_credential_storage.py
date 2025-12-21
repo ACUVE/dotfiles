@@ -4,12 +4,12 @@ import json
 from unittest.mock import MagicMock, patch
 
 
-from cli.docker_credential_storage import (
-    _cmd_erase,
-    _cmd_get,
-    _cmd_list,
-    _cmd_store,
-    main,
+from cli.docker_credential import (
+    _cmd_erase_storage,
+    _cmd_get_storage,
+    _cmd_list_storage,
+    _cmd_store_storage,
+    docker_credential_bw,
 )
 from cli.docker_credential.bitwarden import (
     BitwardenError,
@@ -19,8 +19,8 @@ from cli.docker_credential.bitwarden import (
 class TestCmdGet:
     """Tests for the get command."""
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
     @patch("builtins.print")
     def test_get_success(
         self, mock_print: MagicMock, mock_get_all: MagicMock, mock_check: MagicMock
@@ -33,7 +33,7 @@ class TestCmdGet:
             }
         }
 
-        _cmd_get("https://index.docker.io/v1/")
+        _cmd_get_storage("https://index.docker.io/v1/")
 
         # Verify output
         mock_print.assert_called_once()
@@ -42,9 +42,9 @@ class TestCmdGet:
         assert output["Username"] == "testuser"
         assert output["Secret"] == "testpass"
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
+    @patch("cli.docker_credential.output_error")
     def test_get_not_found(
         self,
         mock_error: MagicMock,
@@ -53,12 +53,12 @@ class TestCmdGet:
     ) -> None:
         """Test get when credential not found."""
         mock_get_all.return_value = {}
-        _cmd_get("https://index.docker.io/v1/")
+        _cmd_get_storage("https://index.docker.io/v1/")
         mock_error.assert_called_once_with("credentials not found")
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
+    @patch("cli.docker_credential.output_error")
     def test_get_invalid_format(
         self,
         mock_error: MagicMock,
@@ -72,26 +72,26 @@ class TestCmdGet:
                 # Missing Secret
             }
         }
-        _cmd_get("https://index.docker.io/v1/")
+        _cmd_get_storage("https://index.docker.io/v1/")
         mock_error.assert_called_once_with("invalid credentials format")
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.output_error")
     def test_get_bitwarden_error(
         self, mock_error: MagicMock, mock_check: MagicMock
     ) -> None:
         """Test get when Bitwarden raises an error."""
         mock_check.side_effect = BitwardenError("Bitwarden is locked")
-        _cmd_get("https://index.docker.io/v1/")
+        _cmd_get_storage("https://index.docker.io/v1/")
         mock_error.assert_called_once_with("Bitwarden is locked")
 
 
 class TestCmdStore:
     """Tests for the store command."""
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
-    @patch("cli.docker_credential_storage.save_all_credentials")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
+    @patch("cli.docker_credential.save_all_credentials")
     @patch("sys.exit")
     def test_store_success(
         self,
@@ -108,7 +108,7 @@ class TestCmdStore:
             "Username": "testuser",
             "Secret": "testpass",
         }
-        _cmd_store(input_data)
+        _cmd_store_storage(input_data)
 
         # Verify save was called with updated credentials
         mock_save.assert_called_once()
@@ -117,19 +117,19 @@ class TestCmdStore:
         assert saved_creds["https://index.docker.io/v1/"]["Secret"] == "testpass"
         mock_exit.assert_called_once_with(0)
 
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.output_error")
     def test_store_invalid_input(self, mock_error: MagicMock) -> None:
         """Test store with invalid input."""
         input_data = {
             "ServerURL": "https://index.docker.io/v1/",
             # Missing Username and Secret
         }
-        _cmd_store(input_data)
+        _cmd_store_storage(input_data)
         mock_error.assert_called_once()
         assert "invalid input" in mock_error.call_args[0][0]
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.output_error")
     def test_store_check_status_error(
         self, mock_error: MagicMock, mock_check: MagicMock
     ) -> None:
@@ -140,13 +140,13 @@ class TestCmdStore:
             "Username": "testuser",
             "Secret": "testpass",
         }
-        _cmd_store(input_data)
+        _cmd_store_storage(input_data)
         mock_error.assert_called_once_with("Bitwarden is locked")
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
-    @patch("cli.docker_credential_storage.save_all_credentials")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
+    @patch("cli.docker_credential.save_all_credentials")
+    @patch("cli.docker_credential.output_error")
     def test_store_save_error(
         self,
         mock_error: MagicMock,
@@ -162,15 +162,15 @@ class TestCmdStore:
             "Username": "testuser",
             "Secret": "testpass",
         }
-        _cmd_store(input_data)
+        _cmd_store_storage(input_data)
         mock_error.assert_called_once_with("Failed to save")
 
 
 class TestCmdErase:
     """Tests for the erase command."""
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
     @patch("sys.exit")
     def test_erase_not_exists(
         self,
@@ -180,12 +180,12 @@ class TestCmdErase:
     ) -> None:
         """Test erase when credential doesn't exist."""
         mock_get_all.return_value = {}
-        _cmd_erase("https://index.docker.io/v1/")
+        _cmd_erase_storage("https://index.docker.io/v1/")
         mock_exit.assert_called_once_with(0)
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
-    @patch("cli.docker_credential_storage.save_all_credentials")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
+    @patch("cli.docker_credential.save_all_credentials")
     @patch("sys.exit")
     def test_erase_success(
         self,
@@ -201,7 +201,7 @@ class TestCmdErase:
                 "Secret": "testpass",
             }
         }
-        _cmd_erase("https://index.docker.io/v1/")
+        _cmd_erase_storage("https://index.docker.io/v1/")
 
         # Verify save was called with credential removed
         mock_save.assert_called_once()
@@ -209,20 +209,20 @@ class TestCmdErase:
         assert "https://index.docker.io/v1/" not in saved_creds
         mock_exit.assert_called_once_with(0)
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.output_error")
     def test_erase_check_status_error(
         self, mock_error: MagicMock, mock_check: MagicMock
     ) -> None:
         """Test erase when Bitwarden status check fails."""
         mock_check.side_effect = BitwardenError("Bitwarden is locked")
-        _cmd_erase("https://index.docker.io/v1/")
+        _cmd_erase_storage("https://index.docker.io/v1/")
         mock_error.assert_called_once_with("Bitwarden is locked")
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
-    @patch("cli.docker_credential_storage.save_all_credentials")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
+    @patch("cli.docker_credential.save_all_credentials")
+    @patch("cli.docker_credential.output_error")
     def test_erase_save_error(
         self,
         mock_error: MagicMock,
@@ -238,15 +238,15 @@ class TestCmdErase:
             }
         }
         mock_save.side_effect = BitwardenError("Failed to save")
-        _cmd_erase("https://index.docker.io/v1/")
+        _cmd_erase_storage("https://index.docker.io/v1/")
         mock_error.assert_called_once_with("Failed to save")
 
 
 class TestCmdList:
     """Tests for the list command."""
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
     @patch("builtins.print")
     @patch("sys.exit")
     def test_list_success(
@@ -268,7 +268,7 @@ class TestCmdList:
             },
         }
 
-        _cmd_list()
+        _cmd_list_storage()
 
         # Verify output
         mock_print.assert_called_once()
@@ -277,8 +277,8 @@ class TestCmdList:
         assert output["https://gcr.io"] == "gcr-user"
         mock_exit.assert_called_once_with(0)
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.get_all_credentials")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.get_all_credentials")
     @patch("builtins.print")
     @patch("sys.exit")
     def test_list_empty(
@@ -291,19 +291,19 @@ class TestCmdList:
         """Test list when no credentials exist."""
         mock_get_all.return_value = {}
 
-        _cmd_list()
+        _cmd_list_storage()
 
         mock_print.assert_called_once_with("{}")
         mock_exit.assert_called_once_with(0)
 
-    @patch("cli.docker_credential_storage.check_bw_status")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.check_bw_status")
+    @patch("cli.docker_credential.output_error")
     def test_list_check_status_error(
         self, mock_error: MagicMock, mock_check: MagicMock
     ) -> None:
         """Test list when Bitwarden status check fails."""
         mock_check.side_effect = BitwardenError("Bitwarden is locked")
-        _cmd_list()
+        _cmd_list_storage()
         mock_error.assert_called_once_with("Bitwarden is locked")
 
 
@@ -311,63 +311,63 @@ class TestMainFunction:
     """Tests for the main entry point."""
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential_storage._cmd_get")
+    @patch("cli.docker_credential._cmd_get_storage")
     def test_main_get_command(self, mock_cmd: MagicMock, mock_stdin: MagicMock) -> None:
         """Test main function with get command."""
         mock_stdin.read.return_value = "https://index.docker.io/v1/\n"
 
-        main("get")
+        docker_credential_bw("get")
 
         mock_cmd.assert_called_once_with("https://index.docker.io/v1/")
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential_storage._cmd_store")
+    @patch("cli.docker_credential._cmd_store_storage")
     def test_main_store_command(
         self, mock_cmd: MagicMock, mock_stdin: MagicMock
     ) -> None:
         """Test main function with store command."""
         mock_stdin.read.return_value = '{"ServerURL":"https://index.docker.io/v1/","Username":"user","Secret":"pass"}'
 
-        main("store")
+        docker_credential_bw("store")
 
         mock_cmd.assert_called_once()
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.output_error")
     def test_main_store_invalid_json(
         self, mock_error: MagicMock, mock_stdin: MagicMock
     ) -> None:
         """Test main function with invalid JSON for store command."""
         mock_stdin.read.return_value = "invalid json"
 
-        main("store")
+        docker_credential_bw("store")
 
         mock_error.assert_called_once()
         assert "invalid JSON input" in mock_error.call_args[0][0]
 
     @patch("sys.stdin")
-    @patch("cli.docker_credential_storage._cmd_erase")
+    @patch("cli.docker_credential._cmd_erase_storage")
     def test_main_erase_command(
         self, mock_cmd: MagicMock, mock_stdin: MagicMock
     ) -> None:
         """Test main function with erase command."""
         mock_stdin.read.return_value = "https://index.docker.io/v1/\n"
 
-        main("erase")
+        docker_credential_bw("erase")
 
         mock_cmd.assert_called_once_with("https://index.docker.io/v1/")
 
-    @patch("cli.docker_credential_storage._cmd_list")
+    @patch("cli.docker_credential._cmd_list_storage")
     def test_main_list_command(self, mock_cmd: MagicMock) -> None:
         """Test main function with list command."""
-        main("list")
+        docker_credential_bw("list")
 
         mock_cmd.assert_called_once()
 
-    @patch("cli.docker_credential_storage.output_error")
+    @patch("cli.docker_credential.output_error")
     def test_main_unknown_command(self, mock_error: MagicMock) -> None:
         """Test main function with unknown command."""
-        main("unknown")
+        docker_credential_bw("unknown")  # type: ignore
 
         mock_error.assert_called_once()
         assert "Unknown command" in mock_error.call_args[0][0]

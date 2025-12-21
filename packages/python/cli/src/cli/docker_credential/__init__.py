@@ -1,12 +1,13 @@
 """Docker credential helper using Bitwarden CLI.
 
 This module implements the Docker credential helper specification for Bitwarden.
-It provides read-only access to Docker Hub credentials stored in Bitwarden.
+It provides both read-only access to Docker Hub credentials stored in Bitwarden,
+and full read-write access to credentials stored in a secure note.
 
 Supported commands:
 - get: Retrieve credentials for a server URL
-- store: Accept credentials (no-op, read-only implementation)
-- erase: Erase credentials (no-op, read-only implementation)
+- store: Accept credentials (no-op for docker-bw-docker, full storage for docker-bw)
+- erase: Erase credentials (no-op for docker-bw-docker, full erase for docker-bw)
 - list: List all stored credentials
 """
 
@@ -16,16 +17,24 @@ from typing import Any, Literal
 
 from pydantic import ValidationError
 
-from .bitwarden import BitwardenError, check_bw_status, output_error, search_items
+from .bitwarden import (
+    BitwardenError,
+    check_bw_status,
+    get_all_credentials,
+    output_error,
+    save_all_credentials,
+    search_items,
+)
 from .types import DockerCredential, DockerCredentialInput
 
 # Constants
 _DOCKER_HUB_URL = "https://index.docker.io/v1/"
+_ITEM_NAME = "docker-credentials"
 
 
-def _cmd_get(server_url: str, search_term: str) -> None:
+def _cmd_get_docker_hub(server_url: str, search_term: str) -> None:
     """
-    Get credentials for a server URL.
+    Get credentials for Docker Hub from Bitwarden search.
 
     Args:
         server_url: The Docker registry server URL.
@@ -70,7 +79,49 @@ def _cmd_get(server_url: str, search_term: str) -> None:
         return  # For type checker (output_error calls sys.exit)
 
 
-def _cmd_store(input_data: dict[str, Any]) -> None:
+def _cmd_get_storage(server_url: str) -> None:
+    """
+    Get credentials for a server URL from storage.
+
+    Args:
+        server_url: The server URL to get credentials for.
+    """
+    try:
+        check_bw_status()
+        all_creds = get_all_credentials(_ITEM_NAME)
+    except BitwardenError as e:
+        output_error(str(e))
+        return  # For type checker (output_error calls sys.exit)
+
+    # Extract credential for the requested server URL
+    cred_data = all_creds.get(server_url)
+
+    if not cred_data:
+        output_error("credentials not found")
+        return  # For type checker (output_error calls sys.exit)
+
+    # Parse credential
+    username = cred_data.get("Username")
+    secret = cred_data.get("Secret")
+
+    if not username or not secret:
+        output_error("invalid credentials format")
+        return  # For type checker (output_error calls sys.exit)
+
+    # Create and validate the credential
+    try:
+        credential = DockerCredential(
+            ServerURL=server_url,
+            Username=username,
+            Secret=secret,
+        )
+        print(credential.model_dump_json())
+    except ValidationError as e:
+        output_error(f"validation error: {e.errors()[0]['msg']}")
+        return  # For type checker (output_error calls sys.exit)
+
+
+def _cmd_store_noop(input_data: dict[str, Any]) -> None:
     """
     Store credentials (no-op implementation).
 
@@ -89,7 +140,43 @@ def _cmd_store(input_data: dict[str, Any]) -> None:
         output_error(f"invalid input: {e.errors()[0]['msg']}")
 
 
-def _cmd_erase(server_url: str) -> None:
+def _cmd_store_storage(input_data: dict[str, Any]) -> None:
+    """
+    Store credentials for a server URL in storage.
+
+    Args:
+        input_data: The credential data to store.
+    """
+    # Validate input format
+    try:
+        cred_input = DockerCredentialInput(**input_data)
+    except ValidationError as e:
+        output_error(f"invalid input: {e.errors()[0]['msg']}")
+        return  # For type checker (output_error calls sys.exit)
+
+    try:
+        check_bw_status()
+        all_creds = get_all_credentials(_ITEM_NAME)
+    except BitwardenError as e:
+        output_error(str(e))
+        return  # For type checker (output_error calls sys.exit)
+
+    # Add or update the credential for this server URL
+    all_creds[cred_input.ServerURL] = {
+        "Username": cred_input.Username,
+        "Secret": cred_input.Secret,
+    }
+
+    # Save back to Bitwarden
+    try:
+        save_all_credentials(_ITEM_NAME, all_creds)
+        sys.exit(0)
+    except BitwardenError as e:
+        output_error(str(e))
+        return  # For type checker (output_error calls sys.exit)
+
+
+def _cmd_erase_noop(server_url: str) -> None:
     """
     Erase credentials (no-op implementation).
 
@@ -103,9 +190,41 @@ def _cmd_erase(server_url: str) -> None:
     sys.exit(0)
 
 
-def _cmd_list(search_term: str) -> None:
+def _cmd_erase_storage(server_url: str) -> None:
     """
-    List all stored credentials.
+    Erase credentials for a server URL from storage.
+
+    Args:
+        server_url: The server URL to erase credentials for.
+    """
+    try:
+        check_bw_status()
+        all_creds = get_all_credentials(_ITEM_NAME)
+    except BitwardenError as e:
+        output_error(str(e))
+        return  # For type checker (output_error calls sys.exit)
+
+    # Check if the credential exists
+    if server_url not in all_creds:
+        # No credential to delete, succeed silently
+        sys.exit(0)
+        return  # For type checker
+
+    # Remove the credential for this server URL
+    del all_creds[server_url]
+
+    # Save back to Bitwarden
+    try:
+        save_all_credentials(_ITEM_NAME, all_creds)
+        sys.exit(0)
+    except BitwardenError as e:
+        output_error(str(e))
+        return  # For type checker (output_error calls sys.exit)
+
+
+def _cmd_list_docker_hub(search_term: str) -> None:
+    """
+    List Docker Hub credentials from Bitwarden search.
 
     Args:
         search_term: The search term to find credentials in Bitwarden.
@@ -134,6 +253,52 @@ def _cmd_list(search_term: str) -> None:
         print(json.dumps(result))
 
 
+def _cmd_list_storage() -> None:
+    """List all stored credentials from storage."""
+    try:
+        check_bw_status()
+        all_creds = get_all_credentials(_ITEM_NAME)
+    except BitwardenError as e:
+        output_error(str(e))
+        return  # For type checker (output_error calls sys.exit)
+
+    # Convert to the list format: {"url": "username", ...}
+    result = {url: cred["Username"] for url, cred in all_creds.items()}
+
+    print(json.dumps(result))
+    sys.exit(0)
+
+
+def docker_credential_bw(command: Literal["get", "store", "erase", "list"]) -> None:
+    """
+    Main entry point for docker-credential-bw.
+
+    Args:
+        command: The command to execute (get, store, erase, list).
+    """
+    if command == "get":
+        server_url = sys.stdin.read().strip()
+        _cmd_get_storage(server_url)
+    elif command == "store":
+        input_json = sys.stdin.read().strip()
+        try:
+            input_data = json.loads(input_json)
+        except json.JSONDecodeError as e:
+            output_error(f"invalid JSON input: {e}")
+            return  # For type checker (output_error calls sys.exit)
+        _cmd_store_storage(input_data)
+    elif command == "erase":
+        server_url = sys.stdin.read().strip()
+        _cmd_erase_storage(server_url)
+    elif command == "list":
+        _cmd_list_storage()
+    else:
+        output_error(
+            f"Unknown command: {command}. Supported commands: get, store, erase, list"
+        )
+        return  # For type checker (output_error calls sys.exit)
+
+
 def docker_credential_bw_docker(
     command: Literal["get", "store", "erase", "list"], search_term: str = "DockerHub"
 ) -> None:
@@ -146,7 +311,7 @@ def docker_credential_bw_docker(
     """
     if command == "get":
         server_url = sys.stdin.read().strip()
-        _cmd_get(server_url, search_term)
+        _cmd_get_docker_hub(server_url, search_term)
     elif command == "store":
         input_json = sys.stdin.read().strip()
         try:
@@ -154,13 +319,14 @@ def docker_credential_bw_docker(
         except json.JSONDecodeError as e:
             output_error(f"invalid JSON input: {e}")
             return  # For type checker (output_error calls sys.exit)
-        _cmd_store(input_data)
+        _cmd_store_noop(input_data)
     elif command == "erase":
         server_url = sys.stdin.read().strip()
-        _cmd_erase(server_url)
+        _cmd_erase_noop(server_url)
     elif command == "list":
-        _cmd_list(search_term)
+        _cmd_list_docker_hub(search_term)
     else:
         output_error(
             f"Unknown command: {command}. Supported commands: get, store, erase, list"
         )
+        return  # For type checker (output_error calls sys.exit)

@@ -7,10 +7,8 @@ from typer import Typer
 
 from .sbx import sbx as sbx_command
 from .docker_credential import (
-    docker_credential_bw_docker as docker_credential_bw_docker_command,
-)
-from .docker_credential_storage import (
     docker_credential_bw as docker_credential_bw_command,
+    docker_credential_bw_docker as docker_credential_bw_docker_command,
 )
 
 _LOGGER = getLogger(__name__)
