@@ -7,6 +7,7 @@ from typer import Typer
 
 from .sbx import sbx as sbx_command
 from .docker_credential import main as docker_credential_main
+from .docker_credential_storage import main as docker_credential_storage_main
 
 _LOGGER = getLogger(__name__)
 
@@ -145,6 +146,38 @@ def docker_credential_bw_docker(
 
     command = ctx.args[0]
     docker_credential_main(command, search_term)
+
+
+@app.command(
+    name="docker-credential-bw",
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
+def docker_credential_bw(
+    ctx: typer.Context,
+) -> None:
+    """Docker credential helper with Bitwarden storage.
+
+    This command implements the Docker credential helper specification,
+    storing all Docker credentials in a single Bitwarden secure note item.
+
+    Supported subcommands: get, store, erase, list
+
+    Usage:
+        py_cli docker-credential-bw get < server_url.txt
+        py_cli docker-credential-bw list
+        py_cli docker-credential-bw store < credentials.json
+        py_cli docker-credential-bw erase < server_url.txt
+
+    Environment variables:
+        BW_SESSION: Bitwarden session token (required for unlocked vault)
+    """
+    if not ctx.args:
+        typer.echo("Error: No command specified", err=True)
+        typer.echo("Usage: docker-credential-bw <get|store|erase|list>", err=True)
+        raise typer.Exit(1)
+
+    command = ctx.args[0]
+    docker_credential_storage_main(command)
 
 
 def main() -> None:
