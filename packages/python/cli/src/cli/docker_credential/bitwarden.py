@@ -3,7 +3,7 @@
 import json
 import subprocess
 import sys
-from typing import Any
+from typing import Any, NoReturn
 
 from .types import ErrorResponse
 
@@ -82,7 +82,7 @@ def search_items(search_term: str) -> list[dict[str, Any]]:
         raise BitwardenError(f"Failed to parse Bitwarden response: {e}")
 
 
-def output_error(message: str, exit_code: int = 1) -> None:
+def output_error(message: str, exit_code: int = 1) -> NoReturn:
     """
     Output error in Docker credential helper format and exit.
 

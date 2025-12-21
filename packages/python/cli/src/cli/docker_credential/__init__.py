@@ -13,7 +13,7 @@ Supported commands:
 
 import json
 import sys
-from typing import Any, Literal
+from typing import Any, Literal, NoReturn
 
 from pydantic import ValidationError
 
@@ -43,18 +43,15 @@ def _cmd_get_docker_hub(server_url: str, search_term: str) -> None:
     # Only handle Docker Hub
     if server_url != _DOCKER_HUB_URL:
         output_error(f"credentials not found for {server_url}")
-        return  # For type checker (output_error calls sys.exit)
 
     try:
         check_bw_status()
         items = search_items(search_term)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
     if not items:
         output_error("credentials not found")
-        return  # For type checker (output_error calls sys.exit)
 
     # Parse the first matching item
     first_item = items[0]
@@ -64,7 +61,6 @@ def _cmd_get_docker_hub(server_url: str, search_term: str) -> None:
 
     if not username or not password:
         output_error("invalid credentials format")
-        return  # For type checker (output_error calls sys.exit)
 
     # Create and validate the credential
     try:
@@ -76,7 +72,6 @@ def _cmd_get_docker_hub(server_url: str, search_term: str) -> None:
         print(credential.model_dump_json())
     except ValidationError as e:
         output_error(f"validation error: {e.errors()[0]['msg']}")
-        return  # For type checker (output_error calls sys.exit)
 
 
 def _cmd_get_storage(server_url: str) -> None:
@@ -91,14 +86,12 @@ def _cmd_get_storage(server_url: str) -> None:
         all_creds = get_all_credentials(_ITEM_NAME)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
     # Extract credential for the requested server URL
     cred_data = all_creds.get(server_url)
 
     if not cred_data:
         output_error("credentials not found")
-        return  # For type checker (output_error calls sys.exit)
 
     # Parse credential
     username = cred_data.get("Username")
@@ -106,7 +99,6 @@ def _cmd_get_storage(server_url: str) -> None:
 
     if not username or not secret:
         output_error("invalid credentials format")
-        return  # For type checker (output_error calls sys.exit)
 
     # Create and validate the credential
     try:
@@ -118,10 +110,9 @@ def _cmd_get_storage(server_url: str) -> None:
         print(credential.model_dump_json())
     except ValidationError as e:
         output_error(f"validation error: {e.errors()[0]['msg']}")
-        return  # For type checker (output_error calls sys.exit)
 
 
-def _cmd_store_noop(input_data: dict[str, Any]) -> None:
+def _cmd_store_noop(input_data: dict[str, Any]) -> NoReturn:
     """
     Store credentials (no-op implementation).
 
@@ -140,7 +131,7 @@ def _cmd_store_noop(input_data: dict[str, Any]) -> None:
         output_error(f"invalid input: {e.errors()[0]['msg']}")
 
 
-def _cmd_store_storage(input_data: dict[str, Any]) -> None:
+def _cmd_store_storage(input_data: dict[str, Any]) -> NoReturn:
     """
     Store credentials for a server URL in storage.
 
@@ -152,14 +143,12 @@ def _cmd_store_storage(input_data: dict[str, Any]) -> None:
         cred_input = DockerCredentialInput(**input_data)
     except ValidationError as e:
         output_error(f"invalid input: {e.errors()[0]['msg']}")
-        return  # For type checker (output_error calls sys.exit)
 
     try:
         check_bw_status()
         all_creds = get_all_credentials(_ITEM_NAME)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
     # Add or update the credential for this server URL
     all_creds[cred_input.ServerURL] = {
@@ -173,10 +162,9 @@ def _cmd_store_storage(input_data: dict[str, Any]) -> None:
         sys.exit(0)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
 
-def _cmd_erase_noop(server_url: str) -> None:
+def _cmd_erase_noop(server_url: str) -> NoReturn:
     """
     Erase credentials (no-op implementation).
 
@@ -190,7 +178,7 @@ def _cmd_erase_noop(server_url: str) -> None:
     sys.exit(0)
 
 
-def _cmd_erase_storage(server_url: str) -> None:
+def _cmd_erase_storage(server_url: str) -> NoReturn:
     """
     Erase credentials for a server URL from storage.
 
@@ -202,13 +190,11 @@ def _cmd_erase_storage(server_url: str) -> None:
         all_creds = get_all_credentials(_ITEM_NAME)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
     # Check if the credential exists
     if server_url not in all_creds:
         # No credential to delete, succeed silently
         sys.exit(0)
-        return  # For type checker
 
     # Remove the credential for this server URL
     del all_creds[server_url]
@@ -219,7 +205,6 @@ def _cmd_erase_storage(server_url: str) -> None:
         sys.exit(0)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
 
 def _cmd_list_docker_hub(search_term: str) -> None:
@@ -234,12 +219,10 @@ def _cmd_list_docker_hub(search_term: str) -> None:
         items = search_items(search_term)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
     if not items:
         print("{}")
         sys.exit(0)
-        return  # For type checker (sys.exit is mocked in tests)
 
     # Get username from the first matching item
     first_item = items[0]
@@ -253,14 +236,13 @@ def _cmd_list_docker_hub(search_term: str) -> None:
         print(json.dumps(result))
 
 
-def _cmd_list_storage() -> None:
+def _cmd_list_storage() -> NoReturn:
     """List all stored credentials from storage."""
     try:
         check_bw_status()
         all_creds = get_all_credentials(_ITEM_NAME)
     except BitwardenError as e:
         output_error(str(e))
-        return  # For type checker (output_error calls sys.exit)
 
     # Convert to the list format: {"url": "username", ...}
     result = {url: cred["Username"] for url, cred in all_creds.items()}
@@ -296,7 +278,6 @@ def docker_credential_bw(command: Literal["get", "store", "erase", "list"]) -> N
         output_error(
             f"Unknown command: {command}. Supported commands: get, store, erase, list"
         )
-        return  # For type checker (output_error calls sys.exit)
 
 
 def docker_credential_bw_docker(
@@ -318,7 +299,6 @@ def docker_credential_bw_docker(
             input_data = json.loads(input_json)
         except json.JSONDecodeError as e:
             output_error(f"invalid JSON input: {e}")
-            return  # For type checker (output_error calls sys.exit)
         _cmd_store_noop(input_data)
     elif command == "erase":
         server_url = sys.stdin.read().strip()
@@ -329,4 +309,3 @@ def docker_credential_bw_docker(
         output_error(
             f"Unknown command: {command}. Supported commands: get, store, erase, list"
         )
-        return  # For type checker (output_error calls sys.exit)
