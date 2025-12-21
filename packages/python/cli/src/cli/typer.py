@@ -6,6 +6,7 @@ import typer
 from typer import Typer
 
 from .sbx import sbx as sbx_command
+from .docker_credential import main as docker_credential_main
 
 _LOGGER = getLogger(__name__)
 
@@ -100,6 +101,50 @@ def version() -> None:
 def show_python_executable() -> None:
     """Show the current Python path."""
     print(sys.executable)
+
+
+@app.command(
+    name="docker-credential-bw-docker",
+    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
+)
+def docker_credential_bw_docker(
+    ctx: typer.Context,
+    search_term: Annotated[
+        str,
+        typer.Option(
+            "--search-term",
+            "-s",
+            envvar="BW_DOCKER_SEARCH_TERM",
+            help="Search term for Bitwarden item lookup (default: DockerHub)",
+        ),
+    ] = "DockerHub",
+) -> None:
+    """Docker credential helper using Bitwarden CLI.
+
+    This command implements the Docker credential helper specification,
+    providing read-only access to Docker Hub credentials stored in Bitwarden.
+
+    Supported subcommands: get, store, erase, list
+
+    Usage:
+        py_cli docker-credential-bw-docker get < server_url.txt
+        py_cli docker-credential-bw-docker list
+        py_cli docker-credential-bw-docker store < credentials.json
+        py_cli docker-credential-bw-docker erase < server_url.txt
+
+    Environment variables:
+        BW_DOCKER_SEARCH_TERM: Override the default search term (default: "DockerHub")
+        BW_SESSION: Bitwarden session token (required for unlocked vault)
+    """
+    if not ctx.args:
+        typer.echo("Error: No command specified", err=True)
+        typer.echo(
+            "Usage: docker-credential-bw-docker <get|store|erase|list>", err=True
+        )
+        raise typer.Exit(1)
+
+    command = ctx.args[0]
+    docker_credential_main(command, search_term)
 
 
 def main() -> None:
