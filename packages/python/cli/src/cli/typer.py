@@ -6,8 +6,12 @@ import typer
 from typer import Typer
 
 from .sbx import sbx as sbx_command
-from .docker_credential import main as docker_credential_main
-from .docker_credential_storage import main as docker_credential_storage_main
+from .docker_credential import (
+    docker_credential_bw_docker as docker_credential_bw_docker_command,
+)
+from .docker_credential_storage import (
+    docker_credential_bw as docker_credential_bw_command,
+)
 
 _LOGGER = getLogger(__name__)
 
@@ -145,7 +149,7 @@ def docker_credential_bw_docker(
         raise typer.Exit(1)
 
     command = ctx.args[0]
-    docker_credential_main(command, search_term)
+    docker_credential_bw_docker_command(command, search_term)
 
 
 @app.command(
@@ -177,7 +181,7 @@ def docker_credential_bw(
         raise typer.Exit(1)
 
     command = ctx.args[0]
-    docker_credential_storage_main(command)
+    docker_credential_bw_command(command)
 
 
 def main() -> None:

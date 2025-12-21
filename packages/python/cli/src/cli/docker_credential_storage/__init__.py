@@ -149,7 +149,7 @@ def _cmd_list() -> None:
     sys.exit(0)
 
 
-def main(command: str) -> None:
+def docker_credential_bw(command: str) -> None:
     """
     Main entry point for docker-credential-bw.
 

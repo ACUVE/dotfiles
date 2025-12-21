@@ -134,7 +134,7 @@ def _cmd_list(search_term: str) -> None:
         print(json.dumps(result))
 
 
-def main(command: str, search_term: str = "DockerHub") -> None:
+def docker_credential_bw_docker(command: str, search_term: str = "DockerHub") -> None:
     """
     Main entry point for docker-credential-bw-docker.
 
