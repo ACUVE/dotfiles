@@ -177,6 +177,7 @@ def sbx(
         profile_str,
         "-D",
         f"HOME_DIR={Path.home().as_posix()}",
+        "--",
     ] + list(command)
 
     try:
