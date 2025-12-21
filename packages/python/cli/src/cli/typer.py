@@ -157,10 +157,6 @@ def docker_credential_bw_docker(
     docker_credential_bw_docker_command(command, search_term)
 
 
-def main() -> None:
-    app()
-
-
 @app.command()
 def version() -> None:
     """Show the version of the CLI tool."""
@@ -174,3 +170,7 @@ def version() -> None:
 def show_python_executable() -> None:
     """Show the current Python path."""
     print(sys.executable)
+
+
+def main() -> None:
+    app()
