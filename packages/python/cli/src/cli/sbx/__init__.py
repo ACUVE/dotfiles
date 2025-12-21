@@ -6,8 +6,8 @@ from logging import DEBUG, getLogger
 from pathlib import Path
 from typing import Sequence, Literal, LiteralString
 
-from .sbx_parser import parse
-from .sbx_ast import ASTNode, Symbol, String, SExpression
+from .parser import parse
+from .ast import ASTNode, Symbol, String, SExpression
 
 _LOGGER = getLogger(__name__)
 

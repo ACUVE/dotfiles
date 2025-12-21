@@ -2,8 +2,8 @@
 
 import pytest
 from cli.sbx import default_profile
-from cli.sbx_ast import Integer, SExpression, String, Symbol
-from cli.sbx_parser import parse
+from cli.sbx.ast import Integer, SExpression, String, Symbol
+from cli.sbx.parser import parse
 
 
 @pytest.fixture
