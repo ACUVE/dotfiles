@@ -81,7 +81,40 @@ def sbx(
         ),
     ] = False,
 ) -> None:
-    """Execute a command in a sandboxed environment using sandbox-exec."""
+    """Execute a command in a sandboxed environment using sandbox-exec.
+
+    This command provides a secure sandboxed environment for executing commands
+    on macOS using the sandbox-exec system utility. By default, the sandbox
+    restricts file system access to read-only for most directories.
+
+    Options:
+        --git: Enable git-related operations by allowing access to .git directories
+        --cwd: Allow access to the current working directory
+        -w, --write: Specify directories to allow write access (can be used multiple times)
+        --dry-run: Display the sandbox-exec command without executing it
+
+    Usage:
+        py_cli sbx -- command args...
+        py_cli sbx --git -- git status
+        py_cli sbx --cwd --write /tmp -- python script.py
+        py_cli sbx --dry-run -- ls -la
+
+    Examples:
+        # Run a command in strict sandbox mode
+        py_cli sbx -- echo "Hello from sandbox"
+
+        # Enable git operations in the sandbox
+        py_cli sbx --git -- git status
+
+        # Allow current directory access and write to /tmp
+        py_cli sbx --cwd --write /tmp -- ./build.sh
+
+        # Preview the sandbox command without executing
+        py_cli sbx --dry-run --git --cwd -- make test
+
+    Note:
+        This command is macOS-specific and requires the sandbox-exec utility.
+    """
     sbx_command(
         enable_git=enable_git,
         enable_cwd=enable_cwd,
