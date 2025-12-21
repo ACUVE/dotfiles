@@ -124,9 +124,7 @@ def sbx(
     )
 
 
-@app.command(
-    name="docker-credential-bw",
-)
+@app.command()
 def docker_credential_bw(
     command: Annotated[
         Literal["get", "store", "erase", "list"],
@@ -152,9 +150,7 @@ def docker_credential_bw(
     docker_credential_bw_command(command)
 
 
-@app.command(
-    name="docker-credential-bw-docker",
-)
+@app.command()
 def docker_credential_bw_docker(
     command: Annotated[
         Literal["get", "store", "erase", "list"],
