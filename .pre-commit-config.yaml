@@ -27,7 +27,11 @@ repos:
       - id: ruff-check
       - id: ruff-format
 
-  - repo: https://github.com/pre-commit/mirrors-mypy
-    rev: v1.19.0
+  - repo: local
     hooks:
       - id: mypy
+        name: mypy
+        entry: bash -c 'cd packages/python/cli && uv sync --quiet && uv run mypy src/cli'
+        language: system
+        pass_filenames: false
+        files: ^packages/python/cli/src/cli/.*\.py$
