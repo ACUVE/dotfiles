@@ -13,7 +13,7 @@ Supported commands:
 
 import json
 import sys
-from typing import Any, Literal, NoReturn
+from typing import Literal, NoReturn
 
 from pydantic import ValidationError
 
@@ -55,19 +55,17 @@ def _cmd_get_docker_hub(server_url: str, search_term: str) -> None:
 
     # Parse the first matching item
     first_item = items[0]
-    login = first_item.get("login", {})
-    username = login.get("username")
-    password = login.get("password")
+    login = first_item.login
 
-    if not username or not password:
+    if not login or not login.username or not login.password:
         output_error("invalid credentials format")
 
     # Create and validate the credential
     try:
         credential = DockerCredential(
             ServerURL=server_url,
-            Username=username,
-            Secret=password,
+            Username=login.username,
+            Secret=login.password,
         )
         print(credential.model_dump_json())
     except ValidationError as e:
@@ -112,7 +110,7 @@ def _cmd_get_storage(server_url: str) -> None:
         output_error(f"validation error: {e.errors()[0]['msg']}")
 
 
-def _cmd_store_noop(input_data: dict[str, Any]) -> NoReturn:
+def _cmd_store_noop(input_data: dict[str, str]) -> NoReturn:
     """
     Store credentials (no-op implementation).
 
@@ -131,7 +129,7 @@ def _cmd_store_noop(input_data: dict[str, Any]) -> NoReturn:
         output_error(f"invalid input: {e.errors()[0]['msg']}")
 
 
-def _cmd_store_storage(input_data: dict[str, Any]) -> NoReturn:
+def _cmd_store_storage(input_data: dict[str, str]) -> NoReturn:
     """
     Store credentials for a server URL in storage.
 
@@ -226,13 +224,12 @@ def _cmd_list_docker_hub(search_term: str) -> None:
 
     # Get username from the first matching item
     first_item = items[0]
-    login = first_item.get("login", {})
-    username = login.get("username")
+    login = first_item.login
 
-    if not username:
+    if not login or not login.username:
         print("{}")
     else:
-        result = {_DOCKER_HUB_URL: username}
+        result = {_DOCKER_HUB_URL: login.username}
         print(json.dumps(result))
 
 

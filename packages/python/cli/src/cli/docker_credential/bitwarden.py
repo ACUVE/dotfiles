@@ -3,9 +3,11 @@
 import json
 import subprocess
 import sys
-from typing import Any, NoReturn
+from typing import NoReturn
 
-from .types import ErrorResponse
+from pydantic import ValidationError
+
+from .types import BitwardenItem, ErrorResponse
 
 
 class BitwardenError(Exception):
@@ -51,7 +53,7 @@ def check_bw_status() -> None:
         raise BitwardenError(f"Failed to parse Bitwarden status: {e}")
 
 
-def search_items(search_term: str) -> list[dict[str, Any]]:
+def search_items(search_term: str) -> list[BitwardenItem]:
     """
     Search for items in Bitwarden vault.
 
@@ -74,12 +76,14 @@ def search_items(search_term: str) -> list[dict[str, Any]]:
         raise BitwardenError(f"Failed to search Bitwarden items: {result.stderr}")
 
     try:
-        items = json.loads(result.stdout)
-        if not isinstance(items, list):
+        items_data = json.loads(result.stdout)
+        if not isinstance(items_data, list):
             raise BitwardenError("Invalid response from Bitwarden: expected a list")
-        return items
+        return [BitwardenItem.model_validate(item) for item in items_data]
     except json.JSONDecodeError as e:
         raise BitwardenError(f"Failed to parse Bitwarden response: {e}")
+    except ValidationError as e:
+        raise BitwardenError(f"Invalid Bitwarden item format: {e}")
 
 
 def output_error(message: str, exit_code: int = 1) -> NoReturn:
@@ -95,7 +99,7 @@ def output_error(message: str, exit_code: int = 1) -> NoReturn:
     sys.exit(exit_code)
 
 
-def list_items() -> list[dict[str, Any]]:
+def list_items() -> list[BitwardenItem]:
     """
     List all items in Bitwarden vault.
 
@@ -115,15 +119,17 @@ def list_items() -> list[dict[str, Any]]:
         raise BitwardenError(f"Failed to list Bitwarden items: {result.stderr}")
 
     try:
-        items = json.loads(result.stdout)
-        if not isinstance(items, list):
+        items_data = json.loads(result.stdout)
+        if not isinstance(items_data, list):
             raise BitwardenError("Invalid response from Bitwarden: expected a list")
-        return items
+        return [BitwardenItem.model_validate(item) for item in items_data]
     except json.JSONDecodeError as e:
         raise BitwardenError(f"Failed to parse Bitwarden response: {e}")
+    except ValidationError as e:
+        raise BitwardenError(f"Invalid Bitwarden item format: {e}")
 
 
-def get_all_credentials(item_name: str) -> dict[str, Any]:
+def get_all_credentials(item_name: str) -> dict[str, dict[str, str]]:
     """
     Get all credentials from a Bitwarden secure note item.
 
@@ -144,7 +150,7 @@ def get_all_credentials(item_name: str) -> dict[str, Any]:
     # Find the credentials item (type 2 = secure note)
     cred_item = None
     for item in items:
-        if item.get("name") == item_name and item.get("type") == 2:
+        if item.name == item_name and item.type == 2:
             cred_item = item
             break
 
@@ -152,7 +158,7 @@ def get_all_credentials(item_name: str) -> dict[str, Any]:
         return {}
 
     # Parse notes field as JSON
-    notes = cred_item.get("notes", "{}")
+    notes = cred_item.notes or "{}"
 
     try:
         credentials = json.loads(notes)
@@ -163,7 +169,9 @@ def get_all_credentials(item_name: str) -> dict[str, Any]:
         return {}
 
 
-def save_all_credentials(item_name: str, credentials: dict[str, Any]) -> None:
+def save_all_credentials(
+    item_name: str, credentials: dict[str, dict[str, str]]
+) -> None:
     """
     Save all credentials to a Bitwarden secure note item.
 
@@ -184,8 +192,8 @@ def save_all_credentials(item_name: str, credentials: dict[str, Any]) -> None:
     # Find existing item
     item_id = None
     for item in items:
-        if item.get("name") == item_name and item.get("type") == 2:
-            item_id = item.get("id")
+        if item.name == item_name and item.type == 2:
+            item_id = item.id
             break
 
     if item_id:
