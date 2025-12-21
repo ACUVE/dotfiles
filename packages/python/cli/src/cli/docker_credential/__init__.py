@@ -12,7 +12,7 @@ Supported commands:
 
 import json
 import sys
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import ValidationError
 
@@ -134,7 +134,9 @@ def _cmd_list(search_term: str) -> None:
         print(json.dumps(result))
 
 
-def docker_credential_bw_docker(command: str, search_term: str = "DockerHub") -> None:
+def docker_credential_bw_docker(
+    command: Literal["get", "store", "erase", "list"], search_term: str = "DockerHub"
+) -> None:
     """
     Main entry point for docker-credential-bw-docker.
 

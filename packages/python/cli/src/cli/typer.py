@@ -1,5 +1,5 @@
 import sys
-from typing import Annotated
+from typing import Annotated, Literal
 from logging import DEBUG, INFO, WARNING, basicConfig, getLogger
 
 import typer
@@ -93,27 +93,42 @@ def sbx(
     )
 
 
-@app.command()
-def version() -> None:
-    """Show the version of the CLI tool."""
+@app.command(
+    name="docker-credential-bw",
+)
+def docker_credential_bw(
+    command: Annotated[
+        Literal["get", "store", "erase", "list"],
+        typer.Argument(help="The command to execute"),
+    ],
+) -> None:
+    """Docker credential helper with Bitwarden storage.
 
-    from . import __version__
+    This command implements the Docker credential helper specification,
+    storing all Docker credentials in a single Bitwarden secure note item.
 
-    print(f"cli version {__version__}")
+    Supported subcommands: get, store, erase, list
 
+    Usage:
+        py_cli docker-credential-bw get < server_url.txt
+        py_cli docker-credential-bw list
+        py_cli docker-credential-bw store < credentials.json
+        py_cli docker-credential-bw erase < server_url.txt
 
-@app.command()
-def show_python_executable() -> None:
-    """Show the current Python path."""
-    print(sys.executable)
+    Environment variables:
+        BW_SESSION: Bitwarden session token (required for unlocked vault)
+    """
+    docker_credential_bw_command(command)
 
 
 @app.command(
     name="docker-credential-bw-docker",
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
 )
 def docker_credential_bw_docker(
-    ctx: typer.Context,
+    command: Annotated[
+        Literal["get", "store", "erase", "list"],
+        typer.Argument(help="The command to execute"),
+    ],
     search_term: Annotated[
         str,
         typer.Option(
@@ -141,48 +156,23 @@ def docker_credential_bw_docker(
         BW_DOCKER_SEARCH_TERM: Override the default search term (default: "DockerHub")
         BW_SESSION: Bitwarden session token (required for unlocked vault)
     """
-    if not ctx.args:
-        typer.echo("Error: No command specified", err=True)
-        typer.echo(
-            "Usage: docker-credential-bw-docker <get|store|erase|list>", err=True
-        )
-        raise typer.Exit(1)
-
-    command = ctx.args[0]
     docker_credential_bw_docker_command(command, search_term)
-
-
-@app.command(
-    name="docker-credential-bw",
-    context_settings={"allow_extra_args": True, "ignore_unknown_options": True},
-)
-def docker_credential_bw(
-    ctx: typer.Context,
-) -> None:
-    """Docker credential helper with Bitwarden storage.
-
-    This command implements the Docker credential helper specification,
-    storing all Docker credentials in a single Bitwarden secure note item.
-
-    Supported subcommands: get, store, erase, list
-
-    Usage:
-        py_cli docker-credential-bw get < server_url.txt
-        py_cli docker-credential-bw list
-        py_cli docker-credential-bw store < credentials.json
-        py_cli docker-credential-bw erase < server_url.txt
-
-    Environment variables:
-        BW_SESSION: Bitwarden session token (required for unlocked vault)
-    """
-    if not ctx.args:
-        typer.echo("Error: No command specified", err=True)
-        typer.echo("Usage: docker-credential-bw <get|store|erase|list>", err=True)
-        raise typer.Exit(1)
-
-    command = ctx.args[0]
-    docker_credential_bw_command(command)
 
 
 def main() -> None:
     app()
+
+
+@app.command()
+def version() -> None:
+    """Show the version of the CLI tool."""
+
+    from . import __version__
+
+    print(f"cli version {__version__}")
+
+
+@app.command()
+def show_python_executable() -> None:
+    """Show the current Python path."""
+    print(sys.executable)

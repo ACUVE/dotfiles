@@ -6,7 +6,7 @@ Bitwarden CLI to store all credentials in a single secure note item.
 
 import json
 import sys
-from typing import Any
+from typing import Any, Literal
 
 from pydantic import ValidationError
 
@@ -149,7 +149,7 @@ def _cmd_list() -> None:
     sys.exit(0)
 
 
-def docker_credential_bw(command: str) -> None:
+def docker_credential_bw(command: Literal["get", "store", "erase", "list"]) -> None:
     """
     Main entry point for docker-credential-bw.
 
