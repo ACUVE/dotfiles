@@ -64,6 +64,29 @@ class BitwardenItem(BaseModel):
     ]
 
 
+class StoredCredential(BaseModel):
+    """Credential data stored in Bitwarden secure note.
+
+    This model represents a single credential entry stored in the notes field
+    of a Bitwarden secure note item. Multiple credentials are stored as a JSON
+    object mapping server URLs to StoredCredential instances.
+
+    Unknown fields are ignored to maintain compatibility with existing stored data.
+    """
+
+    model_config = ConfigDict(extra="ignore")
+
+    Username: Annotated[
+        str, Field(min_length=1, description="Username for authentication")
+    ]
+    Secret: Annotated[str, Field(min_length=1, description="Password or token")]
+
+
+# Type alias for the credential storage structure
+# Maps server URLs to their corresponding credentials
+CredentialStore = dict[str, StoredCredential]
+
+
 class DockerCredential(BaseModel):
     """Docker credential helper output format for get command."""
 

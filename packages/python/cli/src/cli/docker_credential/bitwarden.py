@@ -7,7 +7,7 @@ from typing import NoReturn
 
 from pydantic import ValidationError
 
-from .types import BitwardenItem, ErrorResponse
+from .types import BitwardenItem, CredentialStore, ErrorResponse, StoredCredential
 
 
 class BitwardenError(Exception):
@@ -129,7 +129,7 @@ def list_items() -> list[BitwardenItem]:
         raise BitwardenError(f"Invalid Bitwarden item format: {e}")
 
 
-def get_all_credentials(item_name: str) -> dict[str, dict[str, str]]:
+def get_all_credentials(item_name: str) -> CredentialStore:
     """
     Get all credentials from a Bitwarden secure note item.
 
@@ -137,7 +137,7 @@ def get_all_credentials(item_name: str) -> dict[str, dict[str, str]]:
         item_name: The name of the secure note item.
 
     Returns:
-        Dictionary of credentials (server_url -> {Username, Secret}).
+        Dictionary of credentials (server_url -> StoredCredential).
 
     Raises:
         BitwardenError: If reading from Bitwarden fails.
@@ -161,17 +161,21 @@ def get_all_credentials(item_name: str) -> dict[str, dict[str, str]]:
     notes = cred_item.notes or "{}"
 
     try:
-        credentials = json.loads(notes)
-        if not isinstance(credentials, dict):
+        credentials_data = json.loads(notes)
+        if not isinstance(credentials_data, dict):
             return {}
-        return credentials
+        # Validate and convert to StoredCredential instances
+        return {
+            url: StoredCredential.model_validate(cred)
+            for url, cred in credentials_data.items()
+        }
     except json.JSONDecodeError:
         return {}
+    except ValidationError as e:
+        raise BitwardenError(f"Invalid credential format in storage: {e}")
 
 
-def save_all_credentials(
-    item_name: str, credentials: dict[str, dict[str, str]]
-) -> None:
+def save_all_credentials(item_name: str, credentials: CredentialStore) -> None:
     """
     Save all credentials to a Bitwarden secure note item.
 
@@ -182,7 +186,9 @@ def save_all_credentials(
     Raises:
         BitwardenError: If saving to Bitwarden fails.
     """
-    credentials_json = json.dumps(credentials)
+    # Convert StoredCredential instances to dict for JSON serialization
+    credentials_dict = {url: cred.model_dump() for url, cred in credentials.items()}
+    credentials_json = json.dumps(credentials_dict)
 
     try:
         items = list_items()

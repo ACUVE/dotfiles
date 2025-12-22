@@ -25,7 +25,7 @@ from .bitwarden import (
     save_all_credentials,
     search_items,
 )
-from .types import DockerCredential, DockerCredentialInput
+from .types import DockerCredential, DockerCredentialInput, StoredCredential
 
 # Constants
 _DOCKER_HUB_URL = "https://index.docker.io/v1/"
@@ -91,19 +91,12 @@ def _cmd_get_storage(server_url: str) -> None:
     if not cred_data:
         output_error("credentials not found")
 
-    # Parse credential
-    username = cred_data.get("Username")
-    secret = cred_data.get("Secret")
-
-    if not username or not secret:
-        output_error("invalid credentials format")
-
     # Create and validate the credential
     try:
         credential = DockerCredential(
             ServerURL=server_url,
-            Username=username,
-            Secret=secret,
+            Username=cred_data.Username,
+            Secret=cred_data.Secret,
         )
         print(credential.model_dump_json())
     except ValidationError as e:
@@ -149,10 +142,10 @@ def _cmd_store_storage(input_data: dict[str, str]) -> NoReturn:
         output_error(str(e))
 
     # Add or update the credential for this server URL
-    all_creds[cred_input.ServerURL] = {
-        "Username": cred_input.Username,
-        "Secret": cred_input.Secret,
-    }
+    all_creds[cred_input.ServerURL] = StoredCredential(
+        Username=cred_input.Username,
+        Secret=cred_input.Secret,
+    )
 
     # Save back to Bitwarden
     try:
@@ -242,7 +235,7 @@ def _cmd_list_storage() -> NoReturn:
         output_error(str(e))
 
     # Convert to the list format: {"url": "username", ...}
-    result = {url: cred["Username"] for url, cred in all_creds.items()}
+    result = {url: cred.Username for url, cred in all_creds.items()}
 
     print(json.dumps(result))
     sys.exit(0)
