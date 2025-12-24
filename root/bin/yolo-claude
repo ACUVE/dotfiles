@@ -7,6 +7,8 @@ REAL_SCRIPT_DIR=$(dirname "$(realpath "$0")")
 exec "$REAL_SCRIPT_DIR/sbx" \
     --git \
     --cwd \
+    --awscli \
+    --cdk \
     --write "${HOME}/.claude" \
     --write "${CLAUDE_CONFIG_DIR:-${HOME}/.claude}" \
     claude --dangerously-skip-permissions "$@"

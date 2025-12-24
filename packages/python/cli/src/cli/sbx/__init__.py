@@ -146,6 +146,8 @@ def sbx(
     *,
     enable_git: bool,
     enable_cwd: bool,
+    enable_awscli: bool,
+    enable_cdk: bool,
     write: Sequence[str],
     dry_run: bool,
     command: Sequence[str],
@@ -157,6 +159,14 @@ def sbx(
         additional_allow_write_subpaths.extend(_git_subpaths())
     if enable_cwd:
         additional_allow_write_subpaths.append(os.getcwd())
+    if enable_awscli:
+        additional_allow_write_subpaths.append(
+            os.path.join(Path.home().as_posix(), ".aws")
+        )
+    if enable_cdk:
+        additional_allow_write_subpaths.append(
+            os.path.join(Path.home().as_posix(), ".cdk")
+        )
     if write:
         additional_allow_write_subpaths.extend(write)
 

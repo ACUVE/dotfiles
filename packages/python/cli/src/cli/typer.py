@@ -65,6 +65,20 @@ def sbx(
             help="Enable current working directory access in the sandbox.",
         ),
     ] = False,
+    enable_awscli: Annotated[
+        bool,
+        typer.Option(
+            "--awscli",
+            help="Enable AWS CLI access in the sandbox.",
+        ),
+    ] = False,
+    enable_cdk: Annotated[
+        bool,
+        typer.Option(
+            "--cdk",
+            help="Enable AWS CDK access in the sandbox.",
+        ),
+    ] = False,
     write: Annotated[
         list[str],
         typer.Option(
@@ -118,6 +132,8 @@ def sbx(
     sbx_command(
         enable_git=enable_git,
         enable_cwd=enable_cwd,
+        enable_awscli=enable_awscli,
+        enable_cdk=enable_cdk,
         write=write,
         dry_run=dry_run,
         command=ctx.args,

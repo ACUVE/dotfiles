@@ -7,5 +7,7 @@ REAL_SCRIPT_DIR=$(dirname "$(realpath "$0")")
 exec "$REAL_SCRIPT_DIR/sbx" \
     --git \
     --cwd \
+    --awscli \
+    --cdk \
     --write "${XDG_CONFIG_HOME:-${HOME}/.config}/.copilot" \
     copilot --allow-all-paths --allow-all-tools "$@"
