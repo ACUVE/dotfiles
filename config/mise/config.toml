@@ -35,6 +35,7 @@ gcloud = "latest"
 
 # not categorized
 buf = "latest"
+docker-cli = "28"  # 29 は podman で API version 1.41 is not supported by this client: the minimum supported API version is 1.44 となるので、一旦 28 固定
 jq = "latest"
 yq = "latest"
 bat = "latest"
