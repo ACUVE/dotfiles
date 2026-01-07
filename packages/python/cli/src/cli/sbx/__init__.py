@@ -35,6 +35,7 @@ def default_profile() -> list[ASTNode]:
   (subpath (string-append (param "HOME_DIR") "/.cache"))
   (subpath (string-append (param "HOME_DIR") "/Library/Caches"))
   (subpath (string-append (param "HOME_DIR") "/.local/share"))
+  (regex (string-append "^" (regex-quote (param "HOME_DIR")) "/.ssh/.mux-*"))
 
   (subpath (string-append (param "HOME_DIR") "/.npm"))
   (subpath (string-append (param "HOME_DIR") "/.pnpm"))
