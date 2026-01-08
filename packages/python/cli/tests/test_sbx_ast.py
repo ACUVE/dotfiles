@@ -1,7 +1,5 @@
 """Tests for sbx_ast module."""
 
-import sys
-
 import pytest
 
 from cli.sbx.darwin import default_profile
@@ -328,7 +326,6 @@ class TestProfileParsing:
             assert n1 == n2, "Nodes should be structurally equivalent after round-trip"
 
 
-@pytest.mark.skipif(sys.platform != "darwin", reason="macOS only test")
 class TestDefaultProfile:
     """Test that the default profile from sbx.py can be parsed."""
 
