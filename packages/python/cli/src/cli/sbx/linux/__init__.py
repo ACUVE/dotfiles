@@ -65,8 +65,13 @@ def _generate_profile(
     read_only_paths: list[str],
     write_paths: list[str],
 ) -> Path:
-    """Generate a temporary island profile."""
-    profile_dir = Path(tempfile.mkdtemp(prefix="sbx_island_"))
+    """Generate a temporary island profile in island's config directory."""
+    # island requires profiles to be in ~/.config/island/profiles/
+    island_profiles_dir = Path.home() / ".config" / "island" / "profiles"
+    island_profiles_dir.mkdir(parents=True, exist_ok=True)
+
+    # Create a unique profile directory
+    profile_dir = Path(tempfile.mkdtemp(prefix="sbx_", dir=island_profiles_dir))
     landlock_dir = profile_dir / "landlock"
     landlock_dir.mkdir()
 
@@ -141,7 +146,9 @@ def sbx(
     )
 
     # Build island run command
-    cmd = [island_path, "run", "-p", str(profile_dir), "--", *command]
+    # -p takes the profile name (directory name), not full path
+    profile_name = profile_dir.name
+    cmd = [island_path, "run", "-p", profile_name, "--", *command]
 
     _LOGGER.info("Island profile: %s", profile_dir)
     _LOGGER.info("Island command: %s", shlex.join(cmd))
