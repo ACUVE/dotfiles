@@ -37,6 +37,10 @@ def _build_landlock_toml(
     """Build Landlock TOML configuration."""
     lines = []
 
+    # ABI version is required for abi.* access groups
+    lines.append("abi = 6")
+    lines.append("")
+
     # Filter to existing paths only
     existing_ro_paths = [p for p in read_only_paths if os.path.exists(p)]
     existing_rw_paths = [p for p in write_paths if os.path.exists(p)]
