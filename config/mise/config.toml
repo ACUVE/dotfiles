@@ -70,6 +70,10 @@ url = "https://github.com/coderabbitai/git-worktree-runner/archive/refs/tags/v{{
 checksum = "sha256:ea5be2610bcd49a7f05806c3cf956d8dd5bc53d51a2f1c2519604586e2b3afa8"
 size = 118519
 
+[tools."cargo:https://github.com/landlock-lsm/island"]  # https://github.com/landlock-lsm/island
+version = "latest"
+os = ["linux"]
+
 [settings]
 idiomatic_version_file_enable_tools = []
 

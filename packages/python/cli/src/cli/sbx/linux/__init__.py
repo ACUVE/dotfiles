@@ -1,9 +1,10 @@
-"""Linux sandbox implementation using bubblewrap (bwrap)."""
+"""Linux sandbox implementation using island (Landlock-based)."""
 
 import os
 import shlex
 import shutil
 import sys
+import tempfile
 from logging import getLogger
 from pathlib import Path
 from typing import Sequence
@@ -12,119 +13,71 @@ from .._common import collect_write_paths
 
 _LOGGER = getLogger(__name__)
 
-# System directories to bind read-only by default
-_DEFAULT_RO_BINDS = [
-    "/usr",
-    "/bin",
-    "/lib",
-    "/lib64",
-    "/sbin",
-    "/etc",
-    "/opt",
-]
 
-# Paths that should be read-write by default
-_DEFAULT_RW_PATHS = [
-    "/tmp",
-    "/var/tmp",
-]
-
-
-def _check_bwrap_available() -> str:
-    """Check if bwrap is available and return its path.
+def _check_island_available() -> str:
+    """Check if island is available and return its path.
 
     Raises:
-        SystemExit: If bwrap is not installed.
+        SystemExit: If island is not installed.
     """
-    bwrap_path = shutil.which("bwrap")
-    if bwrap_path is None:
+    island_path = shutil.which("island")
+    if island_path is None:
         print(
-            "Error: bubblewrap (bwrap) is not installed.\n"
-            "Install it with:\n"
-            "  Ubuntu/Debian: sudo apt install bubblewrap\n"
-            "  Fedora: sudo dnf install bubblewrap\n"
-            "  Arch: sudo pacman -S bubblewrap",
+            "Error: island is not installed.\nInstall it with: mise install",
             file=sys.stderr,
         )
         sys.exit(1)
-    return bwrap_path
+    return island_path
 
 
-def _build_bwrap_command(
-    *,
+def _build_landlock_toml(
+    read_only_paths: list[str],
     write_paths: list[str],
-    command: Sequence[str],
-) -> list[str]:
-    """Build the bwrap command with appropriate bindings."""
-    bwrap_path = _check_bwrap_available()
-    home = Path.home().as_posix()
-    cwd = os.getcwd()
+) -> str:
+    """Build Landlock TOML configuration."""
+    lines = []
 
-    cmd = [bwrap_path]
+    # Filter to existing paths only
+    existing_ro_paths = [p for p in read_only_paths if os.path.exists(p)]
+    existing_rw_paths = [p for p in write_paths if os.path.exists(p)]
 
-    # Create new PID namespace
-    cmd.extend(["--unshare-pid"])
+    # Read-only paths (read + execute)
+    if existing_ro_paths:
+        lines.append("[[path_beneath]]")
+        lines.append('allowed_access = ["abi.read_execute"]')
+        paths_str = ", ".join(f'"{p}"' for p in existing_ro_paths)
+        lines.append(f"parent = [{paths_str}]")
+        lines.append("")
 
-    # Mount /proc and /dev
-    cmd.extend(["--proc", "/proc"])
-    cmd.extend(["--dev", "/dev"])
+    # Read-write paths
+    if existing_rw_paths:
+        lines.append("[[path_beneath]]")
+        lines.append('allowed_access = ["abi.read_write"]')
+        paths_str = ", ".join(f'"{p}"' for p in existing_rw_paths)
+        lines.append(f"parent = [{paths_str}]")
+        lines.append("")
 
-    # Bind system directories read-only
-    for path in _DEFAULT_RO_BINDS:
-        if os.path.exists(path):
-            cmd.extend(["--ro-bind", path, path])
+    return "\n".join(lines)
 
-    # Temporary directories are read-write
-    for path in _DEFAULT_RW_PATHS:
-        if os.path.exists(path):
-            cmd.extend(["--bind", path, path])
 
-    # Home directory is read-only by default
-    cmd.extend(["--ro-bind", home, home])
+def _generate_profile(
+    *,
+    read_only_paths: list[str],
+    write_paths: list[str],
+) -> Path:
+    """Generate a temporary island profile."""
+    profile_dir = Path(tempfile.mkdtemp(prefix="sbx_island_"))
+    landlock_dir = profile_dir / "landlock"
+    landlock_dir.mkdir()
 
-    # Cache directories under home should be writable
-    cache_dirs = [
-        os.path.join(home, ".cache"),
-        os.path.join(home, ".local/share"),
-        os.path.join(home, ".npm"),
-        os.path.join(home, ".pnpm"),
-    ]
-    for cache_dir in cache_dirs:
-        if os.path.exists(cache_dir):
-            cmd.extend(["--bind", cache_dir, cache_dir])
+    # profile.toml (empty is fine)
+    (profile_dir / "profile.toml").write_text("")
 
-    # User-specified write paths
-    for path in write_paths:
-        abs_path = os.path.abspath(path)
-        if os.path.exists(abs_path):
-            cmd.extend(["--bind", abs_path, abs_path])
-        else:
-            _LOGGER.warning("Write path does not exist: %s", abs_path)
+    # landlock/base.toml
+    landlock_config = _build_landlock_toml(read_only_paths, write_paths)
+    (landlock_dir / "base.toml").write_text(landlock_config)
 
-    # Mask sensitive files with tmpfs (similar to macOS deny file-read-data)
-    # This prevents reading shell history
-    sensitive_files = [
-        os.path.join(home, ".zsh_history"),
-        os.path.join(home, ".bash_history"),
-    ]
-    for sensitive_file in sensitive_files:
-        if os.path.exists(sensitive_file):
-            cmd.extend(["--tmpfs", sensitive_file])
-
-    # Note: ~/.aws/credentials is accessible because home is ro-bind mounted.
-    # Unlike macOS sandbox-exec which can deny file-read-data specifically,
-    # bubblewrap doesn't have fine-grained read permission control.
-    # If you need to restrict it, you would need to not bind $HOME and instead
-    # bind only specific subdirectories.
-
-    # Change to current working directory
-    cmd.extend(["--chdir", cwd])
-
-    # Add the command to execute
-    cmd.append("--")
-    cmd.extend(command)
-
-    return cmd
+    return profile_dir
 
 
 def sbx(
@@ -137,8 +90,12 @@ def sbx(
     dry_run: bool,
     command: Sequence[str],
 ) -> None:
-    """Execute a command in a sandboxed environment using bubblewrap."""
-    write_paths = collect_write_paths(
+    """Execute a command in a sandboxed environment using island."""
+    island_path = _check_island_available()
+    home = Path.home().as_posix()
+
+    # Collect user-specified write paths
+    user_write_paths = collect_write_paths(
         enable_git=enable_git,
         enable_cwd=enable_cwd,
         enable_awscli=enable_awscli,
@@ -146,18 +103,61 @@ def sbx(
         write=write,
     )
 
-    cmd = _build_bwrap_command(
+    # Default read-only paths (system directories)
+    read_only_paths = [
+        "/usr",
+        "/bin",
+        "/lib",
+        "/lib64",
+        "/sbin",
+        "/etc",
+        "/opt",
+        # Home subdirectories that should be read-only
+        # (excluding sensitive files by not including ~/.aws, ~/.zsh_history, etc.)
+        os.path.join(home, ".config"),
+        os.path.join(home, ".local/bin"),
+        os.path.join(home, ".mise"),
+        os.path.join(home, ".cargo"),
+        os.path.join(home, ".rustup"),
+    ]
+
+    # Default write paths
+    default_write_paths = [
+        "/tmp",
+        "/var/tmp",
+        os.path.join(home, ".cache"),
+        os.path.join(home, ".local/share"),
+        os.path.join(home, ".npm"),
+        os.path.join(home, ".pnpm"),
+    ]
+
+    # Combine write paths
+    write_paths = default_write_paths + list(user_write_paths)
+
+    # Generate temporary profile
+    profile_dir = _generate_profile(
+        read_only_paths=read_only_paths,
         write_paths=write_paths,
-        command=command,
     )
 
-    _LOGGER.info("Bubblewrap command: %s", shlex.join(cmd))
+    # Build island run command
+    cmd = [island_path, "run", "-p", str(profile_dir), "--", *command]
 
-    try:
-        if dry_run:
-            print(" ".join(shlex.quote(arg) for arg in cmd))
-        else:
+    _LOGGER.info("Island profile: %s", profile_dir)
+    _LOGGER.info("Island command: %s", shlex.join(cmd))
+
+    if dry_run:
+        landlock_config = (profile_dir / "landlock" / "base.toml").read_text()
+        print(f"Profile directory: {profile_dir}")
+        print(f"Landlock config:\n{landlock_config}")
+        print(f"Command: {shlex.join(cmd)}")
+        # Clean up in dry_run mode
+        shutil.rmtree(profile_dir, ignore_errors=True)
+    else:
+        try:
             os.execvp(cmd[0], cmd)
-    except Exception as e:
-        print(f"Error: {e}", file=sys.stderr)
-        sys.exit(1)
+        except Exception as e:
+            # Clean up on error
+            shutil.rmtree(profile_dir, ignore_errors=True)
+            print(f"Error: {e}", file=sys.stderr)
+            sys.exit(1)
