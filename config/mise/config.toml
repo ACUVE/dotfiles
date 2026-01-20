@@ -51,23 +51,17 @@ aws-sso = "latest"
 bitwarden-secrets-manager = "latest"
 amazon-ecr-credential-helper = "latest"
 "npm:aws-cdk" = "2.1101.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
-"npm:@anthropic-ai/claude-code" = "2.1.7"  # https://www.claude.com/product/claude-code
+"npm:@anthropic-ai/claude-code" = "2.1.12"  # https://www.claude.com/product/claude-code
 "npm:@typespec/compiler" = "1.8.0"  # https://typespec.io/docs/language-basics/visibility/
 "pipx:awsume" = "4.5.4"  # https://awsu.me/
 "npm:@bitwarden/cli" = "2025.12.1"  # https://bitwarden.com/help/article/cli/
-"pipx:typer" = "0.20.1"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
-"npm:vibe-kanban" = "0.0.153"  # https://www.vibekanban.com/docs
+"pipx:typer" = "0.21.1"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
+"npm:vibe-kanban" = "0.0.157"  # https://www.vibekanban.com/docs
 "npm:@google/clasp" = "3.1.3" # https://github.com/google/clasp#readme
 "pipx:github/spec-kit" = "v0.0.90"  # https://github.com/github/spec-kit
 "npm:@hono/cli" = "0.1.8"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
-"npm:@github/copilot" = "0.0.383"
+"npm:@github/copilot" = "0.0.386"
 "pipx:serena-agent" = "0.1.4"
-
-[tools."http:git-worktree-runner"]  # https://github.com/coderabbitai/git-worktree-runner
-version = "2.0.0"
-url = "https://github.com/coderabbitai/git-worktree-runner/archive/refs/tags/v{{version}}.tar.gz"
-checksum = "sha256:ea5be2610bcd49a7f05806c3cf956d8dd5bc53d51a2f1c2519604586e2b3afa8"
-size = 118519
 
 [tools."cargo:https://github.com/landlock-lsm/island"]  # https://github.com/landlock-lsm/island
 version = "latest"
