@@ -62,6 +62,7 @@ amazon-ecr-credential-helper = "latest"
 "npm:@hono/cli" = "0.1.8"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
 "npm:@github/copilot" = "0.0.386"
 "pipx:serena-agent" = "0.1.4"
+"pipx:ansible-core" = "2.20.1"
 
 [tools."cargo:https://github.com/landlock-lsm/island"]  # https://github.com/landlock-lsm/island
 version = "latest"
