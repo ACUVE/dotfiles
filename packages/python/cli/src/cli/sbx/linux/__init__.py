@@ -100,6 +100,9 @@ def sbx(
     command: Sequence[str],
 ) -> None:
     """Execute a command in a sandboxed environment using island."""
+    os.execvp(command[0], list(command))
+    # currently no sandboxing on linux platforms
+
     island_path = _check_island_available()
     home = Path.home().as_posix()
 
