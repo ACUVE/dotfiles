@@ -19,28 +19,6 @@ fi
 
 SEND_SSH_KEY="${HOME}/.ssh/id_ed25519.pub"
 
-CMD=""
-if where awsume >/dev/null 2>&1; then
-    CMD="awsume"
-elif [ -x "${HOME}/.local/bin/awsume" ]; then
-    CMD="${HOME}/.local/bin/awsume"
-elif [ -x "/usr/local/bin/awsume" ]; then
-    CMD="/usr/local/bin/awsume"
-elif [ -x "/opt/homebrew/bin/awsume" ]; then
-    CMD="/opt/homebrew/bin/awsume"
-elif [ -x "${HOME}/.local/share/mise/installs/pipx-awsume/latest/bin/awsume" ]; then
-    CMD="${HOME}/.local/share/mise/installs/pipx-awsume/latest/bin/awsume"
-fi
-
-if [ -z "${CMD}" ]; then
-    echo "awsume not found"
-    exit 1
-fi
-
-set +eu +o pipefail
-
-. "${CMD}" "${PROFILE_NAME}"
-
 if [ -n "${AWS_REGION_TMP}" ]; then
     export AWS_REGION="${AWS_REGION_TMP}"
 fi
@@ -51,6 +29,7 @@ if echo -n "${EC2_INSTANCE_ID}" | grep "i-" >/dev/null 2>&1; then
 else
     # search instance-id with Name tag
     EC2_INSTANCE_ID=$(aws ec2 describe-instances \
+        --profile "${PROFILE_NAME}" \
         --filters "Name=tag:Name,Values=${EC2_INSTANCE_ID}" "Name=instance-state-name,Values=running" \
         --query "Reservations[].Instances[0].InstanceId" \
         --output text)
@@ -61,11 +40,13 @@ else
 fi
 
 aws ec2-instance-connect send-ssh-public-key \
+    --profile "${PROFILE_NAME}" \
     --instance-id "${EC2_INSTANCE_ID}" \
     --instance-os-user "${EC2_USER}" \
     --ssh-public-key "file://${SEND_SSH_KEY}"
 
 exec aws ssm start-session \
+    --profile "${PROFILE_NAME}" \
     --target "${EC2_INSTANCE_ID}" \
     --document-name AWS-StartSSHSession \
     --parameters "portNumber=${EC2_PORT}"
