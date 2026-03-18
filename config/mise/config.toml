@@ -50,17 +50,17 @@ age = "latest"
 aws-sso = "latest"
 bitwarden-secrets-manager = "latest"
 amazon-ecr-credential-helper = "latest"
-"npm:aws-cdk" = "2.1109.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
-"npm:@anthropic-ai/claude-code" = "2.1.71"  # https://www.claude.com/product/claude-code
-"npm:@typespec/compiler" = "1.9.0"  # https://typespec.io/docs/language-basics/visibility/
-"npm:@google/clasp" = "3.2" # https://github.com/google/clasp#readme
+"npm:aws-cdk" = "2.1111.0"  # https://docs.aws.amazon.com/cdk/api/v2/docs/aws-construct-library.html
+"npm:@anthropic-ai/claude-code" = "2.1.78"  # https://www.claude.com/product/claude-code
+"npm:@typespec/compiler" = "1.10.0"  # https://typespec.io/docs/language-basics/visibility/
+"npm:@google/clasp" = "3.3.0" # https://github.com/google/clasp#readme
 "npm:@hono/cli" = "0.1.10"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
-"npm:@github/copilot" = "0.0.410"
-"npm:@bitwarden/cli" = "2026.1.0"  # https://bitwarden.com/help/article/cli/
-"npm:@googleworkspace/cli" = "0.11.1"
+"npm:@github/copilot" = "1.0.7"
+"npm:@bitwarden/cli" = "2026.2.0"  # https://bitwarden.com/help/article/cli/
+"npm:@googleworkspace/cli" = "0.17.0"
 "pipx:awsume" = "4.5.4"  # https://awsu.me/
-"pipx:typer" = "0.21.1"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
-"pipx:ansible-core" = "2.20.2"
+"pipx:typer" = "0.24.1"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
+"pipx:ansible-core" = "2.20.3"
 
 [tools."cargo:https://github.com/landlock-lsm/island"]  # https://github.com/landlock-lsm/island
 version = "latest"
