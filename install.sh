@@ -5,10 +5,10 @@ set -euo pipefail
 git submodule update --init --recursive || true
 
 # Settings #####
-DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .shenv .pep8 .pyenv .digrc .bin .bashrc .sh_profile .bash_profile .zprofile Brewfile)
+DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .shenv .pep8 .digrc .bin .bashrc .sh_profile .bash_profile .zprofile Brewfile)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
 CONFIG_FILES=(nvim git mise pnpm npm docker uv)
-OLD_DOT_FILES=(.env .gitignore)  # 過去管理していたが、現在は管理していないファイル群
+OLD_DOT_FILES=(.env .gitignore .pyenv)  # 過去管理していたが、現在は管理していないファイル群
 OLD_CONFIG_FILES=(claude)  # 過去管理していたが、現在は管理していないファイル群
 ################
 
