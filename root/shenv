@@ -110,7 +110,3 @@ fi
 if command -v gh > /dev/null 2>&1; then
     eval "$(gh completion -s "${SHELL##*/}")"
 fi
-
-# disable npm and npx
-alias npm="false"
-alias npx="false"
