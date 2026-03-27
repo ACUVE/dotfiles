@@ -3,12 +3,6 @@ if [ -e "${HOME}/profile" ]; then
     source "${HOME}/profile"
 fi
 
-# pipenv
-export PIPENV_VENV_IN_PROJECT=true
-if command -v pipenv > /dev/null 2>&1; then
-    eval "$(pipenv --completion)"
-fi
-
 # poetry
 export POETRY_VIRTUALENVS_IN_PROJECT=true
 
