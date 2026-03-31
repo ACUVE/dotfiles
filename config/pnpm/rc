@@ -1,3 +1,4 @@
 minimum-release-age=10080
 manage-package-manager-versions=false
 package-manager-strict-version=false
+trust-policy=no-downgrade
