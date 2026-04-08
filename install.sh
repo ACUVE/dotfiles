@@ -8,8 +8,10 @@ git submodule update --init --recursive || true
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .shenv .pep8 .digrc .bin .bashrc .sh_profile .bash_profile .zprofile Brewfile)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
 CONFIG_FILES=(nvim git mise pnpm npm docker uv)
+CONFIG_FILES_SINGLE_FILE=(jj/config.toml)
 OLD_DOT_FILES=(.env .gitignore .pyenv)  # 過去管理していたが、現在は管理していないファイル群
 OLD_CONFIG_FILES=(claude)  # 過去管理していたが、現在は管理していないファイル群
+# OLD_CONFIG_FILES_SINGLE_FILE=()  # 過去管理していたが、現在は管理していないファイル群（コメントアウトしているのは、空のため）
 ################
 
 SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
@@ -32,7 +34,13 @@ done
 mkdir -p "$HOME/.config"
 for file in "${CONFIG_FILES[@]}"
 do
-	ln -sfn "${SCRIPT_DIR}/config/${file}" "${HOME}/.config/${file}"
+    ln -sfn "${SCRIPT_DIR}/config/${file}" "${HOME}/.config/${file}"
+done
+# CONFIG_FILES_SINGLE_FILE
+for file in "${CONFIG_FILES_SINGLE_FILE[@]}"
+do
+    mkdir -p "$(dirname "${HOME}/.config/${file}")"
+    ln -sfn "${SCRIPT_DIR}/config/${file}" "${HOME}/.config/${file}"
 done
 # OLD_CONFIG_FILES
 for file in "${OLD_CONFIG_FILES[@]}"
@@ -41,6 +49,13 @@ do
         rm "${HOME}/.config/${file}"
     fi
 done
+# OLD_CONFIG_FILES_SINGLE_FILE
+# for file in "${OLD_CONFIG_FILES_SINGLE_FILE[@]}"
+# do
+#     if [ -L "${HOME}/.config/${file}" ] && [ ! -e "${HOME}/.config/${file}" ]; then
+#         rm "${HOME}/.config/${file}"
+#     fi
+# done
 
 # DOT_DIRECTORY_EACH_FILE
 for dir in "${DOT_DIRECTORY_EACH_FILE[@]}"
