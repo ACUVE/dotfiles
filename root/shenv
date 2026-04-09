@@ -110,3 +110,8 @@ fi
 if command -v gh > /dev/null 2>&1; then
     eval "$(gh completion -s "${SHELL##*/}")"
 fi
+
+# jj
+if command -v jj > /dev/null 2>&1; then
+    eval "$(jj util completion "${SHELL##*/}")"
+fi
