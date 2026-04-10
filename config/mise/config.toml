@@ -78,3 +78,6 @@ show_env = true
 
 [settings.pipx]
 uvx = true
+
+[env]
+CLAUDE_CODE_EFFORT_LEVEL = "high"
