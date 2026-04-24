@@ -10,8 +10,8 @@ rust = "latest"
 java = "corretto-8"
 
 # python package managers
-poetry = "latest"
-uv = "latest"
+"pipx:poetry" = "2.3.4"
+"aqua:astral-sh/uv" = "0.11.7"
 
 # python dev tools
 # ruff = "latest"
