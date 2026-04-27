@@ -79,5 +79,8 @@ show_env = true
 [settings.pipx]
 uvx = true
 
+[settings.npm]
+package_manager = "pnpm"
+
 [env]
-CLAUDE_CODE_EFFORT_LEVEL = "high"
+# CLAUDE_CODE_EFFORT_LEVEL = "high"
