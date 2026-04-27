@@ -69,6 +69,9 @@ def default_profile() -> list[ASTNode]:
   ;; .env
   (regex #".*/\\.env$")
   ;; (regex #".*/\\.env\\..*$")
+
+  ;; mise 管理下のファイルへの書き込みも拒否
+  (subpath (string-append (param "HOME_DIR") "/.local/share/mise"))
 )
 
 (allow file-write*
