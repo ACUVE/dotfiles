@@ -4,6 +4,8 @@ set -euo pipefail
 
 REAL_SCRIPT_DIR=$(dirname "$(realpath "$0")")
 
+REAL_CLAUDE_CONFIG_DIR="$(realpath "${CLAUDE_CONFIG_DIR:-${HOME}/.claude}")"
+
 exec "$REAL_SCRIPT_DIR/sbx" \
     --git \
     --cwd \
@@ -11,4 +13,5 @@ exec "$REAL_SCRIPT_DIR/sbx" \
     --cdk \
     --write "${HOME}/.claude" \
     --write "${CLAUDE_CONFIG_DIR:-${HOME}/.claude}" \
+    --write "${REAL_CLAUDE_CONFIG_DIR}" \
     claude --dangerously-skip-permissions "$@"
