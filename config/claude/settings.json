@@ -1,4 +1,11 @@
 {
   "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true
+  "skipDangerousModePermissionPrompt": true,
+  "env": {
+    "DISABLE_AUTOUPDATER": "1",
+    "DISABLE_DOCTOR_COMMAND": "1",
+    "DISABLE_TELEMETRY": "1",
+    "DISABLE_INSTALLATION_CHECKS": "1",
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+  }
 }
