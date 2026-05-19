@@ -9,7 +9,6 @@ import sys
 from typing import Sequence
 
 from .darwin import sbx as darwin_sbx
-from .linux import sbx as linux_sbx
 
 
 def sbx(
@@ -19,6 +18,7 @@ def sbx(
     enable_awscli: bool,
     enable_cdk: bool,
     write: Sequence[str],
+    deny_read: Sequence[str],
     dry_run: bool,
     command: Sequence[str],
 ) -> None:
@@ -38,8 +38,6 @@ def sbx(
     """
     if sys.platform == "darwin":
         sbx_impl = darwin_sbx
-    elif sys.platform == "linux":
-        sbx_impl = linux_sbx
     else:
         raise NotImplementedError(
             f"Sandbox execution is not supported on {sys.platform}. "
@@ -52,6 +50,7 @@ def sbx(
         enable_awscli=enable_awscli,
         enable_cdk=enable_cdk,
         write=write,
+        deny_read=deny_read,
         dry_run=dry_run,
         command=command,
     )

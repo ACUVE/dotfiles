@@ -87,6 +87,13 @@ def sbx(
             help="Directories to allow write access. Can be specified multiple times.",
         ),
     ] = [],
+    deny_read: Annotated[
+        list[str],
+        typer.Option(
+            "--deny-read",
+            help="Directories to deny read access. Can be specified multiple times.",
+        ),
+    ] = [],
     dry_run: Annotated[
         bool,
         typer.Option(
@@ -135,6 +142,7 @@ def sbx(
         enable_awscli=enable_awscli,
         enable_cdk=enable_cdk,
         write=write,
+        deny_read=deny_read,
         dry_run=dry_run,
         command=ctx.args,
     )

@@ -14,4 +14,5 @@ exec "$REAL_SCRIPT_DIR/sbx" \
     --write "${HOME}/.claude" \
     --write "${CLAUDE_CONFIG_DIR:-${HOME}/.claude}" \
     --write "${REAL_CLAUDE_CONFIG_DIR}" \
+    --deny-read "/Library" \
     claude --dangerously-skip-permissions "$@"

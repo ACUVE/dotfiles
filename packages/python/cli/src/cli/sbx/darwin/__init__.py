@@ -135,6 +135,7 @@ def sbx(
     enable_awscli: bool,
     enable_cdk: bool,
     write: Sequence[str],
+    deny_read: Sequence[str],
     dry_run: bool,
     command: Sequence[str],
 ) -> None:
@@ -148,11 +149,19 @@ def sbx(
         enable_cdk=enable_cdk,
         write=write,
     )
+    additional_deny_read_subpaths = deny_read
 
     if additional_allow_write_subpaths:
         allow_file_write = _get_or_insert_allow_deny(profile, "allow", "file-write*")
         for path in additional_allow_write_subpaths:
             allow_file_write.elements.append(
+                SExpression([Symbol("subpath"), String(path)])
+            )
+
+    if additional_deny_read_subpaths:
+        deny_file_read_data = _get_or_insert_allow_deny(profile, "deny", "file-read*")
+        for path in additional_deny_read_subpaths:
+            deny_file_read_data.elements.append(
                 SExpression([Symbol("subpath"), String(path)])
             )
 
