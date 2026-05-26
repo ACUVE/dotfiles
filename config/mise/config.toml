@@ -84,3 +84,8 @@ package_manager = "pnpm"
 
 [env]
 # CLAUDE_CODE_EFFORT_LEVEL = "high"
+
+[shell_alias]
+# user スコープの MCP は ~/.claude.json に書かれて symlink 不能なので、
+# --mcp-config で dotfiles 管理の別ファイルから読ませる
+claude = 'claude --mcp-config "${CLAUDE_CONFIG_DIR}/mcp.json"'
