@@ -20,6 +20,7 @@ fi
 if command -v brew > /dev/null 2>&1; then
     PATH=$(brew --prefix coreutils)/libexec/gnubin:$PATH
     PATH=$(brew --prefix openssl)/bin:$PATH
+    PATH=$(brew --prefix bind)/bin:$PATH
     export PATH
 fi
 
