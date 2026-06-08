@@ -6,10 +6,10 @@
     "DISABLE_INSTALLATION_CHECKS": "1",
     "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
   },
-  "alwaysThinkingEnabled": true,
-  "skipDangerousModePermissionPrompt": true,
-  "skipAutoPermissionPrompt": true,
   "permissions": {
     "defaultMode": "auto"
-  }
+  },
+  "alwaysThinkingEnabled": true,
+  "skipDangerousModePermissionPrompt": true,
+  "skipAutoPermissionPrompt": true
 }
