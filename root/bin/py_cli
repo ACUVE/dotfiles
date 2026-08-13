@@ -3,6 +3,15 @@
 REAL_SCRIPT_DIR=$(dirname "$(realpath "$0")")
 CLI_PACKAGE_DIR="${REAL_SCRIPT_DIR%/}/../../packages/python/cli"
 
+# uv/uvx は Windows ネイティブのバイナリなので、POSIX パス（/c/Users/...）を
+# そのまま渡すと解釈できない。MSYS の引数変換は暗黙的で当てにならないため
+# 明示的に Windows 形式へ変換する。
+case "$(uname -s)" in
+    MINGW*|MSYS*|CYGWIN*)
+        CLI_PACKAGE_DIR="$(cygpath -w "${CLI_PACKAGE_DIR}")"
+        ;;
+esac
+
 COMMAND_NAME=${0##*/}
 UVX_BASE_CMD=(uvx --from "${CLI_PACKAGE_DIR}" --with-editable "${CLI_PACKAGE_DIR}" --quiet -- py_cli)
 

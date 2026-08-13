@@ -1,5 +1,17 @@
 #!/bin/sh
 
+# OS/シェル判定（DOTFILES_OS, DOTFILES_SHELL）
+if [ -f "${HOME}/.sh_os" ]; then
+    # shellcheck source=/dev/null
+    . "${HOME}/.sh_os"
+fi
+
+# XDG 系 env var は OS を問わず必須。
+# ~/.config/<tool> というリンク配置はこれらに支えられており、
+# ガードすると Windows で npm/claude/docker の設定が読まれなくなる。
+# ※ Windows ではネイティブプロセス（PowerShell 等）もこれらを必要とするため、
+#   install.sh の WINDOWS_USER_ENV がユーザー環境変数として同じ値を設定する。
+#   片方だけ変更しないこと。
 export XDG_CONFIG_HOME="${HOME}/.config"
 # export XDG_CACHE_HOME="${HOME}/.cache"
 # export XDG_DATA_HOME="${HOME}/.local/share"
@@ -28,23 +40,26 @@ if [ -d "${HOME}/.antigravity/antigravity/bin" ]; then
 fi
 
 # SSH_AUTH_SOCK（shenv と同じ内容とすること）
-#  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
-if [ -S "/Users/${USER}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
-    export SSH_AUTH_SOCK="/Users/${USER}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
-fi
-if [ -S "/Users/${USER}/.bitwarden-ssh-agent.sock" ]; then
-    export SSH_AUTH_SOCK="/Users/${USER}/.bitwarden-ssh-agent.sock"
-fi
-#  SSH で接続していない場合は ssh-agent を起動する
-if [ -z "${SSH_CONNECTION}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
-    if command -v ssh-agent > /dev/null 2>&1; then
-        eval "$(ssh-agent)" > /dev/null 2>&1
+#  Windows では ssh-agent を扱わない。理由は shenv 側のコメントを参照。
+if [ "${DOTFILES_OS:-}" != "windows" ]; then
+    #  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
+    if [ -S "${HOME}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
+        export SSH_AUTH_SOCK="${HOME}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+    fi
+    if [ -S "${HOME}/.bitwarden-ssh-agent.sock" ]; then
+        export SSH_AUTH_SOCK="${HOME}/.bitwarden-ssh-agent.sock"
+    fi
+    #  SSH で接続していない場合は ssh-agent を起動する
+    if [ -z "${SSH_CONNECTION:-}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
+        if command -v ssh-agent > /dev/null 2>&1; then
+            eval "$(ssh-agent)" > /dev/null 2>&1
+        fi
     fi
 fi
 
 # Homebrew
 if [ -x "/opt/homebrew/bin/brew" ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv "${SHELL##*/}")"
+    eval "$(/opt/homebrew/bin/brew shellenv "${DOTFILES_SHELL}")"
 fi
 
 # その他しょうもない設定

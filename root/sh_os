@@ -1,0 +1,49 @@
+#!/bin/sh
+# sh_profile と shenv の両方から先頭で source される OS/シェル判定ヘルパ。
+#
+# 両方から source するのは、2 つのチェーンが独立しているため:
+#   ログインシェル      : bash_profile/zprofile -> sh_profile  と  bashrc/zshrc -> shenv の両方
+#   非ログインシェル    : bashrc/zshrc -> shenv のみ（VS Code の統合ターミナル等）
+#   bash -c '...'       : どちらも走らない
+# 冪等なので二重 source しても無害。
+#
+# 使い分けの方針:
+#   まず capability 検出（command -v / [ -e ]）を試み、
+#   「ハードコードされたパスがあるためそれでは判定できない」箇所にのみ DOTFILES_OS を使う。
+
+# ------------------------------------------------------------
+# DOTFILES_OS : macos | linux | windows | unknown
+#
+# $OSTYPE は使わないこと。Git Bash (MINGW64) は 'cygwin' を返すため、
+# よくある `case "$OSTYPE" in msys*)` というガードは黙ってすり抜ける。
+# uname -s は 'MINGW64_NT-10.0-26200' で一意に判定できる。
+# ------------------------------------------------------------
+if [ -z "${DOTFILES_OS:-}" ]; then
+    case "$(uname -s)" in
+        Darwin*)              DOTFILES_OS=macos   ;;
+        Linux*)               DOTFILES_OS=linux   ;;  # WSL もここに含まれる
+        MINGW*|MSYS*|CYGWIN*) DOTFILES_OS=windows ;;
+        *)                    DOTFILES_OS=unknown ;;
+    esac
+    export DOTFILES_OS
+fi
+
+# ------------------------------------------------------------
+# DOTFILES_SHELL : bash | zsh | ...
+#
+# ${SHELL##*/} を使ってはならない。Git Bash では $SHELL=/bin/bash.exe のため
+# 'bash.exe' になり、`mise activate bash.exe` のように補完生成が軒並み失敗する。
+# また $SHELL はログインシェルであって「今動いているシェル」とは限らない。
+# ------------------------------------------------------------
+if [ -z "${DOTFILES_SHELL:-}" ]; then
+    if [ -n "${ZSH_VERSION:-}" ]; then
+        DOTFILES_SHELL=zsh
+    elif [ -n "${BASH_VERSION:-}" ]; then
+        DOTFILES_SHELL=bash
+    else
+        _dotfiles_sh=${SHELL##*/}
+        DOTFILES_SHELL=${_dotfiles_sh%.exe}
+        unset _dotfiles_sh
+    fi
+    export DOTFILES_SHELL
+fi

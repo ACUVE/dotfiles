@@ -1,3 +1,9 @@
+# OS/シェル判定（DOTFILES_OS, DOTFILES_SHELL）
+if [ -f "${HOME}/.sh_os" ]; then
+    # shellcheck source=/dev/null
+    . "${HOME}/.sh_os"
+fi
+
 # if ~/profile exists, source it
 if [ -e "${HOME}/profile" ]; then
     source "${HOME}/profile"
@@ -25,25 +31,32 @@ if command -v brew > /dev/null 2>&1; then
 fi
 
 # SSH_AUTH_SOCK（sh_profile と同じ内容とすること）
-#  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
-if [ -S "/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
-    SSH_AUTH_SOCK="/Users/$(whoami)/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
-    export SSH_AUTH_SOCK
-fi
-if [ -S "/Users/$(whoami)/.bitwarden-ssh-agent.sock" ]; then
-    SSH_AUTH_SOCK="/Users/$(whoami)/.bitwarden-ssh-agent.sock"
-    export SSH_AUTH_SOCK
-fi
-#  SSH で接続していない場合は ssh-agent を起動する
-if [ -z "${SSH_CONNECTION}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
-    if command -v ssh-agent > /dev/null 2>&1; then
-        eval "$(ssh-agent)" > /dev/null 2>&1
+#  Windows では ssh-agent を扱わない。
+#  MSYS の ssh-agent を起動しても、~/.gitconfig の core.sshCommand が指す
+#  ネイティブの C:\Windows\System32\OpenSSH\ssh.exe からは見えない別キーリングになり、
+#  「鍵を追加したのに git が認識しない」という混乱を生むだけ。
+#  Windows では ssh-agent サービス（名前付きパイプ \\.\pipe\openssh-ssh-agent）を使う。
+if [ "${DOTFILES_OS:-}" != "windows" ]; then
+    #  Bitwarden が起動している場合は Bitwarden の SSH エージェントを使う
+    if [ -S "${HOME}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock" ]; then
+        SSH_AUTH_SOCK="${HOME}/Library/Containers/com.bitwarden.desktop/Data/.bitwarden-ssh-agent.sock"
+        export SSH_AUTH_SOCK
+    fi
+    if [ -S "${HOME}/.bitwarden-ssh-agent.sock" ]; then
+        SSH_AUTH_SOCK="${HOME}/.bitwarden-ssh-agent.sock"
+        export SSH_AUTH_SOCK
+    fi
+    #  SSH で接続していない場合は ssh-agent を起動する
+    if [ -z "${SSH_CONNECTION:-}" ] && [ -z "${SSH_AUTH_SOCK:-}" ]; then
+        if command -v ssh-agent > /dev/null 2>&1; then
+            eval "$(ssh-agent)" > /dev/null 2>&1
+        fi
     fi
 fi
 
 # mise
 if command -v mise > /dev/null 2>&1; then
-    eval "$(mise activate "${SHELL##*/}")"
+    eval "$(mise activate "${DOTFILES_SHELL}")"
 fi
 
 if command -v whence > /dev/null 2>&1; then
@@ -89,7 +102,7 @@ fi
 
 # kubectl
 if command -v kubectl > /dev/null 2>&1; then
-    eval "$(kubectl completion "${SHELL##*/}")"
+    eval "$(kubectl completion "${DOTFILES_SHELL}")"
 fi
 
 # typer
@@ -99,20 +112,20 @@ fi
 
 # task
 if command -v task > /dev/null 2>&1; then
-    eval "$(task --completion "${SHELL##*/}")"
+    eval "$(task --completion "${DOTFILES_SHELL}")"
 fi
 
 # uv
 if command -v uv > /dev/null 2>&1; then
-    eval "$(uv generate-shell-completion "${SHELL##*/}")"
+    eval "$(uv generate-shell-completion "${DOTFILES_SHELL}")"
 fi
 
 # gh
 if command -v gh > /dev/null 2>&1; then
-    eval "$(gh completion -s "${SHELL##*/}")"
+    eval "$(gh completion -s "${DOTFILES_SHELL}")"
 fi
 
 # jj
 if command -v jj > /dev/null 2>&1; then
-    eval "$(jj util completion "${SHELL##*/}")"
+    eval "$(jj util completion "${DOTFILES_SHELL}")"
 fi

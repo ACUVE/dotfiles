@@ -110,6 +110,9 @@ PROMPT_COMMAND="_set_prompt"
 # ===== Source Additional Configurations =====
 if [ -f "/etc/bashrc" ]; then
     source "/etc/bashrc"
+elif [ -f "/etc/bash.bashrc" ]; then
+    # Debian 系および MSYS(Git Bash) はこちら
+    source "/etc/bash.bashrc"
 fi
 
 if [ -f "${HOME}/.shenv" ]; then

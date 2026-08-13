@@ -1,3 +1,10 @@
+[core]
+	# Windows の Git は開発者モードが無効な状態でインストールすると
+	# system の gitconfig に core.symlinks=false を書き込む。そのまま clone すると
+	# mode 120000 のエントリが「リンク先パスを内容とする通常ファイル」として
+	# 展開されてしまうため、明示的に true にしておく。
+	symlinks = true
+
 [push]
 	default = simple
 	autoSetupRemote = true
