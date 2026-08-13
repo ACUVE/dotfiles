@@ -55,8 +55,22 @@ if [ "${DOTFILES_OS:-}" != "windows" ]; then
 fi
 
 # mise
+#
+# Windows では `mise activate` を使わない。
+# ネイティブの mise.exe は Windows 形式（';' 区切り・バックスラッシュ）の PATH を
+# 出力するため、Git Bash で eval すると PATH が
+#   C:\Users\...;C:\Program Files\...
+# のように壊れ、ls すら command not found になる。
+# 代わりに shims ディレクトリを POSIX 形式で自前で PATH に通す。
 if command -v mise > /dev/null 2>&1; then
-    eval "$(mise activate "${DOTFILES_SHELL}")"
+    if [ "${DOTFILES_OS:-}" = "windows" ]; then
+        if [ -n "${LOCALAPPDATA:-}" ] && [ -d "$(cygpath -u "${LOCALAPPDATA}")/mise/shims" ]; then
+            PATH="$(cygpath -u "${LOCALAPPDATA}")/mise/shims:${PATH}"
+            export PATH
+        fi
+    else
+        eval "$(mise activate "${DOTFILES_SHELL}")"
+    fi
 fi
 
 if command -v whence > /dev/null 2>&1; then
