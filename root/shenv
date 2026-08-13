@@ -54,22 +54,6 @@ if [ "${DOTFILES_OS:-}" != "windows" ]; then
     fi
 fi
 
-# mise に GitHub トークンを渡す
-#
-# mise は `= "latest"` 指定のツールを解決する際に GitHub API を叩く。
-# 未認証だとレート制限（60 req/h）に当たり、シェル起動のたびに
-# 大量の警告とリトライで待たされる。
-# ※ mise.toml の [env] に書いても意味がない。mise は自身の設定を解決し終える
-#    前に API を叩くため間に合わない（実測で確認済み）。
-if [ -z "${MISE_GITHUB_TOKEN:-}" ] && command -v gh > /dev/null 2>&1; then
-    _mise_gh_token="$(gh auth token 2>/dev/null || true)"
-    if [ -n "${_mise_gh_token}" ]; then
-        MISE_GITHUB_TOKEN="${_mise_gh_token}"
-        export MISE_GITHUB_TOKEN
-    fi
-    unset _mise_gh_token
-fi
-
 # mise
 #
 # Windows では `mise activate` を使わない。
