@@ -73,8 +73,19 @@ SCRIPT_DIR=$(cd "$(dirname "$0")"; pwd)
 # Settings #####
 DOT_FILES=(.zsh .zshrc .zshenv .vimrc .vim .easystroke .tmux.conf .shenv .sh_os .pep8 .digrc .bin .bashrc .sh_profile .bash_profile .zprofile Brewfile)
 DOT_DIRECTORY_EACH_FILE=(.ssh .aws .awsume)
-CONFIG_FILES=(nvim git mise pnpm npm docker uv claude)
+CONFIG_FILES=(nvim git mise pnpm npm docker uv claude powershell)
 CONFIG_FILES_SINGLE_FILE=(jj/config.toml)
+# OS ごとに配置先が異なるものの追加リンク
+#   "<repo 内の相対パス> <$HOME からの相対パス>"
+# PowerShell のプロファイル位置:
+#   macOS/Linux : ~/.config/powershell/  （CONFIG_FILES の powershell でカバー済み）
+#   Windows     : ~/Documents/PowerShell/
+# ディレクトリごとではなく profile.ps1 単体をリンクする。
+# Install-Module -Scope CurrentUser が Documents/PowerShell/Modules に書くため、
+# ディレクトリをリンクすると repo にモジュールが降ってくる。
+WINDOWS_EXTRA_LINKS=(
+    "config/powershell/profile.ps1 Documents/PowerShell/profile.ps1"
+)
 OLD_DOT_FILES=(.env .gitignore .pyenv)  # 過去管理していたが、現在は管理していないファイル群
 OLD_CONFIG_FILES=()  # 過去管理していたが、現在は管理していないファイル群
 # OLD_CONFIG_FILES_SINGLE_FILE=()  # 過去管理していたが、現在は管理していないファイル群（コメントアウトしているのは、空のため）
@@ -470,6 +481,15 @@ do
 done
 
 if [ "$OS" = "windows" ]; then
+    info ""
+    info "Windows 固有の配置先:"
+    for rec in "${WINDOWS_EXTRA_LINKS[@]}"; do
+        # レコードを空白で分割する意図的な単語分割
+        # shellcheck disable=SC2086
+        set -- $rec
+        link "${SCRIPT_DIR}/$1" "${HOME}/$2"
+    done
+
     info ""
     if [ -z "${DOTFILES_NO_WINDOWS_ENV:-}" ]; then
         windows_persist_env
