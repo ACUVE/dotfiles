@@ -39,11 +39,14 @@ else
     fi
 fi
 
+# 鍵はファイル参照（file://）ではなく中身を直接渡す。
+# MSYS の引数パス変換は先頭が '/' の場合しか働かず、"file://" に埋め込むと
+# ネイティブの aws.exe が POSIX パスを解釈できずに失敗するため。
 aws ec2-instance-connect send-ssh-public-key \
     --profile "${PROFILE_NAME}" \
     --instance-id "${EC2_INSTANCE_ID}" \
     --instance-os-user "${EC2_USER}" \
-    --ssh-public-key "file://${SEND_SSH_KEY}"
+    --ssh-public-key "$(cat "${SEND_SSH_KEY}")"
 
 exec aws ssm start-session \
     --profile "${PROFILE_NAME}" \

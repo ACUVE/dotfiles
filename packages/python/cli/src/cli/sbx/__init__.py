@@ -1,8 +1,10 @@
-"""Cross-platform sandbox execution module.
+"""Sandbox execution module.
 
 Provides sandboxed command execution:
 - macOS: Uses sandbox-exec
-- Linux: Uses bubblewrap (bwrap)
+
+Other platforms (Linux, Windows) are not implemented and raise
+NotImplementedError.
 """
 
 import sys
@@ -36,14 +38,13 @@ def sbx(
     Raises:
         NotImplementedError: If the current platform is not supported.
     """
-    if sys.platform == "darwin":
-        sbx_impl = darwin_sbx
-    else:
+    if sys.platform != "darwin":
         raise NotImplementedError(
             f"Sandbox execution is not supported on {sys.platform}. "
-            "Supported platforms: darwin (macOS), linux"
+            "Supported platforms: darwin (macOS) only."
         )
 
+    sbx_impl = darwin_sbx
     sbx_impl(
         enable_git=enable_git,
         enable_cwd=enable_cwd,

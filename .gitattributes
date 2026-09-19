@@ -1,0 +1,7 @@
+# 改行コードは常に LF で管理する。
+#
+# これが無いと、core.autocrlf=true が既定の Windows 環境（Git for Windows の
+# インストーラ既定値）で clone した際に作業ツリー全体が CRLF になる。
+# text=auto は git が内容を見てバイナリを自動判別し、バイナリには改行変換を
+# 行わないため、バイナリファイルを追加してもこの 1 行のままで安全。
+* text=auto eol=lf
