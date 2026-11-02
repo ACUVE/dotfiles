@@ -10,8 +10,8 @@ rust = "latest"
 java = "corretto-8"
 
 # python package managers
-"pipx:poetry" = "2.3.4"
-"aqua:astral-sh/uv" = "0.12.14"
+"pipx:poetry" = "2.5.1"
+"aqua:astral-sh/uv" = "0.13.5"
 
 # python dev tools
 # ruff = "latest"
@@ -30,8 +30,8 @@ aws-cli = "latest"
 gcloud = "latest"
 
 # git hooks manager
-"pipx:pre-commit" = "4.5.0"  # https://pre-commit.com/
-"pipx:lefthook" = "2.0.7"  # https://github.com/evilmartians/lefthook?tab=readme-ov-file#why-lefthook
+"pipx:pre-commit" = "4.7.0"  # https://pre-commit.com/
+"pipx:lefthook" = "2.2.2"  # https://github.com/evilmartians/lefthook?tab=readme-ov-file#why-lefthook
 
 # not categorized
 buf = "latest"
@@ -50,18 +50,18 @@ age = "latest"
 aws-sso = "latest"
 # bitwarden-secrets-manager = "latest"
 amazon-ecr-credential-helper = "latest"
-"npm:@anthropic-ai/claude-code" = "2.1.306"  # https://www.claude.com/product/claude-code
-"npm:@typespec/compiler" = "1.10.0"  # https://typespec.io/docs/language-basics/visibility/
+"npm:@anthropic-ai/claude-code" = "2.1.309"  # https://www.claude.com/product/claude-code
+"npm:@typespec/compiler" = "1.17.0"  # https://typespec.io/docs/language-basics/visibility/
 # "npm:@google/clasp" = "3.3.0" # https://github.com/google/clasp#readme
-"npm:@hono/cli" = "0.1.10"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
-"npm:@github/copilot" = "1.0.7"
+"npm:@hono/cli" = "0.1.11"  # https://speakerdeck.com/yusukebe/introduce-hono-cli
+"npm:@github/copilot" = "1.0.103"
 "npm:@bitwarden/cli" = "2026.2.0"  # https://bitwarden.com/help/article/cli/
-"npm:@googleworkspace/cli" = "0.17.0"
-"npm:portless" = "0.15.5"  # https://www.npmjs.com/package/portless
+"npm:@googleworkspace/cli" = "0.22.5"
+"npm:portless" = "0.15.9"  # https://www.npmjs.com/package/portless
 "pipx:awsume" = "4.5.4"  # https://awsu.me/
-"pipx:typer" = "0.24.1"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
-"pipx:ansible-core" = "2.20.3"
-"aqua:suzuki-shunsuke/pinact" = "4.1.0"  # https://github.com/suzuki-shunsuke/pinact
+"pipx:typer" = "0.27.3"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
+"pipx:ansible-core" = "2.21.5"
+"aqua:suzuki-shunsuke/pinact" = "5.0.1"  # https://github.com/suzuki-shunsuke/pinact
 
 [tools."cargo:https://github.com/landlock-lsm/island"]  # https://github.com/landlock-lsm/island
 version = "latest"

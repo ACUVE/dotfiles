@@ -5,3 +5,5 @@
 *.swo
 *~
 .idea/
+
+**/.claude/.cc-writes/

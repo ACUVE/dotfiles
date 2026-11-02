@@ -10,6 +10,7 @@
     "defaultMode": "auto"
   },
   "alwaysThinkingEnabled": true,
+  "cleanupPeriodDays": 36500,
   "skipDangerousModePermissionPrompt": true,
   "skipAutoPermissionPrompt": true
 }
