@@ -1,0 +1,13 @@
+# Betterleaks の設定（https://github.com/betterleaks/betterleaks）
+# 誤検知は、その行の末尾に `betterleaks:allow` のコメントを書くか、下の [[allowlists]] に足す。
+# 本物の秘密が見つかったら、コミットから外してキーを失効させる。
+
+[extend]
+useDefault = true
+
+# docker の config.json の auths に入るログインの資格情報（"auth": "<base64>"）。標準のルールでは拾わないので足す
+[[rules]]
+id = "docker-config-auth"
+description = "docker config.json の auths の auth（base64 の資格情報）"
+regex = '''"auth"\s*:\s*"[A-Za-z0-9+/=]{20,}"'''
+keywords = ["auth"]

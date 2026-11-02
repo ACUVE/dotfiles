@@ -23,6 +23,14 @@ repos:
 
   - repo: local
     hooks:
+      - id: betterleaks
+        name: betterleaks
+        description: "ステージした差分に秘密情報（API キー、トークン、秘密鍵など）がないか確かめる（見つけた値は伏せて表示）"
+        entry: mise exec -- betterleaks git --pre-commit --staged --redact --no-banner --verbose
+        language: system
+        pass_filenames: false
+        always_run: true
+        stages: [pre-commit]
       - id: mypy
         name: mypy
         entry: bash -c 'export UV_PROJECT=$(pwd)/packages/python/cli && uv sync --quiet && cd packages/python/cli && uv run mypy src/cli'
