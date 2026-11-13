@@ -5,7 +5,8 @@
     "DISABLE_DOCTOR_COMMAND": "1",
     "DISABLE_TELEMETRY": "1",
     "DISABLE_INSTALLATION_CHECKS": "1",
-    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1"
+    "CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC": "1",
+    "MISE_LOG_LEVEL": "error"
   },
   "permissions": {
     "defaultMode": "auto"

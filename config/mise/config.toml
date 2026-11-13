@@ -62,6 +62,7 @@ amazon-ecr-credential-helper = "latest"
 "pipx:typer" = "0.27.3"  # https://typer.tiangolo.com/tutorial/typer-command/#run-with-the-typer-command
 "pipx:ansible-core" = "2.21.5"
 "aqua:suzuki-shunsuke/pinact" = "5.0.1"  # https://github.com/suzuki-shunsuke/pinact
+"llama.cpp" = { version = "11819", prerelease = true, version_prefix = "b" }  # https://github.com/ggml-org/llama.cpp/releases (タグは b11819 の形。ビルド済みの macOS arm64 のバイナリを取る)
 
 [tools."cargo:https://github.com/landlock-lsm/island"]  # https://github.com/landlock-lsm/island
 version = "latest"
